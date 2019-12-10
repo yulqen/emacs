@@ -1,0 +1,633 @@
+;;; Package --- Summary
+
+;;; Commentary:
+
+;;; Code:
+(package-initialize)
+
+;; Make sure `emacs-leuven.el' is in your `load-path'.
+;;(add-to-list 'load-path "/home/lemon/code/github/emacs-leuven")
+;;(setq leuven-elpa-ignored-packages '(git-commit-mode))
+
+;; get zz, zt from vim etc in emacs - from http://www.emacswiki.org/emacs/RecenterLikeVi
+(defun line-to-top-of-window ()
+   "Shift current line to the top of the window-  i.e. zt in Vim"
+   (interactive)
+   (set-window-start (selected-window) (point))
+)
+
+(defun line-to-bottom-of-window ()
+  "Shift current line to the botom of the window- i.e. zb in Vim"
+  (interactive)
+  (line-to-top-of-window) 
+  (scroll-down (- (window-height) 3))
+)
+
+(defun ctrl-e-in-vi (n)
+ (interactive "p")
+ (scroll-up n))
+
+(defun ctrl-y-in-vi (n)
+ (interactive "p")
+ (scroll-down n))
+
+(global-set-key "\M-n" 'ctrl-e-in-vi)
+(global-set-key "\M-p" 'ctrl-y-in-vi)
+(global-set-key "\C-x\C-a\C-a" 'line-to-top-of-window)
+(global-set-key "\C-x\C-r" 'line-to-bottom-of-window)
+
+  ;; Treat undo history as a tree.
+  (with-eval-after-load "undo-tree-autoloads"
+
+    ;; Enable Global-Undo-Tree mode.
+    (global-undo-tree-mode 1))
+
+  (with-eval-after-load "undo-tree"
+
+    (with-eval-after-load "diminish-autoloads"
+      (diminish 'undo-tree-mode))
+
+    ;; Display times relative to current time in visualizer.
+    (setq undo-tree-visualizer-relative-timestamps t)
+
+    ;; Display time-stamps by default in undo-tree visualizer.
+    (setq undo-tree-visualizer-timestamps t) ; Toggle time-stamps display using `t'.
+
+    ;; Display diff by default in undo-tree visualizer.
+    (setq undo-tree-visualizer-diff t) ; Toggle the diff display using `d'.
+
+    (define-key undo-tree-map (kbd "C-/") nil)
+
+    ;; (defalias 'redo 'undo-tree-redo)
+    (global-set-key (kbd "C-S-z") #'undo-tree-redo)
+    (global-set-key (kbd "<S-f11>") #'undo-tree-redo))
+
+
+;; Require it as normal.
+;;(require 'emacs-leuven)
+(load-file "/home/lemon/code/github/emacs-leuven/org-custom-agenda-views.el")
+
+
+;; enable znc (which is sitting on bobbins server 46.101.17.241)
+(require 'znc)
+
+(defun email-buffer ()
+  "Send region as the body of an email."
+  (interactive)
+  (let ((content (buffer-string)))
+    (compose-mail)
+    (message-goto-body)
+    (insert content)
+    (message-goto-to)))
+
+;;let's switch off global highlight mode - this doesn't switch it off!
+(global-hl-line-mode 0)
+
+;;line number mode-line
+(line-number-mode 1)
+
+;;switch off company mode
+(company-mode)
+
+;;set cursor colour
+(set-cursor-color "#ffffff")
+(setq-default cursor-type 'box)
+
+(setq custom-file "~/.emacs.d/lisp/emacs-custom.el")
+(load custom-file)
+
+;; delete region with a keystroke
+(global-set-key (kbd "M-a") 'delete-region)
+
+;; enable encryption of files
+;; to enable in org mode, include # -*- mode:org; epa-file-encrypt-to: ("me@mydomain.com") -*- as first line of file
+;; where email is id of key. When you open, you'll need your passphrase, and when you save it will encrypt automatically
+;; the org file should be saved with a .gpg suffix.
+(require 'epa-file)
+(epa-file-enable)
+
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (add-to-list
+   'package-archives
+   '("melpa" . "http://melpa.org/packages/")
+   t)
+  (package-initialize))
+
+(setq ad-redefinition-action 'accept)
+
+
+;; Place your settings here, which can override the settings of Emacs-Leuven.
+
+;; I needed this to sort out a bad bug when emacs
+;; was hanging whilst I tried to launch emacs - fixed on 29 October by
+;; checking out https://github.com/emacs-helm/helm/issues/1000
+;; (setq tramp-ssh-controlmaster-options
+;;       (concat
+;;        "-o ControlMaster=auto"
+;;        "-o ControlPath='tramp.%%C -o ControlPersist=no"))
+
+;; ledger-mode
+(autoload 'ledger-mode "ledger-mode" "A major mode for Ledger" t)
+(add-to-list 'load-path
+             (expand-file-name "/path/to/ledger/source/lisp/"))
+(add-to-list 'auto-mode-alist '("\\.ledger$" . ledger-mode))
+(setq ledger-reconcile-default-commodity "Â£")
+
+;; add my own lisp directory to .emacs.d
+(add-to-list 'load-path "~/.emacs.d/lisp")
+
+;; load org settings
+(load "orgsettings.el")
+
+;; load mu4e settings
+(load "mu4esettings.el")
+
+;; for displaying emoji?
+;; Symbola is a font I installed on the Debian system on 8 November 2015
+(emoji-fontset-enable "Symbola")
+
+;; CLOJURE STUFF (from https://github.com/flyingmachine/emacs-for-clojure/blob/master/customizations/elisp-editing.el)
+;; Automatically load paredit when editing a lisp file
+;; More at http://www.emacswiki.org/emacs/ParEdit
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+
+
+;;;;
+;; Clojure (from https://github.com/flyingmachine/emacs-for-clojure/blob/master/customizations/setup-clojure.el)
+;; To the next ;;END
+;;;;
+
+;; Enable paredit for Clojure
+(add-hook 'clojure-mode-hook 'enable-paredit-mode)
+
+;; This is useful for working with camel-case tokens, like names of
+;; Java classes (e.g. JavaClassName)
+(add-hook 'clojure-mode-hook 'subword-mode)
+
+;; A little more syntax highlighting
+(require 'clojure-mode-extra-font-locking)
+
+;; syntax hilighting for midje
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (setq inferior-lisp-program "lein repl")
+            (font-lock-add-keywords
+             nil
+             '(("(\\(facts?\\)"
+                (1 font-lock-keyword-face))
+               ("(\\(background?\\)"
+                (1 font-lock-keyword-face))))
+            (define-clojure-indent (fact 1))
+            (define-clojure-indent (facts 1))))
+
+;;;;
+;; Cider
+;;;;
+
+;; provides minibuffer documentation for the code you're typing into the repl
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+
+;; go right to the REPL buffer when it's finished connecting
+(setq cider-repl-pop-to-buffer-on-connect t)
+
+;; When there's a cider error, show its buffer and switch to it
+(setq cider-show-error-buffer t)
+(setq cider-auto-select-error-buffer t)
+
+;; Where to store the cider history.
+(setq cider-repl-history-file "~/.emacs.d/cider-history")
+
+;; Wrap when navigating history.
+(setq cider-repl-wrap-history t)
+
+;; enable paredit in your REPL
+(add-hook 'cider-repl-mode-hook 'paredit-mode)
+
+;; Use clojure mode for other extensions
+(add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
+
+
+;; key bindings
+;; these help me out with the way I usually develop web apps
+(defun cider-start-http-server ()
+  (interactive)
+  (cider-load-current-buffer)
+  (let ((ns (cider-current-ns)))
+    (cider-repl-set-ns ns)
+    (cider-interactive-eval (format "(println '(def server (%s/start))) (println 'server)" ns))
+    (cider-interactive-eval (format "(def server (%s/start)) (println server)" ns))))
+
+
+(defun cider-refresh ()
+  (interactive)
+  (cider-interactive-eval (format "(user/reset)")))
+
+(defun cider-user-ns ()
+  (interactive)
+  (cider-repl-set-ns "user"))
+
+(eval-after-load 'cider
+  '(progn
+     (define-key clojure-mode-map (kbd "C-c C-v") 'cider-start-http-server)
+     (define-key clojure-mode-map (kbd "C-M-r") 'cider-refresh)
+     (define-key clojure-mode-map (kbd "C-c u") 'cider-user-ns)
+     (define-key cider-mode-map (kbd "C-c u") 'cider-user-ns)))
+
+;; eldoc-mode shows documentation in the minibuffer when writing code
+;; http://www.emacswiki.org/emacs/ElDoc
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+
+;;END OF LOTS OF CLOJURE CONFIG
+;;
+;;
+;;
+;;
+
+;; JAVASCRIPT and COFFEESCRIPT STUFF (from https://github.com/flyingmachine/emacs-for-clojure/blob/master/customizations/setup-js.el)
+;; javascript / html
+(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(add-hook 'js-mode-hook 'subword-mode)
+(add-hook 'html-mode-hook 'subword-mode)
+(setq js-indent-level 2)
+(eval-after-load "sgml-mode"
+  '(progn
+     (require 'tagedit)
+     (tagedit-add-paredit-like-keybindings)
+     (add-hook 'html-mode-hook (lambda () (tagedit-mode 1)))))
+
+
+;; coffeescript
+(add-to-list 'auto-mode-alist '("\\.coffee.erb$" . coffee-mode))
+(add-hook 'coffee-mode-hook 'subword-mode)
+(add-hook 'coffee-mode-hook 'highlight-indentation-current-column-mode)
+(add-hook 'coffee-mode-hook
+          (defun coffee-mode-newline-and-indent ()
+            (define-key coffee-mode-map "\C-j" 'coffee-newline-and-indent)
+            (setq coffee-cleanup-whitespace nil)))
+
+
+;; END OF JAVASCRIPT AND COFFEESCRIPT STUFF
+;;
+;;
+;;
+
+;; SHELL INTEGRATION STUFF (from https://github.com/flyingmachine/emacs-for-clojure/blob/master/customizations/shell-integration.el#L1)
+;; Sets up exec-path-from shell
+;; https://github.com/purcell/exec-path-from-shell
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-envs
+   '("PATH")))
+;; END
+
+;; SWITCH OFF CURSOR BLINKING
+(blink-cursor-mode 0)
+
+
+;; trying to disable the mouse click which is infuriating me - this doesn't work. Further investigation needed
+(global-unset-key [down-mouse-1])
+
+
+
+;; calendar proper Monday start
+(setq calendar-week-start-day 1)
+
+;; autopair
+(require 'autopair)
+
+;; deft
+(require 'deft)
+(setq deft-directory "~/ownCloud/Textnotes")
+(setq deft-use-filename-as-title t)
+;; (setq deft-extension "txt") ; if I want default new files to be org files
+;; (setq deft-text-mode 'org-mode) ; use org-mode to view the razzers
+
+;; alternative setup of deft to allow for deft seeing all file extensions from
+;; http://emacs.stackexchange.com/questions/3429/how-to-support-multiple-extensions-in-deft
+(setq deft-extension "")
+(defvar deft-default-extension "txt")
+(defun my/deft-default-extension (orig-func &rest args)
+  (let ((deft-extension deft-default-extension))
+    (apply orig-func args)))
+(advice-add 'deft-new-file :around #'my/deft-default-extension)
+
+;; give us a system clipboard
+(setq x-select-enable-clipboard t)
+
+;; I don't want to type yes or no
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;;gnus sorting the summary buffer and putting the date in the headline
+(setq gnus-summary-line-format "%U%d%R%z%I%(%[%4L: %-23,23f%]%) %s\n")
+(setq gnus-thread-sort-functions
+      '(gnus-thread-sort-by-most-recent-date))
+;; how the group buffer looks
+(setq gnus-group-line-format "%M%S%p%P%5y:%B%(%g%)\n")
+
+;; guide-key config - SWITCHED OFF
+(require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
+(guide-key-mode 1)  ; Enable guide-key-mode
+
+;; enable flycheck by default (on the fly linting)
+;; SWITCH IT OFF FOR A BIT: (add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; python stuff - go this from a big pacman update on 18 Dec
+(autoload 'python-mode "python-mode.el" "Python mode." t)
+(setq auto-mode-alist (append '(("/.*\.py\'" . python-mode)) auto-mode-alist))
+
+;; TRAMP stuff
+;; using sshx as default as it works better than ssh
+(setq tramp-default-method "sshx")
+
+;; use iPython as the python interpreter in emacs
+(setq
+ python-shell-interpreter "ipython"
+ python-shell-interpreter-args ""
+ python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+ python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+ python-shell-completion-setup-code
+   "from IPython.core.completerlib import module_completion"
+ python-shell-completion-module-string-code
+   "';'.join(module_completion('''%s'''))\n"
+ python-shell-completion-string-code
+   "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+
+;; virtualenv config
+(require 'virtualenvwrapper)
+(venv-initialize-interactive-shells) ;; if you want interactive shell support
+(venv-initialize-eshell) ;; if you want eshell support
+(setq venv-location "/home/lemon/.envs")
+
+;; set my virtualenv dir for helm-pydoc
+(setq helm-virtualenv ".envs")
+
+;;w3m config
+(require 'w3m)
+ (setq browse-url-browser-function 'w3m-browse-url)
+ (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+ ;; optional keyboard short-cut
+(global-set-key "\C-xm" 'browse-url-at-point)
+
+;; my keybind to open a link in an external browser
+(define-key w3m-mode-map (kbd "\C-c B") 'w3m-external-view-this-url)
+
+;; open the current document in external browser
+(define-key w3m-mode-map (kbd "\C-c b") 'w3m-external-view-current-url)
+
+;;change w3m user-agent to android
+(setq w3m-user-agent "Mozilla/5.0 (Linux; U; Android 2.3.3; zh-tw; HTC_Pyramid Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.")
+
+;;quick access reddit
+(defun reddit (reddit)
+  "Opens the REDDIT in w3m-new-session"
+  (interactive (list
+                (read-string "Enter the reddit (default: emacs): " nil nil "emacs" nil)))
+  (browse-url (format "http://m.reddit.com/r/%s" reddit)))
+
+;; wrap tags in HTML from http://ergoemacs.org/emacs/emacs_html_insert_tags.html
+(defun wrap-html-tag (tagName)
+  "Add a tag to beginning and ending of current word or text selection."
+  (interactive "sEnter tag name: ")
+  (let (p1 p2 inputText)
+    (if (use-region-p)
+        (progn
+          (setq p1 (region-beginning) )
+          (setq p2 (region-end) )
+          )
+      (let ((bds (bounds-of-thing-at-point 'symbol)))
+        (setq p1 (car bds) )
+        (setq p2 (cdr bds) ) ) )
+
+    (goto-char p2)
+    (insert "</" tagName ">")
+    (goto-char p1)
+    (insert "<" tagName ">")
+    ))
+
+
+;;Use AUCTex
+(load "auctex.el" nil t t)
+;;(load "preview-latex.el" nil t t)
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq-default TeX-master nil)
+(setq TeX-PDF-mode t); PDF mode (rather than DVI-mode)
+
+
+;; make sure calendar is using European date format, not the fucking American one
+(setq calendar-date-style (quote european))
+
+;; global visual line mode
+(global-visual-line-mode 1)
+
+;; mouse avoidance
+(mouse-avoidance-mode 'banish)
+
+;; column numbering
+(column-number-mode 1)
+
+;; paren mode
+(show-paren-mode 1)
+
+;; use recentf to open recent files (from http://www.masteringemacs.org/article/find-files-faster-recent-files-package)
+(require 'recentf)
+
+;; get rid of `find-file-read-only' and replace it with something
+;; more useful.
+;;(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+
+;; enable recent files mode.
+(recentf-mode t)
+
+; 50 files ought to be enough.
+(setq recentf-max-saved-items 50)
+
+;;(defun ido-recentf-open ()
+;;  "Use `ido-completing-read' to \\[find-file] a recent file"
+;;  (interactive)
+;;  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+;;      (message "Opening file...")
+;;    (message "Aborting")))
+
+;; fix scrolling
+(setq mouse-wheel-follow-mouse 't)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+
+;; browser shit - ovrriding what's up there for now
+(setq browse-url-browser-function 'browse-url-generic)
+(setq browse-url-generic-program "uzbl-browser")
+
+;; save tonnes of history
+(setq savehist-file "~/.emacs.d/savehist")
+(savehist-mode +1)
+(setq savehist-save-minibuffer-history +1)
+(setq savehist-additional-vriables
+      '(kill-ring
+        search-ring
+        regexp-search-ring))
+
+;; markdown mode - bits from http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.html
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("README\\.md\\.markdown\\'" . gfm-mode))
+
+;; stash backups somewhere more convenient (from https://github.com/correl/dotfiles/blob/master/.emacs.d/emacs.org)
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+
+;; save lots of backups (from https://github.com/correl/dotfiles/blob/master/.emacs.d/emacs.org)
+(setq delete-old-versions -1)
+(setq version-control t)
+(setq vc-make-backup-files t)
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+
+;; if we want line numbers and syntax highlighting from http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.html
+;; (global-linum-mode 1)
+(global-font-lock-mode 1)
+
+;; use SOLARIZED
+;;(load-theme 'solarized-dark t)
+
+;; other themes
+;; (load-theme 'misterioso t)
+(load-theme 'tango-dark t)
+
+;; save history of minibuffer commands
+(savehist-mode 1)
+
+
+
+;; evil mode is here
+;; getting good shit from http://juanjoalvarez.net/es/detail/2014/sep/19/vim-emacsevil-chaotic-migration-guide/
+;; (require 'evil)
+;; (evil-mode 1)
+;; (setq evil-emacs-state-cursor '("red" box))
+;; (setq evil-normal-state-cursor '("green" box))
+;; (setq evil-visual-state-cursor '("orange" box))
+;; (setq evil-insert-state-cursor '("red" bar))
+;; (setq evil-replace-state-cursor '("red" bar))
+;; (setq evil-operator-state-cursor '("red" hollow))
+
+;; my keybindings
+(global-set-key (kbd "C-c u") 'browse-url)
+
+
+;; START HELM STUFF (IT IS INSTALLED IN ~/code/github-code
+;; [Facultative] Only if you have installed async.
+(add-to-list 'load-path "/home/lemon/code/github/helm")
+(add-to-list 'load-path "/home/lemon/code/github/emacs-async")
+(require 'helm-config)
+(helm-mode 1)
+
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+;; (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+;; (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+      helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
+      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+      helm-ff-file-name-history-use-recentf t)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+;; use ack-grep when grepping in shit (following a C-x-C-f)
+(when (executable-find "ack-grep")
+  (setq helm-grep-default-command "ack-grep -Hn --no-group --no-color %e %p %f"
+        helm-grep-default-recurse-command "ack-grep -H --no-group --no-color %e %p %f"))
+;; extra shit in code
+(semantic-mode 1)
+;; find man page of shit at point
+(add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+;; fucking awsome occur shit in helm
+(global-set-key (kbd "C-c h o") 'helm-occur)
+
+
+;; make sure you can delete selected region
+(delete-selection-mode 1)
+
+;; powerline for emacs
+(require 'powerline)
+(powerline-vim-theme)
+
+;; enable buffers to auto-update when file on disk changes
+(global-auto-revert-mode t)
+
+(require 'ace-jump-mode)
+    (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
+;; 
+;; enable a more powerful jump back function from ace jump mode
+;;
+(autoload
+  'ace-jump-mode-pop-mark
+  "ace-jump-mode"
+  "Ace jump back:-)"
+  t)
+(eval-after-load "ace-jump-mode"
+  '(ace-jump-mode-enable-mark-sync))
+(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+
+;; ace search
+(ace-isearch-mode +1)
+(global-ace-isearch-mode +1)
+
+;; use Projectile - currently not using it
+(projectile-global-mode)
+
+
+;; END OF HELM STUFF
+
+;; python Jedi!
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)                 ; optional
+;;(add-to-list 'ac-sources 'ac-source-jedi-direct)
+
+
+
+;; config for mutt to use emacs (from emacs wikie mutt in emacs)
+(server-start)
+(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
+
+;; get rid of annoying buffer key
+(global-unset-key "\C-x\C-b")
+
+;; Start with ido mode by default
+(require 'ido)
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(setq ido-create-new-buffer 'always)
+(setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".xml" ".html" ".el" ".ini" ".cfg" ".cnf"))
+(ido-mode 1)
+
+;; Get rid of the menu bar and toolbar and scroll bar
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; start to scratch
+(setq inhibit-startup-screen +1)
+(put 'narrow-to-region 'disabled nil)
