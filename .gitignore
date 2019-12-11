@@ -3,3 +3,12 @@ elpa
 .\#*
 auto-save-list/
 recentf
+savehist
+.lsp-session-v1
+ac-comphist.dat
+ido.last
+network-security.data
+smex-items
+transient/
+elpy/
+eshell/
