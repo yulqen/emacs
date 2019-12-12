@@ -56,8 +56,8 @@
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
-(add-to-list 'default-frame-alist '(font . "Hack-10"))
-(load-theme 'whiteboard)
+(add-to-list 'default-frame-alist '(font . "Hack-14"))
+(load-theme 'manoj-dark)
 
 (if (string< emacs-version
          "26.3")
@@ -255,7 +255,7 @@
 		(todo "NEXT")))
 	      ("y" "Agenda and All TODOS"
 	       ((agenda "")
-		(alltodo ""))))))
+		     (alltodo ""))))))
 
 (define-key global-map "\C-cc" 'org-capture)
 (setq org-default-notes-file "~/Nextcloud/org/refile.org")
@@ -269,7 +269,7 @@
 
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "PROJECT"))))
 
 (setq org-todo-keyword-faces
       (quote (("TODO" :foreground "red" :weight bold)
@@ -279,6 +279,7 @@
               ("HOLD" :foreground "magenta" :weight bold)
               ("CANCELLED" :foreground "forest green" :weight bold)
               ("MEETING" :foreground "forest green" :weight bold)
+              ("PROJECT" :foreground "OrangeRed2" :weight bold)
               ("PHONE" :foreground "forest green" :weight bold))))
 
 ;; tag stuff automatically dependent on a change of state
@@ -310,7 +311,6 @@
 (setq helm-move-to-line-cycle-in-source t)
 (setq helm-scroll-amount 5)
 (setq helm-ff-file-name-history-use-recentf t)
-(helm-mode 1)
 
 (evil-mode t)
 ;; Enable "M-x" in evil mode
@@ -348,6 +348,8 @@
                                                 forge-pullreq-list-mode
                                                 forge-topic-list-mode
                                                 dired-mode
+                                                help-mode
+                                                info
                                                 tide-references-mode
                                                 image-dired-mode
                                                 image-dired-thumbnail-mode
