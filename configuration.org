@@ -2,14 +2,6 @@
 
 * Installation
 
-*Initial*
-
-Emacs configuration is usually done in the home directory in the
-=.emacs.d= folder. This holds true for Unix and Linux systems. For
-Windows, look it up [[https://www.gnu.org/software/emacs/manual/html_node/efaq-w32/Location-of-init-file.html][here]].
-
-=git clone git@github.com:munen/emacs.d.git ~/.emacs.d=
-
 *Dependencies*
 
 Emacs dependencies/libraries are managed via the internal [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Packages.html#Packages][package
@@ -30,89 +22,43 @@ eval-buffer=.
 #+END_SRC
 
 ** Define packages that are to be installed
-
 List all used third-party packages. Most will be configured further
 down in this file, some are used with the default configuration.
-
 #+BEGIN_SRC emacs-lisp
 
-  (defvar my-packages '(ac-cider
-                        ac-js2
-                        ag
-                        atomic-chrome
+  (defvar my-packages '(
                         auto-complete
-                        beacon
-			blacken
+			                  blacken
                         browse-kill-ring
-                        cider
-                        clj-refactor
-                        clojure-mode
-                        coffee-mode
-                        counsel-jq
-                        comment-tags
                         darktooth-theme
-                        dired-narrow
-                        diminish
-                        dumb-jump
-                        edit-indirect
-                        editorconfig
-			elpy
+			                  elpy
                         elfeed
                         elfeed-goodies
-                        enh-ruby-mode
-                        erc-image
                         evil
                         evil-escape
                         evil-leader
                         evil-mc
                         evil-numbers
                         evil-surround
-                        exec-path-from-shell
-                        forge
                         flycheck
                         flycheck-flow
+                        helm
                         go-mode
-                        hide-mode-line
-                        ido-vertical-mode
                         impatient-mode
-                        ini-mode
-                        ivy counsel swiper
-                        json-mode
-                        js2-mode
-                        js2-refactor
-                        js-comint
                         ledger-mode
                         lsp-mode
                         lsp-ui
-                        lsp-ivy
                         magit
                         markdown-mode
-                        package-lint
-                        parinfer
                         pdf-tools
                         projectile
-			py-autopep8
-			org
+			                  py-autopep8
+			                  org
                         rainbow-mode
-                        rjsx-mode
-                        ob-restclient
-                        restclient
-                        robe
-                        sass-mode
-                        spacemacs-theme
-                        spaceline
-                        smex
-                        synosaurus
-                        tide
-                        visual-fill-column
                         web-mode
                         which-key
-                        writegood-mode
-                        writeroom-mode
-                        yaml-mode
-                        zenburn-theme))
+                        ))
 #+END_SRC
-
 ** Install packages
 #+BEGIN_SRC emacs-lisp
   (dolist (p my-packages)
@@ -138,7 +84,8 @@ down in this file, some are used with the default configuration.
     (tool-bar-mode -1)
     (tooltip-mode -1)
     (menu-bar-mode -1)
-    (add-to-list 'default-frame-alist '(font . "Hack-8"))
+    (add-to-list 'default-frame-alist '(font . "Hack-10"))
+    (load-theme 'whiteboard)
 #+END_SRC
 ** Gnu Elpa TLS Fix
 Emacs 26.1 (for example in Debian Buster) requests the GNU Elpa repo
@@ -598,155 +545,154 @@ Emacs, use =display-line-numbers-mode=, because it's _much_ faster.
 
 ;; custom commands on agenda buffer
 #+END_SRC
+* Helm
+#+BEGIN_SRC emacs-lisp
+(require 'helm-config)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+(setq helm-M-x-fuzzy-match t)
+(setq helm-buffers-fuzzy-matching t)
+(setq helm-recentf-fuzzy-match t)
+(setq helm-move-to-line-cycle-in-source t)
+(setq helm-scroll-amount 5)
+(setq helm-ff-file-name-history-use-recentf t)
+(helm-mode 1)
+#+END_SRC
 * Search / Completion
-** =ido=
+* =evil-mode=
+Evil is an extensible Vim layer for Emacs.
 
-=ido= means "Interactively Do Things". =ido= has a completion engine
-that's sensible to use everywhere. It is built-in and nice and could
-change a lot of defaults like =find-file= and switching buffers.
-
-It works well while not breaking Emacs defaults.
-
+This combines the best of both worlds: VIM being a great text-editor
+with modal editing through semantic commands and Emacs being a LISP
+REPL.
+** Enable Evil
 #+BEGIN_SRC emacs-lisp
-  (ido-mode t)
-  (ido-everywhere t)
-  (setq ido-enable-flex-matching t)
+  (evil-mode t)
+  ;; Enable "M-x" in evil mode
+  (global-set-key (kbd "M-x") 'execute-extended-command)
 #+END_SRC
 
-** =ido-vertical-mode=
-
-https://github.com/creichert/ido-vertical-mode.el
-
-=ido-vertical-mode= makes =ido-mode= display vertically.
+** Leader Mode Config
 
 #+BEGIN_SRC emacs-lisp
-(ido-vertical-mode 1)
-(setq ido-vertical-define-keys 'C-n-and-C-p-only)
-(setq ido-vertical-show-count t)
+  (global-evil-leader-mode)
+  (evil-leader/set-leader ",")
+  (evil-leader/set-key
+    "w" 'basic-save-buffer
+    "s" 'flyspell-buffer
+    "b" 'evil-buffer
+    "q" 'evil-quit)
 #+END_SRC
 
-** Ivy/Counsel/Swiper
-
-https://github.com/abo-abo/swiper
-
-*Ivy*, a generic completion mechanism for Emacs.
-
-*Counsel*, a collection of Ivy-enhanced versions of common Emacs commands.
-
-*Swiper*, an Ivy-enhanced alternative to isearch.
-
-=Ivy= is an interactive interface for completion in Emacs. Therefore
-it overlaps in functionality with =ido=. While =Ivy= is more powerful,
-it breaks certain standard functionality. So =ido= is enabled globally
-by default and for certain tasks, =Ivy= overrides =ido=.
-
-Emacs uses completion mechanism in a variety of contexts: code, menus,
-commands, variables, functions, etc. Completion entails listing,
-sorting, filtering, previewing, and applying actions on selected
-items. When active, =ivy-mode= completes the selection process by
-narrowing available choices while previewing in the minibuffer.
-Selecting the final candidate is either through simple keyboard
-character inputs or through powerful regular expressions.
-
-*** Configuration
+** Evil Surround, emulating tpope's =surround.vim=
 
 #+BEGIN_SRC emacs-lisp
-    (setq enable-recursive-minibuffers t)
-    (global-set-key (kbd "<f6>") 'ivy-resume)
+  (require 'evil-surround)
+  (global-evil-surround-mode 1)
 #+END_SRC
 
-Show total amount of matches and the index of the current match
+** Multiple Cursors
+https://github.com/gabesoft/evil-mc
+
+=evil-mc= provides multiple cursors functionality for Emacs when used
+with =evil-mode=.
+
+=C-n / C-p= are used for creating cursors, and =M-n / M-p= are used
+for cycling through cursors. The commands that create cursors wrap
+around; but, the ones that cycle them do not. To skip creating a
+cursor forward use =C-t= or =grn= and backward =grp=. Finally use
+=gru= to remove all cursors.
+
+*** Enable =evil-mc= for all buffers
 
 #+BEGIN_SRC emacs-lisp
-(setq ivy-count-format "(%d/%d) ")
+(global-evil-mc-mode  1)
 #+END_SRC
 
-Wrap to the first result when on the last result and vice versa.
-
+** Fast switching between buffers
 #+BEGIN_SRC emacs-lisp
-(setq ivy-wrap t)
+  (define-key evil-normal-state-map (kbd "{") 'evil-next-buffer)
+  (define-key evil-normal-state-map (kbd "}") 'evil-prev-buffer)
 #+END_SRC
 
-Enable =Swiper=
+** Increment / Decrement numbers
 
 #+BEGIN_SRC emacs-lisp
-    (global-set-key "\C-s" 'swiper)
+  (global-set-key (kbd "C-=") 'evil-numbers/inc-at-pt)
+  (global-set-key (kbd "C--") 'evil-numbers/dec-at-pt)
+  (define-key evil-normal-state-map (kbd "C-=") 'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map (kbd "C--") 'evil-numbers/dec-at-pt)
 #+END_SRC
 
-Configure =Counsel=
-
+** Use =j/k= for browsing wrapped lines
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x b") 'counsel-ibuffer)
-  ;; Run `counsel-ag` against the current directory and not against the
-  ;; whole project
-  (global-set-key (kbd "C-c k") '(lambda()
-                                   (interactive)
-                                   (counsel-ag "" default-directory nil nil)))
-  (global-set-key (kbd "C-x l") 'counsel-locate)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 #+END_SRC
 
-Next to counsel, there's also =smex= which is =M-x= combined with
-=ido=. =smex= has a better sorting algorithm than =Counsel= and having
-both installed means that we get the =Counsel= interface with =smex=
-sorting. Best of both worlds.
-
-By default, =counsel-M-x= starts with a =^=. More often than not, this
-will be in the way of me fuzzy matching a function. Therefore I'll
-start it with an empty string as argument.
+** Paste in Visual Mode
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-x") (lambda ()
-                                (interactive)
-                                (counsel-M-x "")))
+  (define-key evil-insert-state-map (kbd "C-v") 'evil-visual-paste)
+
 #+END_SRC
 
-*** Where =Ivy= doesn't work well
-
-**** Overwriting standard Emacs functionality
-
-Some basic features are overwritten when "everything" becomes an =Ivy=
-search buffer. For example:
-
-- When two =dired= buffers are open and files should be copied from
-  one to the other, one can use the =up= and =down= keys to toggle the
-  destination. When this is a search buffer, it will auto complete for
-  all local folders, instead. Since copying files is something I do
-  often, this already means I have to disable =Ivy= globally.
-
-- =Tramp= auto-completion doesn't work for me. I'm using =sudo:=, =ssh:=
-  and the likes a lot in =dired= mode. Auto completion when within
-  =Tramp= is broken for me, so I always have to type out the whole
-  connection string when =Ivy= is enabled for =dired=. Since this
-  includes missing auto-completion on remote systems and such, it's
-  another valid reason to disable =Ivy= globally.
-
-**** Disable Swiper where it is broken
-
-Ivy/Swiper cannot search in PDFs. It tries to search in the PDF source
-code. Therefore I fall back to using isearch within PDFs.
+** Disable =evil-mode= for some modes
+   Since Emacs is a multi-purpose LISP REPL, there are many modes that
+   are not primarily (or not at all) centered about text-manipulation.
+   For those, it is reasonable to disable =evil-mode=, because it will
+   bring nothing to the table, but might just shadow some keyboard
+   shortcuts.
+#+BEGIN_SRC emacs-lisp
+  (mapc (lambda (mode)
+          (evil-set-initial-state mode 'emacs)) '(elfeed-show-mode
+                                                  elfeed-search-mode
+                                                  forge-pullreq-list-mode
+                                                  forge-topic-list-mode
+                                                  dired-mode
+                                                  tide-references-mode
+                                                  image-dired-mode
+                                                  image-dired-thumbnail-mode
+                                                  eww-mode))
+#+END_SRC
+** Unbind M-. and M- in =evil-mode=
+=M-.= and =M-,= are popular keybindings for "jump to definition" and
+"back". =evil-mode= by default binds those to rather rarely used
+functions =evil-repeat-pop-next= and =xref-pop-marker-stack=, for some reason.
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'pdf-view-mode-hook '(lambda()
-                                   (define-key pdf-view-mode-map "\C-s" 'isearch-forward)))
+  (define-key evil-normal-state-map (kbd "M-.") nil)
+  (define-key evil-normal-state-map (kbd "M-,") nil)
+#+END_SRC
+** =evil-escape=
+https://github.com/syl20bnr/evil-escape
+
+Escape from insert state and everything else.
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default evil-escape-delay 0.2)
+  (setq-default evil-escape-key-sequence "jk")
+  (evil-escape-mode)
 #+END_SRC
 
-*** Improve other packages with ivy
-
-  Projectile completion (Default is =ido=)
-
+This results in the same feature-set like this vim keybinding:
+#+BEGIN_SRC vim
+"Remap ESC to jk
+:imap jk <esc>
+#+END_SRC
+* Which Key
+  =which-key= displays available keybindings in a popup.
 #+BEGIN_SRC emacs-lisp
-  (setq projectile-completion-system 'ivy)
+  (add-hook 'org-mode-hook 'which-key-mode)
+  (add-hook 'cider-mode-hook 'which-key-mode)
 #+END_SRC
 
-  Mu4e "folder" and "from" completion (Default is =ido=)
+Use =which-key= to show VIM shortcuts, too.
 
 #+BEGIN_SRC emacs-lisp
-  (setq mu4e-completing-read-function 'ivy-completing-read)
-#+END_SRC
-
-  Synosaurus completion (Default is =ido=)
-
-#+BEGIN_SRC emacs-lisp
-  (setq synosaurus-choose-method 'ivy-read)
+(setq which-key-allow-evil-operators t)
+(setq which-key-show-operator-state-maps t)
 #+END_SRC

@@ -5,81 +5,38 @@
                          ("melpa" . "https://melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")))
 
-(defvar my-packages '(ac-cider
-                      ac-js2
-                      ag
-                      atomic-chrome
+(defvar my-packages '(
                       auto-complete
-                      beacon
-		      blacken
+			                blacken
                       browse-kill-ring
-                      cider
-                      clj-refactor
-                      clojure-mode
-                      coffee-mode
-                      counsel-jq
-                      comment-tags
                       darktooth-theme
-                      dired-narrow
-                      diminish
-                      dumb-jump
-                      edit-indirect
-                      editorconfig
-		      elpy
+			                elpy
                       elfeed
                       elfeed-goodies
-                      enh-ruby-mode
-                      erc-image
                       evil
                       evil-escape
                       evil-leader
                       evil-mc
                       evil-numbers
                       evil-surround
-                      exec-path-from-shell
-                      forge
                       flycheck
                       flycheck-flow
+                      helm
                       go-mode
-                      hide-mode-line
-                      ido-vertical-mode
                       impatient-mode
-                      ini-mode
-                      ivy counsel swiper
-                      json-mode
-                      js2-mode
-                      js2-refactor
-                      js-comint
                       ledger-mode
                       lsp-mode
                       lsp-ui
-                      lsp-ivy
                       magit
                       markdown-mode
-                      package-lint
-                      parinfer
                       pdf-tools
                       projectile
-		      py-autopep8
-		      org
+			                py-autopep8
+			                org
                       rainbow-mode
-                      rjsx-mode
-                      ob-restclient
-                      restclient
-                      robe
-                      sass-mode
-                      spacemacs-theme
-                      spaceline
-                      smex
-                      synosaurus
-                      tide
-                      visual-fill-column
                       web-mode
                       which-key
-                      writegood-mode
-                      writeroom-mode
-                      yaml-mode
-                      zenburn-theme))
+                      ))
 
 (dolist (p my-packages)
   (unless (package-installed-p p)
@@ -99,7 +56,8 @@
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
-(add-to-list 'default-frame-alist '(font . "Hack-8"))
+(add-to-list 'default-frame-alist '(font . "Hack-10"))
+(load-theme 'whiteboard)
 
 (if (string< emacs-version
          "26.3")
@@ -340,41 +298,70 @@
 
 (setq org-ellipsis "...")
 
-(ido-mode t)
-(ido-everywhere t)
-(setq ido-enable-flex-matching t)
+(require 'helm-config)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+(setq helm-M-x-fuzzy-match t)
+(setq helm-buffers-fuzzy-matching t)
+(setq helm-recentf-fuzzy-match t)
+(setq helm-move-to-line-cycle-in-source t)
+(setq helm-scroll-amount 5)
+(setq helm-ff-file-name-history-use-recentf t)
+(helm-mode 1)
 
-(ido-vertical-mode 1)
-(setq ido-vertical-define-keys 'C-n-and-C-p-only)
-(setq ido-vertical-show-count t)
+(evil-mode t)
+;; Enable "M-x" in evil mode
+(global-set-key (kbd "M-x") 'execute-extended-command)
 
-(setq enable-recursive-minibuffers t)
-(global-set-key (kbd "<f6>") 'ivy-resume)
+(global-evil-leader-mode)
+(evil-leader/set-leader ",")
+(evil-leader/set-key
+  "w" 'basic-save-buffer
+  "s" 'flyspell-buffer
+  "b" 'evil-buffer
+  "q" 'evil-quit)
 
-(setq ivy-count-format "(%d/%d) ")
+(require 'evil-surround)
+(global-evil-surround-mode 1)
 
-(setq ivy-wrap t)
+(global-evil-mc-mode  1)
 
-(global-set-key "\C-s" 'swiper)
+(define-key evil-normal-state-map (kbd "{") 'evil-next-buffer)
+(define-key evil-normal-state-map (kbd "}") 'evil-prev-buffer)
 
-(global-set-key (kbd "C-x b") 'counsel-ibuffer)
-;; Run `counsel-ag` against the current directory and not against the
-;; whole project
-(global-set-key (kbd "C-c k") '(lambda()
-                                 (interactive)
-                                 (counsel-ag "" default-directory nil nil)))
-(global-set-key (kbd "C-x l") 'counsel-locate)
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+(global-set-key (kbd "C-=") 'evil-numbers/inc-at-pt)
+(global-set-key (kbd "C--") 'evil-numbers/dec-at-pt)
+(define-key evil-normal-state-map (kbd "C-=") 'evil-numbers/inc-at-pt)
+(define-key evil-normal-state-map (kbd "C--") 'evil-numbers/dec-at-pt)
 
-(global-set-key (kbd "M-x") (lambda ()
-                              (interactive)
-                              (counsel-M-x "")))
+(define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 
-(add-hook 'pdf-view-mode-hook '(lambda()
-                                 (define-key pdf-view-mode-map "\C-s" 'isearch-forward)))
+(define-key evil-insert-state-map (kbd "C-v") 'evil-visual-paste)
 
-(setq projectile-completion-system 'ivy)
+(mapc (lambda (mode)
+        (evil-set-initial-state mode 'emacs)) '(elfeed-show-mode
+                                                elfeed-search-mode
+                                                forge-pullreq-list-mode
+                                                forge-topic-list-mode
+                                                dired-mode
+                                                tide-references-mode
+                                                image-dired-mode
+                                                image-dired-thumbnail-mode
+                                                eww-mode))
 
-(setq mu4e-completing-read-function 'ivy-completing-read)
+(define-key evil-normal-state-map (kbd "M-.") nil)
+(define-key evil-normal-state-map (kbd "M-,") nil)
 
-(setq synosaurus-choose-method 'ivy-read)
+(setq-default evil-escape-delay 0.2)
+(setq-default evil-escape-key-sequence "jk")
+(evil-escape-mode)
+
+(add-hook 'org-mode-hook 'which-key-mode)
+(add-hook 'cider-mode-hook 'which-key-mode)
+
+(setq which-key-allow-evil-operators t)
+(setq which-key-show-operator-state-maps t)
