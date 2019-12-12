@@ -489,7 +489,8 @@ Emacs, use =display-line-numbers-mode=, because it's _much_ faster.
 
 (setq org-agenda-custom-commands
       '(("N" "Agenda and NEXT TODOs" ((agenda "") (todo "NEXT")))
-	     ("y" "Agenda and All TODOS" ((agenda "") (alltodo "") (todo "PROJECT")))
+	     ("y" "Agenda and All TODOS" ((agenda "") (alltodo "") ))
+	     ("w" "Agenda and WAITING" ((agenda "") (todo "WAITING")))
 	     ("p" "Agenda and PROJECTs" ((agenda "") (todo "PROJECT")))))
 #+END_SRC
 ** Capture

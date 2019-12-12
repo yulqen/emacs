@@ -250,12 +250,10 @@
                  (org-agenda-files :maxlevel . 9))))
 
 (setq org-agenda-custom-commands
-      (quote (("N" "Agenda and NEXT TODOs"
-	       ((agenda "")
-		(todo "NEXT")))
-	      ("y" "Agenda and All TODOS"
-	       ((agenda "")
-		     (alltodo ""))))))
+      '(("N" "Agenda and NEXT TODOs" ((agenda "") (todo "NEXT")))
+	     ("y" "Agenda and All TODOS" ((agenda "") (alltodo "") ))
+	     ("w" "Agenda and WAITING" ((agenda "") (todo "WAITING")))
+	     ("p" "Agenda and PROJECTs" ((agenda "") (todo "PROJECT")))))
 
 (define-key global-map "\C-cc" 'org-capture)
 (setq org-default-notes-file "~/Nextcloud/org/refile.org")

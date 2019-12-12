@@ -13,6 +13,9 @@
  '(custom-safe-themes
    (quote
     ("8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" default)))
+ '(elfeed-feeds
+   (quote
+    ("https://www.youtube.com/feeds/videos.xml?channel_id=UChWbNrHQHvKK6paclLp7WYw" "https://www.reddit.com/r/linuxmasterrace.rss" "https://feeds.feedburner.com/arstechnica/open-source" "https://www.computerweekly.com/rss/IT-security.xml" "https://www.fsf.org/static/fsforg/rss/news.xml" "https://www.reddit.com/r/freebsd.rss" "https://www.reddit.com/r/emacs.rss" "https://www.reddit.com/r/rugbyunion/.rss" "http://pragmaticemacs.com/feed/" "https://200ok.ch/atom.xml" "https://www.youtube.com/feeds/videos.xml?channel_id=UCkK9UDm_ZNrq_rIXCz3xCGA" "https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA" "https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA" "http://www.linuxinsider.com/perl/syndication/rssfull.pl" "http://planet.debian.org/rss20.xml" "http://feeds2.feedburner.com/Command-line-fu" "https://opensource.org/news.xml" "https://feeds.feedburner.com/arstechnica/index" "https://www.wired.com/feed/rss" "https://sivers.org/en.atom")))
  '(fci-rule-color "#383838")
  '(helm-completion-style (quote emacs))
  '(hl-todo-keyword-faces
@@ -35,7 +38,7 @@
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
- '(org-sort-agenda-notime-is-late nil t)
+ '(org-sort-agenda-notime-is-late nil)
  '(package-selected-packages
    (quote
     (ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
