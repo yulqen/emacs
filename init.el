@@ -8,8 +8,10 @@
 
 (require 'package)
 
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages"))
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")))
 
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -222,7 +224,7 @@
   :config
   (ido-mode t)
   (ido-everywhere t)
-  (setq ido-emable-flex-matching t))
+  (setq ido-enable-flex-matching t))
 
 ;; Python programming
 (use-package elpy
@@ -251,6 +253,8 @@
   :commands lsp-ui-mode
   :init)
 
+(add-to-list 'ac-modes 'go-mode)
+
 (use-package yasnippet
   :commands yas-minor-mode
   :hook (go-mode . yas-minor-mode))
@@ -260,3 +264,7 @@
       lsp-ui-sideline-enable t
       lsp-ui-imenu-enable t
       lsp-ui-flycheck-enable t)
+
+(setq lsp-gopls-staticcheck t)
+(setq lsp-eldoc-render-all t)
+(setq lsp-gopls-complete-unimported t)
