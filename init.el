@@ -241,9 +241,13 @@
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (add-hook 'elpy-mode-hook 'flycheck-mode)))
 
+;; Make sure auto-complete works in python-mode
+(add-to-list 'ac-modes 'python-mode)
+
 ;; Go programming
 (use-package lsp-mode
   :hook (go-mode . lsp-deferred)
+  :hook (python-mode . lsp-deferred)
   :commands (lsp lsp-deferred)
   :config
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
@@ -253,11 +257,13 @@
   :commands lsp-ui-mode
   :init)
 
+;; Make sure auto-complete works in go-mode
 (add-to-list 'ac-modes 'go-mode)
 
 (use-package yasnippet
   :commands yas-minor-mode
-  :hook (go-mode . yas-minor-mode))
+  :hook (go-mode . yas-minor-mode)
+  :hook (python-mode . yas-minor-mode))
 
 (setq lsp-ui-doc-enable nil
       lsp-ui-peek-enable t
