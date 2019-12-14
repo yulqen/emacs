@@ -310,7 +310,7 @@
 (setq helm-scroll-amount 5)
 (setq helm-ff-file-name-history-use-recentf t)
 
-(evil-mode t)
+(evil-mode 0)
 ;; Enable "M-x" in evil mode
 (global-set-key (kbd "M-x") 'execute-extended-command)
 
@@ -325,7 +325,7 @@
 (require 'evil-surround)
 (global-evil-surround-mode 1)
 
-(global-evil-mc-mode  1)
+(global-evil-mc-mode  0)
 
 (define-key evil-normal-state-map (kbd "{") 'evil-next-buffer)
 (define-key evil-normal-state-map (kbd "}") 'evil-prev-buffer)

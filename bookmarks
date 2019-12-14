@@ -4,17 +4,17 @@
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored-marker"
  (filename . "~/Nextcloud/org/todo.org")
- (front-context-string . "** TODO Look int")
- (rear-context-string . " Personal Tasks\n")
- (position . 938))
+ (front-context-string . "** TODO Sort out")
+ (rear-context-string . "ily\n* Computing\n")
+ (position . 101))
 ("org-refile-last-stored"
  (filename . "~/Nextcloud/org/todo.org")
- (front-context-string . "** TODO Look int")
- (rear-context-string . " Personal Tasks\n")
- (position . 938))
+ (front-context-string . "** TODO Sort out")
+ (rear-context-string . "ily\n* Computing\n")
+ (position . 101))
 ("org-capture-last-stored"
  (filename . "~/Nextcloud/org/todo.org")
- (front-context-string . "* TODO Look into")
- (rear-context-string . "          :caf:\n")
- (position . 2800))
+ (front-context-string . "* TODO Sort out ")
+ (rear-context-string . "\n  Chunky body.\n")
+ (position . 4337))
 )

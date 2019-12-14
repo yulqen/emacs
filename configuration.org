@@ -568,7 +568,7 @@ with modal editing through semantic commands and Emacs being a LISP
 REPL.
 ** Enable Evil
 #+BEGIN_SRC emacs-lisp
-  (evil-mode t)
+  (evil-mode 0)
   ;; Enable "M-x" in evil mode
   (global-set-key (kbd "M-x") 'execute-extended-command)
 #+END_SRC
@@ -607,7 +607,7 @@ cursor forward use =C-t= or =grn= and backward =grp=. Finally use
 *** Enable =evil-mc= for all buffers
 
 #+BEGIN_SRC emacs-lisp
-(global-evil-mc-mode  1)
+(global-evil-mc-mode  0)
 #+END_SRC
 
 ** Fast switching between buffers

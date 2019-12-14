@@ -9,7 +9,7 @@
    ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
- '(custom-enabled-themes (quote (manoj-dark)))
+ '(custom-enabled-themes nil)
  '(custom-safe-themes
    (quote
     ("8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" default)))
@@ -38,10 +38,10 @@
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
- '(org-sort-agenda-notime-is-late nil)
+ '(org-sort-agenda-notime-is-late nil t)
  '(package-selected-packages
    (quote
-    (ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
+    (org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
  '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#282828")))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")

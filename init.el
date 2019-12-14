@@ -6,11 +6,257 @@
 (if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
+(require 'package)
+
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages"))
+
+(setq package-enable-at-startup nil)
 (package-initialize)
 
-(defun load-config()
-  "Load the actual configuration in literate 'org-mode' elisp."
-  (interactive)
-  (org-babel-load-file "~/.emacs.d/configuration.org"))
+;;(load-config)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-(load-config)
+(eval-when-compile
+  (require 'use-package))
+
+;; always ensure package
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+;; Deal with history
+(setq savehist-file "~/.emacs.d/savehist")
+(savehist-mode +1)
+(setq savehist-save-minibuffer-history +1)
+(setq savehist-additional-vriables
+      '(kill-ring
+        search-ring
+        regexp-search-ring))
+
+;; GUI stuff
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(menu-bar-mode -1)
+
+;; Garbage collection
+(setq gc-cons-threshold 20000000)
+
+;; No backup files!
+(setq make-backup-files nil)
+
+;; Put backups in /tmp where they belong
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+;; Always follow symlinks
+(setq vc-follow-symlinks t)
+
+;; Confirm before quitting emacs
+(setq confirm-kill-emacs 'y-or-n-p)
+
+;; dired config
+;; use current buffer with "a" instead of RET
+(put 'dired-find-alternate-file 'disabled nil)
+
+;; human readable
+(setq-default dired-listing-switches "-alh")
+
+;; recursively copy by default
+(setq dired-recursive-copies 'always)
+
+;; y or n instead of yes or no
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; auto revert files
+(global-auto-revert-mode t)
+
+;; Inhibit splash
+(setq inhibit-splash-screen t)
+(setq inhibit-startup-message t)
+
+;; Display the current time
+(display-time-mode t)
+
+;; Enable narrow region (disabled by default)
+(put 'narrow-to-region 'disabled nil)
+
+;; Enable cursor position when reopening files
+(setq save-place-file "~/.emacs.d/saveplace")
+(setq-default save-place t)
+(require 'saveplace)
+
+;; Windmove - use Shift and arrow keys to move in windows
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+
+;; Winner mode - undo and redo changes in window config
+;; with C-c left and C-c right
+  (when (fboundp 'winner-mode)
+    (winner-mode 1))
+
+;; Don't ring the system bell
+(setq visible-bell t)
+
+;; Use a separation file for custom commands
+(setq custom-file "~/.emacs.d/custom-settings.el")
+(load custom-file t)
+
+;; Basic auto-complete
+(use-package auto-complete
+  :config
+  (ac-config-default))
+
+
+;; Handling tabs (for programming)
+(setq-default tab-width 2)
+(setq-default tab-width 2 indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
+(setq js-indent-level 2)
+(setq coffee-tab-width 2)
+(setq python-indent 2)
+(setq css-indent-offset 2)
+(add-hook 'sh-mode-hook
+	  (lambda ()
+	    (setq sh-basic-offset 2
+		  sh-indentation 2)))
+(setq web-mode-markup-indent-offset 2)
+
+;; flycheck syntax highlighting
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+;; Auto-indent with RET
+(define-key global-map (kbd "RET") 'newline-and-indent)
+
+;; Highlight matching parens
+(show-paren-mode t)
+
+;; Code folding (hide show mode)
+;;- zc: Fold
+;;- za: Unfold
+;;- zR: Unfold everything
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+
+;; Line numbers
+(add-hook 'prog-mode-hook '(lambda ()
+                             (if (version<= emacs-version "26.0.50")
+                                 (linum-mode)
+                               (display-line-numbers-mode))))
+
+;; org mode config
+(use-package org
+  :config
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
+  (global-set-key "\C-cc" 'org-capture)
+  (setq org-sort-agenda-notime-is-late nil)
+  (setq org-directory "~/Nextcloud/org")
+  (setq org-agenda-files '("~/Nextcloud/org"))
+  (setq org-default-notes-file (concat org-directory "/refile.org"))
+  (setq diary-file "~/Nextcloud/org/diary")
+  (setq org-agenda-include-diary t)
+  (setq org-agenda-skip-deadline-if-done t)
+  (setq org-reverse-note-order t)
+  (setq org-sort-agenda-notime-is-late nil)
+
+  (setq org-archive-location "~/Nextcloud/org/archive.org::* From %s")
+
+  (setq org-refile-targets (quote ((nil :maxlevel . 9)
+                   (org-agenda-files :maxlevel . 9))))
+
+  (setq org-agenda-custom-commands
+        '(("N" "Agenda and NEXT TODOs" ((agenda "") (todo "NEXT")))
+         ("y" "Agenda and All TODOS" ((agenda "") (alltodo "") ))
+         ("w" "Agenda and WAITING" ((agenda "") (todo "WAITING")))
+         ("p" "Agenda and PROJECTs" ((agenda "") (todo "PROJECT")))))
+  (define-key global-map "\C-cc" 'org-capture)
+  (setq org-default-notes-file "~/Nextcloud/org/refile.org")
+  (setq org-capture-templates
+        (quote (("t" "Todo" entry (file "~/Nextcloud/org/todo.org")
+                 "* TODO %?")
+                ("j" "Journal" entry (file+datetree "~/Nextcloud/org/journal.org")
+                 "* %?\nEntered on %U\n %i\n %a")
+                ("e" "Emacs Tip" entry (file+headline "~/Nextcloud/org/emacs-tips.org" "Emacs Tips")
+                 "* %?\n %i\n %a"))))
+  (setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "PROJECT"))))
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("NEXT" :foreground "blue" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold)
+                ("MEETING" :foreground "forest green" :weight bold)
+                ("PROJECT" :foreground "OrangeRed2" :weight bold)
+                ("PHONE" :foreground "forest green" :weight bold))))
+
+  ;; tag stuff automatically dependent on a change of state
+  (setq org-todo-state-tags-triggers
+        (quote (("CANCELLED" ("CANCELLED" . t))
+                ("WAITING" ("WAITING" . t))
+                ("HOLD" ("WAITING") ("HOLD" . t))
+                (done ("WAITING") ("HOLD"))
+                ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+  (setq org-priority-faces
+        '((?A . (:foreground "#CC0000" :background "#FFE3E3"))
+    (?B . (:foreground "#64992C" :background "#EBF4DD"))
+    (?C . (:foreground "#64992C" :background "#FFFFFF"))))
+
+  (setq org-ellipsis "...")
+  )
+
+;; Interactively Do Things (ido)
+(use-package ido
+  :config
+  (ido-mode t)
+  (ido-everywhere t)
+  (setq ido-emable-flex-matching t))
+
+;; Python programming
+(use-package elpy
+  :ensure py-autopep8
+  :config
+  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+  (setq python-shell-interpreter "ptipython"
+        python-shell-interpreter-args "console --simple-prompt"
+        python-shell-prompt-detect-failure-warning nil)
+  (add-to-list 'python-shell-completion-native-disabled-interpreters
+               "ptipython")
+
+  (when (require 'flycheck nil t)
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode)))
+
+;; Go programming
+(use-package lsp-mode
+  :hook (go-mode . lsp-deferred)
+  :commands (lsp lsp-deferred)
+  :config
+  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
+
+(use-package lsp-ui
+  :hook (lsp-mode-hook . lsp-ui-mode)
+  :commands lsp-ui-mode
+  :init)
+
+(use-package yasnippet
+  :commands yas-minor-mode
+  :hook (go-mode . yas-minor-mode))
+
+(setq lsp-ui-doc-enable nil
+      lsp-ui-peek-enable t
+      lsp-ui-sideline-enable t
+      lsp-ui-imenu-enable t
+      lsp-ui-flycheck-enable t)
