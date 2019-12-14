@@ -43,6 +43,17 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
+;; fonts
+(when (eq system-type 'gnu/linux)
+  (set-frame-font "Fira Code Retina 15")
+  ;; Default Browser
+  (setq browse-url-browser-function 'browse-url-generic
+        browse-url-generic-program "firefox"
+        browse-url-new-window-flag t)
+  (menu-bar-mode -1)
+  ;; enable pdf-tools
+  (pdf-tools-install))
+
 ;; Garbage collection
 (setq gc-cons-threshold 20000000)
 
@@ -225,6 +236,11 @@
   (ido-mode t)
   (ido-everywhere t)
   (setq ido-enable-flex-matching t))
+
+;; Which key
+(use-package which-key
+  :hook ('org-mode-hook . 'which-key-mode)
+  :hook ('cider-mode-hook . 'which-key-mode))
 
 ;; Python programming
 (use-package elpy
