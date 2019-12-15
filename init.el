@@ -45,7 +45,7 @@
 
 ;; fonts
 (when (eq system-type 'gnu/linux)
-  (set-frame-font "Fira Code Retina 15")
+  (set-frame-font "Fira Code Retina 13")
   ;; Default Browser
   (setq browse-url-browser-function 'browse-url-generic
         browse-url-generic-program "firefox"
