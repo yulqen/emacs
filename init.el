@@ -43,6 +43,14 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
+;; org-caldav
+(use-package org-caldav
+  :config
+  (setq org-caldav-url "https://ronver.xyz/remote.php/dav/calendars/mrlemon")
+  (setq org-caldav-calendar-id "org-home")
+  (setq org-caldav-inbox "~/Nextcloud/org/inbox_cal.org")
+  (setq org-caldav-files `("~/Nextcloud/org/cal.org")))
+
 ;; fonts
 (when (eq system-type 'gnu/linux)
   (set-frame-font "Fira Code Retina 13")
@@ -114,7 +122,7 @@
 
 ;; Don't ring the system bell
 (setq visible-bell t)
-
+p
 ;; Use a separation file for custom commands
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
@@ -198,8 +206,10 @@
                  "* %?\nEntered on %U\n %i\n %a")
                 ("e" "Emacs Tip" entry (file+headline "~/Nextcloud/org/emacs-tips.org" "Emacs Tips")
                  "* %?\n %i\n %a"))))
+  ;; Put state transition logs into a drawer called LOGBOOK
+  (setq org-log-into-drawer t)
   (setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "PROJECT"))))
   (setq org-todo-keyword-faces
         (quote (("TODO" :foreground "red" :weight bold)
@@ -226,7 +236,6 @@
         '((?A . (:foreground "#CC0000" :background "#FFE3E3"))
     (?B . (:foreground "#64992C" :background "#EBF4DD"))
     (?C . (:foreground "#64992C" :background "#FFFFFF"))))
-
   (setq org-ellipsis "...")
   )
 
@@ -239,8 +248,8 @@
 
 ;; Which key
 (use-package which-key
-  :hook ('org-mode-hook . 'which-key-mode)
-  :hook ('cider-mode-hook . 'which-key-mode))
+  :hook ((org-mode . which-key-mode)
+         (cider-mode . which-key-mode)))
 
 ;; Python programming
 (use-package elpy
@@ -269,7 +278,7 @@
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
 
 (use-package lsp-ui
-  :hook (lsp-mode-hook . lsp-ui-mode)
+  :hook (lsp-mode . lsp-ui-mode)
   :commands lsp-ui-mode
   :init)
 
