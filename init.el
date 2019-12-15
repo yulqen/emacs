@@ -122,7 +122,6 @@
 
 ;; Don't ring the system bell
 (setq visible-bell t)
-p
 ;; Use a separation file for custom commands
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
@@ -204,12 +203,18 @@ p
                  "* TODO %?")
                 ("j" "Journal" entry (file+datetree "~/Nextcloud/org/journal.org")
                  "* %?\nEntered on %U\n %i\n %a")
+                ("c" "Calendar entries")
+                ("cw" "Work Calendar" entry (file+headline "~/Nextcloud/org/cal.org" "DfT")
+                 "* %?\n%^t\n")
+                ("ch" "Home Calendar" entry (file+headline "~/Nextcloud/org/cal.org" "Home")
+                 "* %?\n%^t\n")
                 ("e" "Emacs Tip" entry (file+headline "~/Nextcloud/org/emacs-tips.org" "Emacs Tips")
                  "* %?\n %i\n %a"))))
   ;; Put state transition logs into a drawer called LOGBOOK
   (setq org-log-into-drawer t)
+  
   (setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@)")
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "PROJECT"))))
   (setq org-todo-keyword-faces
         (quote (("TODO" :foreground "red" :weight bold)
