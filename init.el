@@ -29,7 +29,7 @@
 (setq use-package-always-ensure t)
 
 ;; Highlight line
-(set-face-background hl-line-face "pale goldenrod")
+;;(setq set-face-background hl-line-face "pale goldenrod")
 (hl-line-mode 1)
 
 ;; Deal with history
@@ -40,6 +40,72 @@
       '(kill-ring
         search-ring
         regexp-search-ring))
+
+;; Some basics
+(setq auto-save-default nil)
+(global-set-key (kbd "M-o") 'other-window)
+(setq column-number-mode t)
+(setq apropos-do-all t)
+
+;; recentf
+(use-package recentf
+  :config
+  (setq recentf-auto-cleanup 'never
+        recentf-max-saved-items 1000
+        recentf-save-file (concat user-emacs-directory ".recentf"))
+  (recentf-mode t))
+
+;; Basic magit
+(use-package magit
+  :bind ("C-x g" . magit-status))
+
+;; Git enhancement
+(use-package git-gutter
+  :config
+  (global-git-gutter-mode t)
+  (setq git-gutter:modified-sign "|")
+  (set-face-foreground 'git-gutter:modified "grey")
+  (set-face-foreground 'git-gutter:added "green")
+  (set-face-foreground 'git-gutter:deleted "red")
+  :bind (("C-x C-g" . git-gutter))
+  :diminish nil)
+
+;; Lisp programming
+(use-package paredit
+  :init
+  (add-hook 'clojure-mode-hook #'enable-paredit-mode)
+  (add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook #'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook #'enable-paredit-mode)
+  :config
+  (show-paren-mode t)
+  :bind (("M-[" . paredit-wrap-square)
+         ("M-{" . paredit-wrap-curly))
+  :diminish nil)
+
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+(use-package highlight-symbol
+  :config
+  (add-hook 'prog-mode-hook 'highlight-symbol-mode)
+  (set-face-background 'highlight-symbol-face "#a45bad")
+  (setq highlight-symbol-idle-delay 0.5)
+  :bind (("M-n" . highlight-symbol-next)
+         ("M-p" . highlight-symbol-prev)))
+
+;; Ace Jump
+(use-package ace-jump-mode
+  :bind ("C-M-SPC" . ace-jump-mode))
+
+;; Dump Jump
+(use-package dumb-jump
+  :bind ("C-M-." . dumb-jump-go))
 
 ;; GUI stuff
 (scroll-bar-mode -1)
@@ -57,7 +123,7 @@
 
 ;; fonts
 (when (eq system-type 'gnu/linux)
-  (set-frame-font "Fira Code Retina 13")
+  (set-frame-font "Fira Code Retina 12")
   ;; Default Browser
   (setq browse-url-browser-function 'browse-url-generic
         browse-url-generic-program "firefox"
