@@ -13,3 +13,5 @@ transient/
 elpy/
 eshell/
 url/
+.org-id-locations
+org-caldav-*
