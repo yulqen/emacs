@@ -32,6 +32,9 @@
 ;;(setq set-face-background hl-line-face "pale goldenrod")
 (hl-line-mode 1)
 
+;; Region colour
+(set-face-attribute 'region nil :background "#633" :foreground "#ffffff")
+
 ;; Deal with history
 (setq savehist-file "~/.emacs.d/savehist")
 (savehist-mode +1)
@@ -305,7 +308,7 @@
                  "* %?\nEntered on %U\n %i\n %a")
                 ("c" "Calendar entries")
                 ("cw" "Work Calendar" entry (file+headline "~/Nextcloud/org/cal.org" "DfT")
-                 "* CAL %?\n%^t\n")
+                 "* %?\n%^t\n")
                 ("ch" "Home Calendar" entry (file+headline "~/Nextcloud/org/cal.org" "Home")
                  "* %?\n%^t\n")
                 ("e" "Emacs Tip" entry (file+headline "~/Nextcloud/org/emacs-tips.org" "Emacs Tips")
@@ -316,7 +319,7 @@
   (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
-              (sequence "PHONE(o)" "MEETING(m)" "PROJECT(p)" "CAL(i)"))))
+              (sequence "PHONE(o)" "MEETING(m)" "PROJECT(p)"))))
   
   (setq org-todo-keyword-faces
         (quote (("TODO" :foreground "red" :weight bold)
@@ -327,7 +330,6 @@
                 ("CANCELLED" :foreground "forest green" :weight bold)
                 ("MEETING" :foreground "forest green" :weight bold)
                 ("PROJECT" :foreground "OrangeRed2" :weight bold)
-                ("CAL" :foreground "DarkOliveGreen" :weight bold)
                 ("PHONE" :foreground "forest green" :weight bold))))
 
   ;; tag stuff automatically dependent on a change of state
