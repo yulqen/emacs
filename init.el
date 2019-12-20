@@ -404,8 +404,12 @@
 
 (use-package yasnippet
   :commands yas-minor-mode
+  :config
+  (define-key yas-minor-mode-map (kbd "C-c y") #'yas-expand)
   :hook (go-mode . yas-minor-mode)
   :hook (python-mode . yas-minor-mode))
+
+(use-package yasnippet-snippets)
 
 ;;Company mode is a standard completion package that works well with lsp-mode.
 ;;company-lsp integrates company mode completion with lsp-mode.
@@ -418,8 +422,6 @@
 
 (use-package company-lsp
   :commands company-lsp)
-
-(use-package yasnippet-snippets)
 
 (setq lsp-ui-doc-enable nil
       lsp-ui-peek-enable t
