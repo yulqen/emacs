@@ -116,11 +116,18 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
+(use-package oauth2)
+
 ;; org-caldav
 (use-package org-caldav
   :config
-  (setq org-caldav-url "https://ronver.xyz/remote.php/dav/calendars/mrlemon")
-  (setq org-caldav-calendar-id "org-home")
+  ;; (setq org-caldav-url "https://ronver.xyz/remote.php/dav/calendars/mrlemon")
+  ;; (setq org-caldav-calendar-id "org-home")
+    (setq org-caldav-oauth2-client-id "697419293432-p84jei88v7g6lu9qomk1404o86kim3uj.apps.googleusercontent.com")
+  (setq org-caldav-oauth2-client-secret "cwHIENs3tghyb6tEKatxULS_")
+  (setq org-caldav-calendar-id "matthew.lemon@gmail.com")
+  (setq org-caldav-url 'google)
+  (setq org-caldav-sync-direction 'cal->org)
   (setq org-caldav-inbox "~/Nextcloud/org/inbox_cal.org")
   (setq org-caldav-files `("~/Nextcloud/org/cal.org")))
 
@@ -200,9 +207,9 @@
 (load custom-file t)
 
 ;; Basic auto-complete
-(use-package auto-complete
-  :config
-  (ac-config-default))
+;; (use-package auto-complete
+;;   :config
+;;   (ac-config-default))
 
 
 ;; Handling tabs (for programming)
@@ -377,7 +384,7 @@
     (add-hook 'elpy-mode-hook 'flycheck-mode)))
 
 ;; Make sure auto-complete works in python-mode
-(add-to-list 'ac-modes 'python-mode)
+;; (add-to-list 'ac-modes 'python-mode)
 
 ;; Go programming
 (use-package lsp-mode
@@ -393,12 +400,26 @@
   :init)
 
 ;; Make sure auto-complete works in go-mode
-(add-to-list 'ac-modes 'go-mode)
+;; (add-to-list 'ac-modes 'go-mode)
 
 (use-package yasnippet
   :commands yas-minor-mode
   :hook (go-mode . yas-minor-mode)
   :hook (python-mode . yas-minor-mode))
+
+;;Company mode is a standard completion package that works well with lsp-mode.
+;;company-lsp integrates company mode completion with lsp-mode.
+;;completion-at-point also works out of the box but doesn't support snippets.
+
+(use-package company
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1))
+
+(use-package company-lsp
+  :commands company-lsp)
+
+(use-package yasnippet-snippets)
 
 (setq lsp-ui-doc-enable nil
       lsp-ui-peek-enable t

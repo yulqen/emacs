@@ -41,7 +41,7 @@
  '(org-sort-agenda-notime-is-late nil)
  '(package-selected-packages
    (quote
-    (highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
+    (yasnippet-snippets oauth2 highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
  '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#282828")))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
