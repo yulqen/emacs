@@ -12,7 +12,7 @@
  '(custom-enabled-themes nil)
  '(custom-safe-themes
    (quote
-    ("8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" default)))
+    ("a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "947190b4f17f78c39b0ab1ea95b1e6097cc9202d55c73a702395fc817f899393" "8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" default)))
  '(elfeed-feeds
    (quote
     ("https://www.youtube.com/feeds/videos.xml?channel_id=UChWbNrHQHvKK6paclLp7WYw" "https://www.reddit.com/r/linuxmasterrace.rss" "https://feeds.feedburner.com/arstechnica/open-source" "https://www.computerweekly.com/rss/IT-security.xml" "https://www.fsf.org/static/fsforg/rss/news.xml" "https://www.reddit.com/r/freebsd.rss" "https://www.reddit.com/r/emacs.rss" "https://www.reddit.com/r/rugbyunion/.rss" "http://pragmaticemacs.com/feed/" "https://200ok.ch/atom.xml" "https://www.youtube.com/feeds/videos.xml?channel_id=UCkK9UDm_ZNrq_rIXCz3xCGA" "https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA" "https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA" "http://www.linuxinsider.com/perl/syndication/rssfull.pl" "http://planet.debian.org/rss20.xml" "http://feeds2.feedburner.com/Command-line-fu" "https://opensource.org/news.xml" "https://feeds.feedburner.com/arstechnica/index" "https://www.wired.com/feed/rss" "https://sivers.org/en.atom")))
@@ -38,10 +38,10 @@
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
- '(org-sort-agenda-notime-is-late nil)
+ '(org-sort-agenda-notime-is-late nil t)
  '(package-selected-packages
    (quote
-    (yasnippet-snippets oauth2 highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
+    (dracula-theme evil-mode yasnippet-snippets oauth2 highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
  '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#282828")))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")

@@ -30,7 +30,7 @@
 
 ;; Highlight line
 ;;(setq set-face-background hl-line-face "pale goldenrod")
-(hl-line-mode 1)
+;;(hl-line-mode 1)
 
 ;; Region colour
 (set-face-attribute 'region nil :background "#633" :foreground "#ffffff")
@@ -94,13 +94,36 @@
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(use-package highlight-symbol
+;; (use-package highlight-symbol
+;;   :config
+;;   (add-hook 'prog-mode-hook 'highlight-symbol-mode)
+;;   (set-face-background 'highlight-symbol-face "#a45bad")
+;;   (set-face-foreground 'highlight-symbol-face "#ffffff")
+;;   (setq highlight-symbol-idle-delay 0.5)
+;;   :bind (("M-n" . highlight-symbol-next)
+;;          ("M-p" . highlight-symbol-prev)))
+
+
+;; Evil mode
+(use-package evil
   :config
-  (add-hook 'prog-mode-hook 'highlight-symbol-mode)
-  (set-face-background 'highlight-symbol-face "#a45bad")
-  (setq highlight-symbol-idle-delay 0.5)
-  :bind (("M-n" . highlight-symbol-next)
-         ("M-p" . highlight-symbol-prev)))
+  (evil-mode 1)
+  (mapc (lambda (mode)
+        (evil-set-initial-state mode 'emacs)) '(elfeed-show-mode
+                                                elfeed-search-mode
+                                                forge-pullreq-list-mode
+                                                forge-topic-list-mode
+                                                dired-mode
+                                                help-mode
+                                                info
+                                                tide-references-mode
+                                                image-dired-mode
+                                                image-dired-thumbnail-mode
+                                                eww-mode))
+
+  (define-key evil-normal-state-map (kbd "{") 'evil-next-buffer)
+  (define-key evil-normal-state-map (kbd "}") 'evil-prev-buffer)
+  )
 
 ;; Ace Jump
 (use-package ace-jump-mode
@@ -207,9 +230,9 @@
 (load custom-file t)
 
 ;; Basic auto-complete
-;; (use-package auto-complete
-;;   :config
-;;   (ac-config-default))
+(use-package auto-complete
+  :config
+  (ac-config-default))
 
 
 ;; Handling tabs (for programming)
