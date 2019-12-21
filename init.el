@@ -28,6 +28,9 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+;; Themes
+(use-package monokai-theme)
+
 ;; Highlight line
 ;;(setq set-face-background hl-line-face "pale goldenrod")
 ;;(hl-line-mode 1)
@@ -105,25 +108,25 @@
 
 
 ;; Evil mode
-(use-package evil
-  :config
-  (evil-mode 1)
-  (mapc (lambda (mode)
-        (evil-set-initial-state mode 'emacs)) '(elfeed-show-mode
-                                                elfeed-search-mode
-                                                forge-pullreq-list-mode
-                                                forge-topic-list-mode
-                                                dired-mode
-                                                help-mode
-                                                info
-                                                tide-references-mode
-                                                image-dired-mode
-                                                image-dired-thumbnail-mode
-                                                eww-mode))
+;; (use-package evil
+;;   :config
+;;   (evil-mode 1)
+;;   (mapc (lambda (mode)
+;;         (evil-set-initial-state mode 'emacs)) '(elfeed-show-mode
+;;                                                 elfeed-search-mode
+;;                                                 forge-pullreq-list-mode
+;;                                                 forge-topic-list-mode
+;;                                                 dired-mode
+;;                                                 help-mode
+;;                                                 info
+;;                                                 tide-references-mode
+;;                                                 image-dired-mode
+;;                                                 image-dired-thumbnail-mode
+;;                                                 eww-mode))
 
-  (define-key evil-normal-state-map (kbd "{") 'evil-next-buffer)
-  (define-key evil-normal-state-map (kbd "}") 'evil-prev-buffer)
-  )
+;;   (define-key evil-normal-state-map (kbd "{") 'evil-next-buffer)
+;;   (define-key evil-normal-state-map (kbd "}") 'evil-prev-buffer)
+;;   )
 
 ;; Ace Jump
 (use-package ace-jump-mode
@@ -139,7 +142,6 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
-(use-package oauth2)
 
 ;; org-caldav
 (use-package org-caldav
@@ -278,7 +280,7 @@
   (ivy-mode 1)
   (global-set-key (kbd "C-s") 'swiper-isearch)
   (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  ;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (global-set-key (kbd "M-y") 'counsel-yank-pop)
   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
   (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
@@ -286,7 +288,7 @@
   (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
   (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
   (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+  ;; (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
   (global-set-key (kbd "C-c v") 'ivy-push-view)
   (global-set-key (kbd "C-c V") 'ivy-pop-view)
   (global-set-key (kbd "C-c g") 'counsel-git)
