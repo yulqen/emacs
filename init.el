@@ -53,6 +53,13 @@
 (setq column-number-mode t)
 (setq apropos-do-all t)
 
+;; calendar proper Monday start
+(setq calendar-week-start-day 1)
+(setq calendar-date-style (quote european))
+
+;; TRAMP stuff
+;; using sshx as default as it works better than ssh
+(setq tramp-default-method "sshx")
 
 ;; remap M-x to something else
 ;; https://sites.google.com/site/steveyegge2/effective-emacs
