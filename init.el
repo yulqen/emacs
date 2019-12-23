@@ -65,6 +65,35 @@
 (global-set-key "\C-x\C-k" 'kill-region)
 (global-set-key "\C-c\C-k" 'kill-region)
 
+;; mu4e
+;; the exact path may differ --- check it
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+(require 'mu4e)
+(setq mu4e-maildir "~/.mail/matt-matthewlemon.com")
+(setq message-send-mail-function 'smtpmail-send-it)
+(setq mu4e-contexts
+      `( ,(make-mu4e-context
+           :name "Fastmail"
+           :enter-func (lambda () (mu4e-message "Entering Fastmail context"))
+           :leave-func (lambda () (mu4e-message "Leaving Fastmail context"))
+           ;; we match based on the contact-fields of the message
+           :match-func (lambda (msg)
+                         (when msg
+                           (mu4e-message-contact-field-matches msg
+                              :to "matt@matthewlemon.com")))
+           :vars '((user-email-address . "matt@matthewlemon.com")
+                   (user-full-name . "MR Lemon")
+                   (smtpmail-default-smtp-server . "mail.messagingengine.com")
+                   (smtpmail-smtp-server . "mail.messagingengine.com")
+                   (smtpmail-smtp-user . "matthewlemon@fastmail.fm")
+                   (smtpmail-smtp-service . "465")
+                   (smtpmail-stream-type . ssl)
+                   (mu4e-sent-messages-behavior . sent)
+                   (mu4e-compose-signature .
+                                            (concat
+                                             "Matthew Lemon\n"
+                                             "Berwick-upon-Tweed"))))))
+
 ;; recentf
 (use-package recentf
   :config
