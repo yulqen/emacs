@@ -38,7 +38,7 @@
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
- '(org-sort-agenda-notime-is-late nil t)
+ '(org-sort-agenda-notime-is-late nil)
  '(package-selected-packages
    (quote
     (monokai-theme color-theme-monokai color-theme-sanityinc-tomorrow dracula-theme evil-mode yasnippet-snippets highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
