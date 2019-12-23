@@ -9,7 +9,7 @@
    ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
- '(custom-enabled-themes nil)
+ '(custom-enabled-themes (quote (wheatgrass)))
  '(custom-safe-themes
    (quote
     ("a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "947190b4f17f78c39b0ab1ea95b1e6097cc9202d55c73a702395fc817f899393" "8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" default)))

@@ -29,7 +29,7 @@
 (setq use-package-always-ensure t)
 
 ;; Themes
-(use-package monokai-theme)
+;; (use-package monokai-theme)
 
 ;; Highlight line
 ;;(setq set-face-background hl-line-face "pale goldenrod")
@@ -157,15 +157,15 @@
   (setq org-caldav-files `("~/Nextcloud/org/cal.org")))
 
 ;; fonts
-(when (eq system-type 'gnu/linux)
-  (set-frame-font "Fira Code Retina 12")
-  ;; Default Browser
-  (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "firefox"
-        browse-url-new-window-flag t)
-  (menu-bar-mode -1)
-  ;; enable pdf-tools
-  (pdf-tools-install))
+;; (when (eq system-type 'gnu/linux)
+;;   (set-frame-font "Fira Code Retina 12")
+;;   ;; Default Browser
+;;   (setq browse-url-browser-function 'browse-url-generic
+;;         browse-url-generic-program "firefox"
+;;         browse-url-new-window-flag t)
+;;   (menu-bar-mode -1)
+;;   ;; enable pdf-tools
+;;   (pdf-tools-install))
 
 ;; Garbage collection
 (setq gc-cons-threshold 20000000)
