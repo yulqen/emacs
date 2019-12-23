@@ -53,6 +53,11 @@
 (setq column-number-mode t)
 (setq apropos-do-all t)
 
+
+;; remap M-x to something else
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
+
 ;; recentf
 (use-package recentf
   :config
