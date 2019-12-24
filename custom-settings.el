@@ -35,13 +35,19 @@
      ("FIXME" . "#dc752f")
      ("XXX+" . "#dc752f")
      ("\\?\\?\\?+" . "#dc752f"))))
+ '(ivy-count-format "【%d/%d】")
+ '(ivy-height 10)
+ '(ivy-magic-slash-non-match-action (quote ivy-magic-slash-non-match-create))
+ '(ivy-on-del-error-function nil)
+ '(ivy-use-virtual-buffers t)
+ '(ivy-wrap t)
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(org-sort-agenda-notime-is-late nil)
  '(package-selected-packages
    (quote
-    (monokai-theme color-theme-monokai color-theme-sanityinc-tomorrow dracula-theme evil-mode yasnippet-snippets highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
+    (ace-window discover-my-major popup-kill-ring amx gnu-elpa-keyring-update auto-package-update monokai-theme color-theme-monokai color-theme-sanityinc-tomorrow dracula-theme evil-mode yasnippet-snippets highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
  '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#282828")))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
@@ -66,7 +72,10 @@
      (320 . "#8CD0D3")
      (340 . "#94BFF3")
      (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3"))
+ '(vc-annotate-very-old-color "#DC8CC3")
+ '(winner-boring-buffers
+   (quote
+    ("*Completions*" "*Compile-Log*" "*inferior-lisp*" "*Fuzzy Completions*" "*Apropos*" "*Help*" "*cvs*" "*Buffer List*" "*Ibuffer*" "*esh command on file*"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
