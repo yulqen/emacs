@@ -545,8 +545,12 @@
 ;; Python programming
 (use-package elpy
   :ensure py-autopep8
+  :defer t
+  :init
+  (elpy-enable)
   :config
   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+  (setq elpy-rpc-python-command "python3")
   (setq python-shell-interpreter "ptipython"
         python-shell-interpreter-args "console --simple-prompt"
         python-shell-prompt-detect-failure-warning nil)
