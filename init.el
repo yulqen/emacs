@@ -137,6 +137,12 @@
 ;; (global-set-key "\C-x\C-k" 'kill-region)
 ;; (global-set-key "\C-c\C-k" 'kill-region)
 
+;; kill other buffers
+(defun kill-other-buffers ()
+   "Kill all other buffers."
+   (interactive)
+   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
 ;; mu4e
 ;; the exact path may differ --- check it
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
