@@ -301,6 +301,7 @@
 
 ;; org-gcal stuff
 (use-package org-gcal
+  :bind (:map org-agenda-mode-map ("g" . org-gcal-fetch))
   :config
   (setq org-gcal-client-id "685624394721-5bsfpo57ri2rcc7k6f8sbg12gjrs7dot.apps.googleusercontent.com"
       org-gcal-client-secret "IAZ8j86uAPyolUnPGJxfieGO"
@@ -531,11 +532,19 @@
   (global-set-key "\C-cc" 'org-capture)
   (setq org-sort-agenda-notime-is-late nil)
   (setq org-directory "~/Nextcloud/org")
-  (setq org-agenda-files '("~/Nextcloud/org"))
+
+  (setq org-agenda-files (quote ("~/Nextcloud/org/todo.org"
+                                 "~/Nextcloud/org/projects.org"
+                                 "~/Nextcloud/org/"
+                                 "~/Nextcloud/org/calendar/home-cal.org"
+                                 "~/Nextcloud/org/calendar/work-cal.org")))
+  
   (setq org-default-notes-file (concat org-directory "/refile.org"))
   (setq diary-file "~/Nextcloud/org/diary")
   (setq org-agenda-include-diary t)
+  (setq org-agenda-show-future-repeats nil)
   (setq org-agenda-skip-deadline-if-done t)
+  (setq org-agenda-skip-scheduled-if-done t)
   (setq org-reverse-note-order t)
   (setq org-sort-agenda-notime-is-late nil)
 
@@ -598,6 +607,65 @@
     (?C . (:foreground "#64992C" :background "#FFFFFF"))))
   (setq org-ellipsis "...")
   )
+
+;; org tags
+(setq org-tag-alist '(
+                      ;; Depth
+                      ("@immersive" . ?i) ;; "Deep"
+                      ("@process" . ?p) ;; "Shallow"
+                      ("@offdesk" . ?o) ;; "Away from desk"
+                      ;; Context
+                      ("@work" . ?w)
+                      ("@home" . ?h)
+                      ("@errand" . ?e)
+                      ;; Time
+                      ("15min" . ?<)
+                      ("30min" . ?=)
+                      ("1h" . ?>)
+                      ;; Energy
+                      ("Challenge" . ?1)
+                      ("Average" . ?2)
+                      ("Easy" . ?3)
+                      ;; Misc
+                      ("Maybe" . ?m)
+                      ))
+
+;; Some nice org speed commands
+(setq org-use-speed-commands t
+      org-speed-commands-user
+      '(("N" org-narrow-to-subtree)
+        ("$" org-archive-subtree)
+        ("A" org-archive-subtree)
+        ("W" widen)
+        ("d" org-down-element)
+        ("k" org-cut-subtree)
+        ("m" org-mark-subtree)
+        ("s" org-sort)
+        ;; ("x" smex-major-mode-commands)
+        ("X" org-todo-done)
+        ("R" org-done-and-archive)
+        ("y" org-todo-yesterday)))
+
+;; org agenda should be full screen
+(defun open-agenda ()
+  "Open the org-agenda."
+  (interactive)
+  (let ((agenda "*Org Agenda*"))
+    (if (equal (get-buffer agenda) nil)
+        (org-agenda-list)
+      (unless (equal (buffer-name (current-buffer)) agenda)
+        (switch-to-buffer agenda))
+      (org-agenda-redo t)
+      (beginning-of-buffer))))
+
+(bind-key "<f5>" 'open-agenda)
+
+;; markdown
+(use-package markdown-mode)
+
+;; csvs!
+(use-package csv-mode
+  :mode ("\\.csv$" . csv-mode))
 
 ;; Interactively Do Things (ido)
 (use-package ido
