@@ -84,15 +84,43 @@
 (use-package discover-my-major
   :bind ("C-h C-m" . discover-my-major))
 
-;; Ace Window
-(use-package ace-window
-  :bind ("C-x C-o" . ace-window))
-
 ;; Some basics
 (setq auto-save-default nil)
 (global-set-key (kbd "M-o") 'other-window)
 (setq column-number-mode t)
 (setq apropos-do-all t)
+(setq x-stretch-cursor t)
+;; Emacs use own password prompt, not external PIN entry program
+(setenv "GPG_AGENT_INFO" nil)
+(setq kmacro-ring-max 30)
+
+;; encoding
+(prefer-coding-system 'utf-8)
+(setq coding-system-for-read 'utf-8)
+(setq coding-system-for-write 'utf-8)
+
+;; binds
+(bind-keys ("M-1" . delete-other-windows)
+           ("M-O" . mode-line-other-buffer))
+
+;; hydra
+(use-package hydra
+  :config
+  (setq hydra-lv nil))
+
+(defhydra hydra-zoom ()
+  "zoom"
+  ("+" text-scale-increase "in")
+  ("=" text-scale-increase "in")
+  ("-" text-scale-decrease "out")
+  ("_" text-scale-decrease "out")
+  ("0" (text-scale-adjust 0) "reset")
+  ("q" nil "quit" :color blue))
+
+(bind-keys ("C-x C-0" . hydra-zoom/body)
+           ("C-x C-=" . hydra-zoom/body)
+           ("C-x C--" . hydra-zoom/body)
+           ("C-x C-+" . hydra-zoom/body))
 
 ;; calendar proper Monday start
 (setq calendar-week-start-day 1)
@@ -430,7 +458,12 @@
   (ivy-mode 1)
   :bind
   (("C-s" . swiper-isearch)
+   ("C-x C-f" . counsel-find-file)
+   ("C-x C-m" . counsel-M-x)
+   ("C-h f" . counsel-describe-function)
+   ("C-h v" . counsel-describe-variable)
    ("C-z s" . counsel-rg)
+   ("C-x C-r" . counsel-recentf)
    ("C-z b" . counsel-buffer-or-recentf)
    ("C-z C-b" . counsel-ibuffer)
    (:map ivy-minibuffer-map
@@ -449,7 +482,45 @@
   (defun counsel-goto-local-home ()
       "Go to the $HOME of the local machine."
       (interactive)
-    (ivy--cd "~/")))
+      (ivy--cd "~/")))
+
+;; Jump to Characters and Words
+(use-package avy
+  :bind ("M-SPC" . avy-goto-char)
+  :config
+  (setq avy-background t
+        avy-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)))
+
+;; Ace Window
+(use-package ace-window
+  :bind (("C-x o" . ace-window)
+         ("M-2" . ace-window))
+  :init
+  (setq aw-background t
+        aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)))
+
+;; expand-region
+(use-package expand-region
+  :bind (("C-@" . er/expand-region)
+         ("C-=" . er/expand-region)
+         ("M-3" . er/expand-region)))
+
+(pending-delete-mode t)
+
+;; browse-kill-ring
+(use-package browse-kill-ring
+  :bind ("C-x C-y" . browse-kill-ring)
+  :config
+  (setq browse-kill-ring-quit-action 'kill-and-delete-window))
+
+(setq save-interprogram-paste-before-kill t)
+
+;; better re-builder setup
+(use-package re-builder
+  :bind (("C-c R" . re-builder))
+  :config
+  (setq reb-re-syntax 'string))
+
 
 ;; org mode config
 (use-package org
@@ -537,10 +608,9 @@
 
 ;; Which key
 (use-package which-key
-  :hook ((org-mode . which-key-mode)
-         (go-mode . which-key-mode)
-         (python-mode .which-key-mode)
-         (cider-mode . which-key-mode)))
+  :init
+  (which-key-mode))
+
 
 ;; Python programming
 (use-package elpy
