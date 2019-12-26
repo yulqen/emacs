@@ -305,8 +305,8 @@
   :config
   (setq org-gcal-client-id "685624394721-5bsfpo57ri2rcc7k6f8sbg12gjrs7dot.apps.googleusercontent.com"
       org-gcal-client-secret "IAZ8j86uAPyolUnPGJxfieGO"
-      org-gcal-file-alist '(("matthew.lemon@gmail.com" .  "~/Nextcloud/org/work-cal.org")
-                            ("12panp3nqdbmm9df4if9jigigo@group.calendar.google.com" .  "~/Nextcloud/org/home-cal.org"))))
+      org-gcal-file-alist '(("matthew.lemon@gmail.com" .  "~/Nextcloud/org/calendar/work-cal.org")
+                            ("12panp3nqdbmm9df4if9jigigo@group.calendar.google.com" .  "~/Nextcloud/org/calendar/home-cal.org"))))
 
 ;; No backup files!
 (setq make-backup-files nil)
@@ -535,7 +535,6 @@
 
   (setq org-agenda-files (quote ("~/Nextcloud/org/todo.org"
                                  "~/Nextcloud/org/projects.org"
-                                 "~/Nextcloud/org/"
                                  "~/Nextcloud/org/calendar/home-cal.org"
                                  "~/Nextcloud/org/calendar/work-cal.org")))
   
