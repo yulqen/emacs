@@ -706,11 +706,11 @@
   :config
   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
   (setq elpy-rpc-python-command "python3")
-  (setq python-shell-interpreter "ptipython"
+  (setq python-shell-interpreter "python3"
         python-shell-interpreter-args "console --simple-prompt"
         python-shell-prompt-detect-failure-warning nil)
   (add-to-list 'python-shell-completion-native-disabled-interpreters
-               "ptipython")
+               "python3")
 
   (when (require 'flycheck nil t)
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
@@ -720,6 +720,15 @@
   :bind
   ("C-c ESC t" . python-pytest-popup)
   )
+
+;; need this code to fix escape codes in compilation buffer
+;; (when running elpy test, for example)
+;; from https://stackoverflow.com/questions/3072648/cucumbers-ansi-colors-messing-up-emacs-compilation-buffer
+(set-frame-font)(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
 ;; Go programming
 (use-package lsp-mode
