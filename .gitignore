@@ -15,3 +15,10 @@ eshell/
 url/
 .org-id-locations
 org-caldav-*
+/.recentf
+/amx-items
+/mspyls/
+/oauth2.plstore
+/org-gcal/
+/request/
+/init.el-cpy
