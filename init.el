@@ -272,7 +272,14 @@
 
 ;; Dump Jump
 (use-package dumb-jump
-  :bind ("C-M-." . dumb-jump-go))
+  :bind (("M-g o" . dumb-jump-go-other-window)
+         ("M-g j" . dumb-jump-go)
+         ("M-g b" . dumb-jump-back)
+         ("M-g i" . dumb-jump-go-prompt)
+         ("M-g x" . dumb-jump-go-prefer-external)
+         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :config (setq dumb-jump-selector 'ivy)
+  :ensure)
 
 ;; GUI stuff
 (scroll-bar-mode -1)
@@ -708,6 +715,11 @@
   (when (require 'flycheck nil t)
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (add-hook 'elpy-mode-hook 'flycheck-mode)))
+
+(use-package python-pytest
+  :bind
+  ("C-c ESC t" . python-pytest-popup)
+  )
 
 ;; Go programming
 (use-package lsp-mode
