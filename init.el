@@ -537,8 +537,8 @@
   (global-set-key "\C-cb" 'org-iswitchb)
   (global-set-key "\C-cc" 'org-capture)
   (setq org-sort-agenda-notime-is-late nil)
+  (setq org-agenda-span "day")
   (setq org-directory "~/Nextcloud/org")
-
   (setq org-agenda-files (quote ("~/Nextcloud/org/todo.org"
                                  "~/Nextcloud/org/projects.org"
                                  "~/Nextcloud/org/calendar/home-cal.org"
