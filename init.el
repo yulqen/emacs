@@ -150,6 +150,7 @@
 
 ;; deal with horrible grey backgrounds in HTML backgrounds
 (require 'mu4e-contrib)
+(require 'org-mu4e)
 (setq mu4e-html2text-command 'mu4e-shr2text)
 (setq shr-color-visible-luminance-min 60)
 (setq shr-color-visible-distance-min 5)
@@ -170,7 +171,11 @@
                          (when msg
                            (mu4e-message-contact-field-matches msg
                               :to "matt@matthewlemon.com")))
-           :vars '((user-email-address . "matt@matthewlemon.com")
+           :vars '((mu4e-sent-folder . "/INBOX.Sent Items")
+                   (mu4e-drafts-folder . "/INBOX.Drafts")
+                   (mu4e-trash-folder . "/INBOX.Trash")
+                   (mu4e-get-mail-command . "offlineimap")
+                   (user-email-address . "matt@matthewlemon.com")
                    (user-full-name . "MR Lemon")
                    (smtpmail-default-smtp-server . "mail.messagingengine.com")
                    (smtpmail-smtp-server . "mail.messagingengine.com")
@@ -701,8 +706,6 @@
 (use-package elpy
   :ensure py-autopep8
   :defer t
-  :init
-  (elpy-enable)
   :config
   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
   (setq elpy-rpc-python-command "python3")
@@ -724,7 +727,7 @@
 ;; need this code to fix escape codes in compilation buffer
 ;; (when running elpy test, for example)
 ;; from https://stackoverflow.com/questions/3072648/cucumbers-ansi-colors-messing-up-emacs-compilation-buffer
-(set-frame-font)(require 'ansi-color)
+(require 'ansi-color)
 (defun colorize-compilation-buffer ()
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region (point-min) (point-max))))
@@ -771,8 +774,6 @@
 ;; Yasnippet
 (use-package yasnippet
   :diminish yas-minor-mode
-  :init
-  (use-package yasnippet-snippets :after yasnippet)
   :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
   :bind
   (:map yas-minor-mode-map ("C-c C-n" . yas-expand-from-trigger-key))
