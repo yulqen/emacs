@@ -593,11 +593,6 @@
                  "* TODO %?")
                 ("j" "Journal" entry (file+datetree "~/Nextcloud/org/journal.org")
                  "* %?\nEntered on %U\n %i\n %a")
-                ("c" "Calendar entries")
-                ("cw" "Work Calendar" entry (file+headline "~/Nextcloud/org/cal.org" "DfT")
-                 "* %?\n%^t\n")
-                ("ch" "Home Calendar" entry (file+headline "~/Nextcloud/org/cal.org" "Home")
-                 "* %?\n%^t\n")
                 ("e" "Emacs Tip" entry (file+headline "~/Nextcloud/org/emacs-tips.org" "Emacs Tips")
                  "* %?\n %i\n %a"))))
   ;; Put state transition logs into a drawer called LOGBOOK
