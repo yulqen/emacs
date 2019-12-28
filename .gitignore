@@ -22,3 +22,5 @@ org-caldav-*
 /org-gcal/
 /request/
 /init.el-cpy
+/.last-package-update-day
+/forge-database.sqlite
