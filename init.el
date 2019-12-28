@@ -126,6 +126,12 @@
 (setq calendar-week-start-day 1)
 (setq calendar-date-style (quote european))
 
+;; beacon mode
+(use-package beacon
+  :config
+  (setq beacon-color "OrangeRed")
+  (beacon-mode 1))
+
 ;; remap M-x to something else
 ;; https://sites.google.com/site/steveyegge2/effective-emacs
 ;; (global-set-key "\C-x\C-m" 'execute-extended-command)

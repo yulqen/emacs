@@ -7,6 +7,10 @@
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
+ '(auto-package-update-delete-old-versions t)
+ '(auto-package-update-hide-results t)
+ '(auto-package-update-interval 7)
+ '(auto-package-update-prompt-before-update t)
  '(auto-revert-verbose nil)
  '(company-begin-commands (quote (self-insert-command)))
  '(company-global-modes (quote (not shell-mode eaf-mode)))
@@ -68,7 +72,7 @@
  '(org-sort-agenda-notime-is-late nil)
  '(package-selected-packages
    (quote
-    (python-pytest password-store csv-mode expand-region org-gcal lsp-python-ms ace-window discover-my-major popup-kill-ring amx gnu-elpa-keyring-update auto-package-update monokai-theme color-theme-monokai color-theme-sanityinc-tomorrow dracula-theme evil-mode yasnippet-snippets highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
+    (beacon-mode python-pytest password-store csv-mode expand-region org-gcal lsp-python-ms ace-window discover-my-major popup-kill-ring amx gnu-elpa-keyring-update auto-package-update monokai-theme color-theme-monokai color-theme-sanityinc-tomorrow dracula-theme evil-mode yasnippet-snippets highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
  '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#282828")))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
