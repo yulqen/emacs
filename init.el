@@ -816,8 +816,7 @@
         ([tab] . smarter-yas-expand-next-field-complete)
         ("TAB" . smarter-yas-expand-next-field-complete))
   :custom
-  (company-minimum-prefix-length 1)
-  (company-tooltip-align-annotations t)
+    (company-tooltip-align-annotations t)
   (company-begin-commands '(self-insert-command))
   (company-require-match 'never)
   ;; Don't use company in the following modes
@@ -829,7 +828,9 @@
   :config
   ;; clangd variable not present which was a problem
 ;;  (unless *clangd* (delete 'company-clang company-backends))
-  (global-company-mode 1)
+;;  (global-company-mode 1)
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 3)
   (defun smarter-yas-expand-next-field-complete ()
     "Try to `yas-expand' and `yas-next-field' at current cursor position.
 
@@ -847,6 +848,17 @@ If failed try to complete the common part with `company-complete-common'"
               (company-complete-common))))
       (company-complete-common))))
 
+;; this stuff from https://youtu.be/XeWZfruRu6k
+;; for c programming mainly
+(use-package company-irony
+  :config
+  (require 'company)
+  (add-to-list 'company-backends 'company-irony))
+
+(use-package irony
+  :config
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
 (setq lsp-gopls-staticcheck t)
 (setq lsp-eldoc-render-all t)
