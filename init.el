@@ -194,6 +194,32 @@
                                              "Matthew Lemon\n"
                                              "Berwick-upon-Tweed"))))))
 
+
+;; elfeed
+(use-package elfeed
+  :config
+  (setq elfeed-feeds
+        '("https://www.youtube.com/feeds/videos.xml?channel_id=UChWbNrHQHvKK6paclLp7WYw"
+          "https://www.reddit.com/r/linuxmasterrace.rss"
+          "https://feeds.feedburner.com/arstechnica/open-source"
+          "https://www.computerweekly.com/rss/IT-security.xml"
+          "https://www.fsf.org/static/fsforg/rss/news.xml"
+          "https://www.reddit.com/r/freebsd.rss"
+          "https://www.reddit.com/r/emacs.rss"
+          "https://www.reddit.com/r/rugbyunion/.rss"
+          "http://pragmaticemacs.com/feed/"
+          "https://200ok.ch/atom.xml"
+          "https://www.youtube.com/feeds/videos.xml?channel_id=UCkK9UDm_ZNrq_rIXCz3xCGA"
+          "https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA"
+          "https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA"
+          "http://www.linuxinsider.com/perl/syndication/rssfull.pl"
+          "http://planet.debian.org/rss20.xml"
+          "http://feeds2.feedburner.com/Command-line-fu"
+          "https://opensource.org/news.xml"
+          "https://feeds.feedburner.com/arstechnica/index"
+          "https://www.wired.com/feed/rss"
+          "https://sivers.org/en.atom")))
+
 ;; recentf
 (use-package recentf
   :hook (after-init . recentf-mode)
@@ -537,6 +563,9 @@
 
 (pending-delete-mode t)
 
+;; writeroom-mode
+(use-package writeroom-mode)
+
 ;; browse-kill-ring
 (use-package browse-kill-ring
   :bind ("C-x C-y" . browse-kill-ring)
@@ -567,7 +596,7 @@
                                  "~/Nextcloud/org/calendar/home-cal.org"
                                  "~/Nextcloud/org/calendar/work-cal.org")))
   
-  (setq org-default-notes-file (concat org-directory "/refile.org"))
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
   (setq diary-file "~/Nextcloud/org/diary")
   (setq org-agenda-include-diary t)
   (setq org-agenda-show-future-repeats nil)
@@ -587,7 +616,6 @@
          ("w" "Agenda and WAITING" ((agenda "") (todo "WAITING")))
          ("p" "Agenda and PROJECTs" ((agenda "") (todo "PROJECT")))))
   (define-key global-map "\C-cc" 'org-capture)
-  (setq org-default-notes-file "~/Nextcloud/org/refile.org")
   (setq org-capture-templates
         (quote (("t" "Todo" entry (file "~/Nextcloud/org/todo.org")
                  "* TODO %?")
