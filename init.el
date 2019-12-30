@@ -358,9 +358,8 @@
   :config
   (setq org-gcal-secret (password-store-get "EmacsSecrets/org-gcal-secret")
         org-gcal-client-id (password-store-get "EmacsSecrets/org-gcal-client-id"))
-  (setq org-gcal-client-id "685624394721-5bsfpo57ri2rcc7k6f8sbg12gjrs7dot.apps.googleusercontent.com"
-      org-gcal-client-secret org-gcal-secret
-      org-gcal-file-alist '(("matthew.lemon@gmail.com" .  "~/Nextcloud/org/calendar/work-cal.org")
+  (setq org-gcal-client-secret org-gcal-secret
+        org-gcal-file-alist '(("matthew.lemon@gmail.com" .  "~/Nextcloud/org/calendar/work-cal.org")
                             ("12panp3nqdbmm9df4if9jigigo@group.calendar.google.com" .  "~/Nextcloud/org/calendar/home-cal.org"))))
 
 ;; No backup files!
