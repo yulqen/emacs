@@ -1,20 +1,20 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8 -*- 
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored-marker"
  (filename . "~/Nextcloud/org/todo.org")
- (front-context-string . "** TODO Work out")
- (rear-context-string . "10dbece\n  :END:\n")
- (position . 246))
+ (front-context-string . "** TODO Read lat")
+ (rear-context-string . " Personal Tasks\n")
+ (position . 1001))
 ("org-refile-last-stored"
  (filename . "~/Nextcloud/org/todo.org")
- (front-context-string . "** TODO Work out")
- (rear-context-string . "10dbece\n  :END:\n")
- (position . 246))
+ (front-context-string . "** TODO Read lat")
+ (rear-context-string . " Personal Tasks\n")
+ (position . 1001))
 ("org-capture-last-stored"
  (filename . "~/Nextcloud/org/todo.org")
- (front-context-string . "* TODO Work out ")
- (rear-context-string . "3b65\n     :END:\n")
- (position . 5398))
+ (front-context-string . "* TODO Read late")
+ (rear-context-string . "2020-01-02 Thu>\n")
+ (position . 5562))
 )

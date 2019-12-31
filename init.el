@@ -199,8 +199,11 @@
 (use-package elfeed
   :config
   (setq elfeed-feeds
-        '("https://www.youtube.com/feeds/videos.xml?channel_id=UChWbNrHQHvKK6paclLp7WYw"
-          "https://www.reddit.com/r/linuxmasterrace.rss"
+        '("http://feeds.bbci.co.uk/news/rss.xml?edition=uk"
+          "https://www.feedspot.com/?followfeedid=4946040"
+          "http://feeds.bbci.co.uk/news/technology/rss.xml"
+          "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/rugby_union/rss.xml"
+          "http://feeds.bbci.co.uk/news/video_and_audio/politics/rss.xml"
           "https://feeds.feedburner.com/arstechnica/open-source"
           "https://www.computerweekly.com/rss/IT-security.xml"
           "https://www.fsf.org/static/fsforg/rss/news.xml"
