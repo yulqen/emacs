@@ -890,6 +890,16 @@ If failed try to complete the common part with `company-complete-common'"
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
+(use-package ledger-mode
+  :mode ("\\.ledger\\'")
+  :config
+  (add-hook 'ledger-mode-hook
+            (lambda ()
+              (setq-local tab-always-indent 'complete)
+              (setq-local completion-cycle-threshold t)
+              (setq-local ledger-complete-in-steps t)))
+  :custom (ledger-clear-whole-transactions t))
+
 (setq lsp-gopls-staticcheck t)
 (setq lsp-eldoc-render-all t)
 (setq lsp-gopls-complete-unimported t)
