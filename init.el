@@ -616,6 +616,7 @@
         '(("N" "Agenda and NEXT TODOs" ((agenda "") (todo "NEXT")))
          ("y" "Agenda and All TODOS" ((agenda "") (alltodo "") ))
          ("w" "Agenda and WAITING" ((agenda "") (todo "WAITING")))
+         ("W" "Agenda and @work" ((agenda "") (tags "@work")))
          ("p" "Agenda and PROJECTs" ((agenda "") (todo "PROJECT")))))
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
