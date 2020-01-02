@@ -595,6 +595,7 @@
   (setq org-directory "~/Nextcloud/org")
   (setq org-agenda-files (quote ("~/Nextcloud/org/todo.org"
                                  "~/Nextcloud/org/projects.org"
+                                 "~/Nextcloud/org/dft.org"
                                  "~/Nextcloud/org/calendar/home-cal.org"
                                  "~/Nextcloud/org/calendar/work-cal.org")))
   
@@ -614,14 +615,18 @@
 
   (setq org-agenda-custom-commands
         '(("N" "Agenda and NEXT TODOs" ((agenda "") (todo "NEXT")))
-         ("y" "Agenda and All TODOS" ((agenda "") (alltodo "") ))
+         ("a" "Agenda and All TODOS" ((agenda "") (alltodo "")))
          ("w" "Agenda and WAITING" ((agenda "") (todo "WAITING")))
-         ("W" "Agenda and @work" ((agenda "") (tags "@work")))
-         ("p" "Agenda and PROJECTs" ((agenda "") (todo "PROJECT")))))
+         ("W" "Agenda and @work" ((agenda "") (tags-todo "@work")))))
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
-        (quote (("t" "Todo" entry (file "~/Nextcloud/org/todo.org")
-                 "* TODO %?")
+        (quote (("t" "Templates for Tasks")
+                ("tp" "Task Personal" entry (file "~/Nextcloud/org/todo.org")
+                 "* TODO %?"
+                 :prepend t)
+                ("tw" "Task Work" entry (file "~/Nextcloud/org/dft.org")
+                 "* TODO %?"
+                 :prepend t)
                 ("j" "Journal" entry (file+datetree "~/Nextcloud/org/journal.org")
                  "* %?\nEntered on %U\n %i\n %a")
                 ("e" "Emacs Tip" entry (file+headline "~/Nextcloud/org/emacs-tips.org" "Emacs Tips")
