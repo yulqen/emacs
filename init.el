@@ -840,7 +840,7 @@
 ;; this config works better with yasnippet
 (use-package company
   :diminish company-mode
-  :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode) . company-mode)
+  :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode ledger-mode) . company-mode)
   :bind
   (:map company-active-map
         ([tab] . smarter-yas-expand-next-field-complete)
