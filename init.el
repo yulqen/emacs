@@ -2,7 +2,7 @@
 ;; contents over https.
 ;; https://www.reddit.com/r/emacs/comments/cdei4p/failed_to_download_gnu_archive_bad_request/etw48ux
 ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
-;; this is also included in the configuration.org file
+nn;; this is also included in the configuration.org file
 (if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
@@ -131,17 +131,6 @@
   :config
   (setq beacon-color "OrangeRed")
   (beacon-mode 1))
-
-;; remap M-x to something else
-;; https://sites.google.com/site/steveyegge2/effective-emacs
-;; (global-set-key "\C-x\C-m" 'execute-extended-command)
-;; (global-set-key "\C-c\C-m" 'execute-extended-command)
-
-;; Remapping killing
-;; https://sites.google.com/site/steveyegge2/effective-emacs
-;; (global-set-key "\C-w" 'backward-kill-word)
-;; (global-set-key "\C-x\C-k" 'kill-region)
-;; (global-set-key "\C-c\C-k" 'kill-region)
 
 ;; kill other buffers
 (defun kill-other-buffers ()
@@ -285,27 +274,6 @@
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-;; Evil mode
-;; (use-package evil
-;;   :config
-;;   (evil-mode 1)
-;;   (mapc (lambda (mode)
-;;         (evil-set-initial-state mode 'emacs)) '(elfeed-show-mode
-;;                                                 elfeed-search-mode
-;;                                                 forge-pullreq-list-mode
-;;                                                 forge-topic-list-mode
-;;                                                 dired-mode
-;;                                                 help-mode
-;;                                                 info
-;;                                                 tide-references-mode
-;;                                                 image-dired-mode
-;;                                                 image-dired-thumbnail-mode
-;;                                                 eww-mode))
-
-;;   (define-key evil-normal-state-map (kbd "{") 'evil-next-buffer)
-;;   (define-key evil-normal-state-map (kbd "}") 'evil-prev-buffer)
-;;   )
-
 ;; Ace Jump
 (use-package ace-jump-mode
   :bind ("C-M-SPC" . ace-jump-mode))
@@ -327,30 +295,6 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
-
-;; ;; org-caldav - not currently used
-;; (use-package org-caldav
-;;   :config
-;;   ;; (setq org-caldav-url "https://ronver.xyz/remote.php/dav/calendars/mrlemon")
-;;   ;; (setq org-caldav-calendar-id "org-home")
-;;     (setq org-caldav-oauth2-client-id "HERE"
-;;   (setq org-caldav-oauth2-client-secret "HERE")
-;;   (setq org-caldav-calendar-id "matthew.lemon@gmail.com")
-;;   (setq org-caldav-url 'google)
-;;   (setq org-caldav-sync-direction 'cal->org)
-;;   (setq org-caldav-inbox "~/Nextcloud/org/inbox_cal.org")
-;;   (setq org-caldav-files `("~/Nextcloud/org/cal.org")))
-
-;; fonts
-;; (when (eq system-type 'gnu/linux)
-;;   (set-frame-font "Fira Code Retina 12")
-;;   ;; Default Browser
-;;   (setq browse-url-browser-function 'browse-url-generic
-;;         browse-url-generic-program "firefox"
-;;         browse-url-new-window-flag t)
-;;   (menu-bar-mode -1)
-;;   ;; enable pdf-tools
-;;   (pdf-tools-install))
 
 ;; Garbage collection
 (setq gc-cons-threshold 20000000)
@@ -842,19 +786,6 @@
       (when (and (eq old-point (point))
                  (eq old-tick (buffer-chars-modified-tick)))
         (ignore-errors (yas-next-field))))))
-
-;;Company mode is a standard completion package that works well with lsp-mode.
-;;company-lsp integrates company mode completion with lsp-mode.
-;;completion-at-point also works out of the box but doesn't support snippets.
-
-;; (use-package company
-;;   :config
-;;   (setq company-idle-delay 0)
-;;   (setq company-minimum-prefix-length 1))
-
-;; (use-package company-lsp
-;;   :commands company-lsp)
-
 
 ;; this config works better with yasnippet
 (use-package company
