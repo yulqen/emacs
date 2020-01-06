@@ -529,6 +529,8 @@
   :config
   (setq reb-re-syntax 'string))
 
+;; reduce size of images in eww
+(setq shr-max-image-proportion 0.2)
 
 ;; org mode config
 (use-package org
