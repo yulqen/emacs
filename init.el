@@ -66,6 +66,9 @@
 (global-set-key (kbd "M-n") #'forward-paragraph)
 (global-set-key (kbd "M-p") #'backward-paragraph)
 
+;; ox-hugo
+(use-package ox-hugo
+  :after ox)
 
 ;; Deal with history
 (setq savehist-file "~/.emacs.d/savehist")
