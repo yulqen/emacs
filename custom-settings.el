@@ -58,6 +58,7 @@
  '(ivy-on-del-error-function nil)
  '(ivy-use-virtual-buffers t)
  '(ivy-wrap t)
+ '(ledger-clear-whole-transactions t)
  '(lsp-ui-doc-border "wheat")
  '(lsp-ui-doc-enable t)
  '(lsp-ui-doc-header t)

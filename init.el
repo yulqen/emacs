@@ -738,6 +738,8 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
 
+(use-package gotest)
+
 ;; lsp-ui
 (use-package lsp-ui
   :after lsp-mode
