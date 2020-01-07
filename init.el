@@ -160,6 +160,10 @@
   (when (version< emacs-version "26")
     (add-hook LaTeX-mode-hook #'display-line-numbers-mode)))
 
+(use-package org-edit-latex
+  :defer t
+  :after org)
+
 ;; kill other buffers
 (defun kill-other-buffers ()
    "Kill all other buffers."

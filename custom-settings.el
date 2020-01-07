@@ -3,6 +3,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(TeX-after-compilation-finished-functions (quote TeX-revert-document-buffer) t)
+ '(TeX-auto-save t t)
+ '(TeX-master nil t)
+ '(TeX-parse-self t t)
+ '(TeX-view-program-list (quote (("pdf-tools" "TeX-pdf-tools-sync-view"))) t)
+ '(TeX-view-program-selection (quote ((output-pdf "pdf-tools"))) t)
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
@@ -73,7 +79,7 @@
  '(org-sort-agenda-notime-is-late nil)
  '(package-selected-packages
    (quote
-    (auctex dired-x gotest company-irony beacon-mode python-pytest password-store csv-mode expand-region org-gcal lsp-python-ms ace-window discover-my-major popup-kill-ring amx gnu-elpa-keyring-update auto-package-update monokai-theme color-theme-monokai color-theme-sanityinc-tomorrow dracula-theme evil-mode yasnippet-snippets highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
+    (org-edit-latex auctex dired-x gotest company-irony beacon-mode python-pytest password-store csv-mode expand-region org-gcal lsp-python-ms ace-window discover-my-major popup-kill-ring amx gnu-elpa-keyring-update auto-package-update monokai-theme color-theme-monokai color-theme-sanityinc-tomorrow dracula-theme evil-mode yasnippet-snippets highlight-symbol rainbow-delimiters git-gutter Ivy org-caldav which-key-mode org-plus-contrib use-package ac-cider magit blacken py-autopep8 flycheck elpy yasnippet company-lsp company lsp-ui go-autocomplete lsp-mode go-mode markdown-mode gruvbox-theme helm org cider slime evil)))
  '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#282828")))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
