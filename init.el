@@ -16,6 +16,10 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
+;; font
+(add-to-list 'default-frame-alist
+                       '(font . "Monaco-14"))
+
 ;;(load-config)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
