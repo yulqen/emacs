@@ -220,29 +220,30 @@
 (use-package elfeed
   :config
   (setq elfeed-feeds
-        '("http://feeds.bbci.co.uk/news/rss.xml?edition=uk"
+        '(("http://feeds.bbci.co.uk/news/rss.xml?edition=uk" news)
           "https://www.feedspot.com/?followfeedid=4946040"
-          "http://feeds.bbci.co.uk/news/technology/rss.xml"
-          "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/rugby_union/rss.xml"
-          "http://feeds.bbci.co.uk/news/video_and_audio/politics/rss.xml"
-          "https://feeds.feedburner.com/arstechnica/open-source"
-          "https://www.computerweekly.com/rss/IT-security.xml"
-          "https://www.fsf.org/static/fsforg/rss/news.xml"
-          "https://www.reddit.com/r/freebsd.rss"
-          "https://www.reddit.com/r/emacs.rss"
-          "https://www.reddit.com/r/rugbyunion/.rss"
-          "http://pragmaticemacs.com/feed/"
-          "https://200ok.ch/atom.xml"
+          ("http://feeds.bbci.co.uk/news/technology/rss.xml" tech news)
+          ("https://dominiccummings.com/rss.xml" blog tech)
+          ("http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/rugby_union/rss.xml" rugby)
+          ("http://feeds.bbci.co.uk/news/video_and_audio/politics/rss.xml" news)
+          ("https://feeds.feedburner.com/arstechnica/open-source" opensource)
+          ("https://www.computerweekly.com/rss/IT-security.xml" cyber)
+          ("https://www.fsf.org/static/fsforg/rss/news.xml" opensource)
+          ("https://www.reddit.com/r/freebsd.rss" bsd)
+          ("https://www.reddit.com/r/emacs.rss" emacs)
+          ("https://www.reddit.com/r/rugbyunion/.rss" rugby)
+          ("http://pragmaticemacs.com/feed/" emacs)
+          ("https://200ok.ch/atom.xml" emacs)
           "https://www.youtube.com/feeds/videos.xml?channel_id=UCkK9UDm_ZNrq_rIXCz3xCGA"
           "https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA"
           "https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA"
-          "http://www.linuxinsider.com/perl/syndication/rssfull.pl"
-          "http://planet.debian.org/rss20.xml"
-          "http://feeds2.feedburner.com/Command-line-fu"
-          "https://opensource.org/news.xml"
-          "https://feeds.feedburner.com/arstechnica/index"
-          "https://www.wired.com/feed/rss"
-          "https://sivers.org/en.atom")))
+          ("http://www.linuxinsider.com/perl/syndication/rssfull.pl" linux)
+          ("http://planet.debian.org/rss20.xml" debian linux)
+          ("http://feeds2.feedburner.com/Command-line-fu" linux)
+          ("https://opensource.org/news.xml" opensource)
+          ("https://feeds.feedburner.com/arstechnica/index" news tech)
+          ("https://www.wired.com/feed/rss" news tech)
+          ("https://sivers.org/en.atom" blog))))
 
 ;; recentf
 (use-package recentf
@@ -559,7 +560,13 @@
   (setq reb-re-syntax 'string))
 
 ;; reduce size of images in eww
-(setq shr-max-image-proportion 0.2)
+(setq shr-max-image-proportion 0.4)
+
+;; reset 'r' to go forward in eww
+(add-hook 'eww-mode-hook
+          (lambda ()
+            (define-key eww-mode-map "r"
+              'eww-forward-url)))
 
 ;; org mode config
 (use-package org
@@ -568,11 +575,14 @@
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cb" 'org-iswitchb)
   (global-set-key "\C-cc" 'org-capture)
+  (setq org-clock-persist 'history)
+  (org-clock-persistence-insinuate)
   (setq org-sort-agenda-notime-is-late nil)
   (setq org-agenda-span 'day)
   (setq org-directory "~/Nextcloud/org")
   (setq org-agenda-files (quote ("~/Nextcloud/org/todo.org"
                                  "~/Nextcloud/org/projects.org"
+                                 "~/Nextcloud/org/habits.org"
                                  "~/Nextcloud/org/dft.org"
                                  "~/Nextcloud/org/calendar/home-cal.org"
                                  "~/Nextcloud/org/calendar/work-cal.org")))
@@ -584,6 +594,7 @@
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-reverse-note-order t)
+  (setq org-habit-graph-column 35)
   (setq org-sort-agenda-notime-is-late nil)
 
   (setq org-archive-location "~/Nextcloud/org/archive.org::* From %s")
@@ -595,6 +606,7 @@
         '(("N" "Agenda and NEXT TODOs" ((agenda "") (todo "NEXT")))
          ("a" "Agenda and All TODOS" ((agenda "") (alltodo "")))
          ("w" "Agenda and WAITING" ((agenda "") (todo "WAITING")))
+         ("h" "Agenda and @home" ((agenda "") (tags-todo "@home")  (tags-todo "read")))
          ("W" "Agenda and @work" ((agenda "") (tags-todo "@work")))))
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates

@@ -13,8 +13,8 @@
  (rear-context-string . " Personal Tasks\n")
  (position . 1001))
 ("org-capture-last-stored"
- (filename . "~/Nextcloud/org/todo.org")
- (front-context-string . "* TODO Read late")
- (rear-context-string . "2020-01-02 Thu>\n")
- (position . 5562))
+ (filename . "~/Nextcloud/org/journal.org")
+ (front-context-string . "**** Been to the")
+ (rear-context-string . "-01-11 Saturday\n")
+ (position . 4657))
 )

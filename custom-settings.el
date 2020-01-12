@@ -4,11 +4,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(TeX-after-compilation-finished-functions (quote TeX-revert-document-buffer) t)
- '(TeX-auto-save t t)
- '(TeX-master nil t)
- '(TeX-parse-self t t)
- '(TeX-view-program-list (quote (("pdf-tools" "TeX-pdf-tools-sync-view"))) t)
- '(TeX-view-program-selection (quote ((output-pdf "pdf-tools"))) t)
+ '(TeX-auto-save t)
+ '(TeX-master nil)
+ '(TeX-parse-self t)
+ '(TeX-view-program-list (quote (("pdf-tools" "TeX-pdf-tools-sync-view"))))
+ '(TeX-view-program-selection (quote ((output-pdf "pdf-tools"))))
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
@@ -76,6 +76,9 @@
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
+ '(org-modules
+   (quote
+    (ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus org-habit ol-info ol-irc ol-mhe ol-rmail ol-w3m)))
  '(org-sort-agenda-notime-is-late nil)
  '(package-selected-packages
    (quote
