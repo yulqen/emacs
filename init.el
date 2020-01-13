@@ -599,6 +599,7 @@
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-reverse-note-order t)
   (setq org-habit-graph-column 35)
+  (setq org-log-done-with-time 'note)
   (setq org-sort-agenda-notime-is-late nil)
 
   (setq org-archive-location "~/Nextcloud/org/archive.org::* From %s")
@@ -622,7 +623,7 @@
                  "* TODO %?"
                  :prepend t)
                 ("j" "Journal" entry (file+datetree "~/Nextcloud/org/journal.org")
-                 "* %?\nEntered on %U\n %i\n %a")
+                 "* %?\nEntered on %U\n %i\n %a\n %l")
                 ("w" "Work Notes and Journaling")
                 ("wn" "Note" entry (file+headline "~/Nextcloud/org/dft.org" "Notes")
                  "* %?\n\t")
