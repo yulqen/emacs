@@ -18,7 +18,7 @@
 
 ;; font
 (add-to-list 'default-frame-alist
-                       '(font . "Monaco-14"))
+                       '(font . "Fira Code-14"))
 
 ;;(load-config)
 (unless (package-installed-p 'use-package)

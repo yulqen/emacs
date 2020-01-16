@@ -35,9 +35,6 @@
  '(dired-dwim-target t)
  '(dired-recursive-copies (quote always))
  '(dired-recursive-deletes (quote always))
- '(elfeed-feeds
-   (quote
-    ("https://www.youtube.com/feeds/videos.xml?channel_id=UChWbNrHQHvKK6paclLp7WYw" "https://www.reddit.com/r/linuxmasterrace.rss" "https://feeds.feedburner.com/arstechnica/open-source" "https://www.computerweekly.com/rss/IT-security.xml" "https://www.fsf.org/static/fsforg/rss/news.xml" "https://www.reddit.com/r/freebsd.rss" "https://www.reddit.com/r/emacs.rss" "https://www.reddit.com/r/rugbyunion/.rss" "http://pragmaticemacs.com/feed/" "https://200ok.ch/atom.xml" "https://www.youtube.com/feeds/videos.xml?channel_id=UCkK9UDm_ZNrq_rIXCz3xCGA" "https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA" "https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA" "http://www.linuxinsider.com/perl/syndication/rssfull.pl" "http://planet.debian.org/rss20.xml" "http://feeds2.feedburner.com/Command-line-fu" "https://opensource.org/news.xml" "https://feeds.feedburner.com/arstechnica/index" "https://www.wired.com/feed/rss" "https://sivers.org/en.atom")))
  '(fci-rule-color "#383838")
  '(global-auto-revert-non-file-buffers t)
  '(helm-completion-style (quote emacs))
