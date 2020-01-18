@@ -1,0 +1,1 @@
+("~/.emacs.d/" "~/code/python/django-test-gcp/")

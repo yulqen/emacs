@@ -518,6 +518,7 @@
   (ivy-count-format "【%d/%d】")
   (ivy-wrap t)
   :config
+  (setq projectile-completion-system 'ivy)
   (defun counsel-goto-local-home ()
       "Go to the $HOME of the local machine."
       (interactive)
@@ -777,6 +778,14 @@
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region (point-min) (point-max))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+;; projectile
+(use-package projectile
+  :config
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  )
 
 ;; Go programming
 (use-package lsp-mode
