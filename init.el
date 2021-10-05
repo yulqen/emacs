@@ -1,137 +1,38 @@
-;; Some combination of GNU TLS and Emacs fail to retrieve archive
-;; contents over https.
-;; https://www.reddit.com/r/emacs/comments/cdei4p/failed_to_download_gnu_archive_bad_request/etw48ux
-;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
-;; this is also included in the configuration.org file
-(if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
-    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+;; Some basic UI stuff
+(setq inhibit-startup-message 1)
 
-(require 'package)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(set-fringe-mode 10)
 
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")
-			 ("org" . "https://orgmode.org/elpa/")))
+(setq visible-bell t)
 
-(setq package-enable-at-startup nil)
-(package-initialize)
-
-;; font
-(add-to-list 'default-frame-alist
-                       '(font . "Fira Code-14"))
-
-;;(load-config)
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(eval-when-compile
-  (require 'use-package))
-
-;; always ensure package
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-
-;; auto package update
-(use-package auto-package-update
-  :if (not (daemonp))
-  :custom
-  (auto-package-update-interval 7) ;; in days
-  (auto-package-update-prompt-before-update t)
-  (auto-package-update-delete-old-versions t)
-  (auto-package-update-hide-results t)
-  :config
-  (auto-package-update-maybe))
-
-;; remove certain minor modes from the mode line
-(use-package diminish)
-
-;; use new GNU Elpa Key update
-(use-package gnu-elpa-keyring-update)
-
-;; ID information
-(setq user-full-name "Matthew Lemon")
-(setq user-mail-address "matt@matthewlemon.com")
-
-;; Core bindings
-;; Unbind unneeded keys
-(global-set-key (kbd "C-z") nil)
-(global-set-key (kbd "M-z") nil)
-(global-set-key (kbd "C-x C-z") nil)
-(global-set-key (kbd "M-/") nil)
-;; Use iBuffer instead of Buffer List
-(global-set-key (kbd "C-x C-b") #'ibuffer)
-;; Truncate lines
-(global-set-key (kbd "C-x C-l") #'toggle-truncate-lines)
-;; Adjust font size like web browsers
-(global-set-key (kbd "C-+") #'text-scale-increase)
-(global-set-key (kbd "C--") #'text-scale-decrease)
-;; Move up/down paragraph
-(global-set-key (kbd "M-n") #'forward-paragraph)
-(global-set-key (kbd "M-p") #'backward-paragraph)
-
-;; ox-hugo
-(use-package ox-hugo
-  :after ox)
-
-;; Deal with history
-(setq savehist-file "~/.emacs.d/savehist")
-(savehist-mode +1)
-(setq savehist-save-minibuffer-history +1)
-(setq savehist-additional-vriables
-      '(kill-ring
-        search-ring
-        regexp-search-ring))
-
-;; popup kill-ring
-(use-package popup-kill-ring
-  :bind ("M-y" . popup-kill-ring))
-
-;; Disover my major
-(use-package discover-my-major
-  :bind ("C-h C-m" . discover-my-major))
-
-;; Some basics
-(setq auto-save-default nil)
-(global-set-key (kbd "M-o") 'other-window)
-(setq column-number-mode t)
-(setq apropos-do-all t)
-(setq x-stretch-cursor t)
-;; Emacs use own password prompt, not external PIN entry program
-(setenv "GPG_AGENT_INFO" nil)
-(setq kmacro-ring-max 30)
-
-;; encoding
-(prefer-coding-system 'utf-8)
-(setq coding-system-for-read 'utf-8)
-(setq coding-system-for-write 'utf-8)
-
-;; binds
-(bind-keys ("M-1" . delete-other-windows)
-           ("M-O" . mode-line-other-buffer))
-
-;; hydra
-(use-package hydra
-  :config
-  (setq hydra-lv nil))
-
-(defhydra hydra-zoom ()
-  "zoom"
-  ("+" text-scale-increase "in")
-  ("=" text-scale-increase "in")
-  ("-" text-scale-decrease "out")
-  ("_" text-scale-decrease "out")
-  ("0" (text-scale-adjust 0) "reset")
-  ("q" nil "quit" :color blue))
-
-(bind-keys ("C-x C-0" . hydra-zoom/body)
-           ("C-x C-=" . hydra-zoom/body)
-           ("C-x C--" . hydra-zoom/body)
-           ("C-x C-+" . hydra-zoom/body))
+(set-face-attribute 'default nil :font "Jetbrains Mono" :height 140)
+(load-theme 'tango-dark)
 
 ;; calendar proper Monday start
 (setq calendar-week-start-day 1)
 (setq calendar-date-style (quote european))
+
+;; packages
+(require 'package)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")
+			 ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(eval-when-compile
+  (require 'use-package))
+(setq use-package-always-ensure t)
+
+
+(require 'use-package)
 
 ;; beacon mode
 (use-package beacon
@@ -139,156 +40,22 @@
   (setq beacon-color "OrangeRed")
   (beacon-mode 1))
 
-;; AUCTeX
-(use-package tex
-  :ensure auctex
-  :defer t
-  :custom
-  (TeX-auto-save t)
-  (TeX-parse-self t)
-  (TeX-master nil)
-  ;; to use pdfview with auctex
-  (TeX-view-program-selection '((output-pdf "pdf-tools"))
-                              TeX-source-correlate-start-server t)
-  (TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
-  (TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
-  :hook
-  (LaTeX-mode . (lambda ()
-                  (turn-on-reftex)
-                  (setq reftex-plug-into-AUCTeX t)
-                  (reftex-isearch-minor-mode)
-                  (setq TeX-PDF-mode t)
-                  (setq TeX-source-correlate-method 'synctex)
-                  (setq TeX-source-correlate-start-server t)))
+(use-package ivy
+  :bind (("C-s" . swiper)
+	 :map ivy-minibuffer-map
+	 ("TAB" . ivy-alt-done)
+	 ("C-l" . ivy-alt-done)
+	 ("C-j" . ivy-next-line)
+	 ("C-k" . ivy-previous-line)
+	 :map ivy-switch-buffer-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-l" . ivy-done)
+	 ("C-d" . ivy-switch-buffer-kill)
+	 :map ivy-reverse-i-search-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-d" . ivy-reverse-i-search-kill))
   :config
-  (when (version< emacs-version "26")
-    (add-hook LaTeX-mode-hook #'display-line-numbers-mode)))
-
-(use-package org-edit-latex
-  :defer t
-  :after org)
-
-;; kill other buffers
-(defun kill-other-buffers ()
-   "Kill all other buffers."
-   (interactive)
-   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
-
-;; mu4e
-;; the exact path may differ --- check it
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
-(require 'mu4e)
-
-;; deal with horrible grey backgrounds in HTML backgrounds
-(require 'mu4e-contrib)
-(require 'org-mu4e)
-(setq mu4e-html2text-command 'mu4e-shr2text)
-(setq shr-color-visible-luminance-min 60)
-(setq shr-color-visible-distance-min 5)
-(setq shr-use-colors nil)
-(advice-add #'shr-colorize-region :around (defun shr-no-colourise-region (&rest ignore)))
-
-
-;; email settings
-(setq mu4e-maildir "~/.mail/matt-matthewlemon.com")
-(setq message-send-mail-function 'smtpmail-send-it)
-(setq mu4e-contexts
-      `( ,(make-mu4e-context
-           :name "Fastmail"
-           :enter-func (lambda () (mu4e-message "Entering Fastmail context"))
-           :leave-func (lambda () (mu4e-message "Leaving Fastmail context"))
-           ;; we match based on the contact-fields of the message
-           :match-func (lambda (msg)
-                         (when msg
-                           (mu4e-message-contact-field-matches msg
-                              :to "matt@matthewlemon.com")))
-           :vars '((mu4e-sent-folder . "/INBOX.Sent Items")
-                   (mu4e-drafts-folder . "/INBOX.Drafts")
-                   (mu4e-trash-folder . "/INBOX.Trash")
-                   (mu4e-get-mail-command . "offlineimap")
-                   (user-email-address . "matt@matthewlemon.com")
-                   (user-full-name . "MR Lemon")
-                   (smtpmail-default-smtp-server . "mail.messagingengine.com")
-                   (smtpmail-smtp-server . "mail.messagingengine.com")
-                   (smtpmail-smtp-user . "matthewlemon@fastmail.fm")
-                   (smtpmail-smtp-service . "465")
-                   (smtpmail-stream-type . ssl)
-                   (mu4e-sent-messages-behavior . sent)
-                   (mu4e-compose-signature .
-                                            (concat
-                                             "Matthew Lemon\n"
-                                             "Berwick-upon-Tweed"))))))
-
-
-;; elfeed
-(use-package elfeed
-  :config
-  (setq elfeed-feeds
-        '(("http://feeds.bbci.co.uk/news/rss.xml?edition=uk" news)
-          "https://www.feedspot.com/?followfeedid=4946040"
-          ("http://feeds.bbci.co.uk/news/technology/rss.xml" tech news)
-          ("https://dominiccummings.com/rss.xml" blog tech)
-          ("http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/rugby_union/rss.xml" rugby)
-          ("http://feeds.bbci.co.uk/news/video_and_audio/politics/rss.xml" news)
-          ("https://feeds.feedburner.com/arstechnica/open-source" opensource)
-          ("https://www.computerweekly.com/rss/IT-security.xml" cyber)
-          ("https://www.fsf.org/static/fsforg/rss/news.xml" opensource)
-          ("https://www.reddit.com/r/freebsd.rss" bsd)
-          ("https://www.reddit.com/r/emacs.rss" emacs)
-          ("https://www.reddit.com/r/rugbyunion/.rss" rugby)
-          ("http://pragmaticemacs.com/feed/" emacs)
-          ("https://200ok.ch/atom.xml" emacs)
-          "https://www.youtube.com/feeds/videos.xml?channel_id=UCkK9UDm_ZNrq_rIXCz3xCGA"
-          "https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA"
-          "https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA"
-          ("http://www.linuxinsider.com/perl/syndication/rssfull.pl" linux)
-          ("http://planet.debian.org/rss20.xml" debian linux)
-          ("http://feeds2.feedburner.com/Command-line-fu" linux)
-          ("https://opensource.org/news.xml" opensource)
-          ("https://feeds.feedburner.com/arstechnica/index" news tech)
-          ("https://www.wired.com/feed/rss" news tech)
-          ("https://sivers.org/en.atom" blog))))
-
-;; recentf
-(use-package recentf
-  :hook (after-init . recentf-mode)
-  :custom
-  (recentf-auto-cleanup "05:00am")
-  (recentf-exclude '((expand-file-name package-user-dir)
-                   ".cache"
-                   ".cask"
-                   ".elfeed"
-                   "bookmarks"
-                   "cache"
-                   "ido.*"
-                   "persp-confs"
-                   "recentf"
-                   "undo-tree-hist"
-                   "url"
-                   "COMMIT_EDITMSG\\'"))
-    (setq recentf-auto-cleanup 'never
-        recentf-max-saved-items 1000
-        recentf-save-file (concat user-emacs-directory ".recentf"))
-    (recentf-mode t))
-
-
-;; Basic magit
-(use-package magit
-  :bind ("C-x g" . magit-status))
-
-;; Integration with pass password manager
-(use-package password-store)
-
-;; Git enhancement
-(use-package git-gutter
-  :config
-  (global-git-gutter-mode t)
-  (setq git-gutter:modified-sign "|")
-  (set-face-foreground 'git-gutter:modified "grey")
-  (set-face-foreground 'git-gutter:added "green")
-  (set-face-foreground 'git-gutter:deleted "red")
-  :bind (("C-x C-g" . git-gutter))
-  :diminish nil)
+  (ivy-mode 1))
 
 ;; Lisp programming
 (use-package paredit
@@ -311,269 +78,19 @@
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-;; Ace Jump
-(use-package ace-jump-mode
-  :bind ("C-M-SPC" . ace-jump-mode))
-
-;; Dump Jump
-(use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g b" . dumb-jump-back)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy)
-  :ensure)
-
-;; GUI stuff
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(menu-bar-mode -1)
-
-
-;; Garbage collection
-(setq gc-cons-threshold 20000000)
-
-;; org-gcal stuff
-(use-package org-gcal
-  :bind (:map org-agenda-mode-map ("g" . org-gcal-fetch))
-  :config
-  (setq org-gcal-secret (password-store-get "EmacsSecrets/org-gcal-secret")
-        org-gcal-client-id (password-store-get "EmacsSecrets/org-gcal-client-id"))
-  (setq org-gcal-client-secret org-gcal-secret
-        org-gcal-file-alist '(("matthew.lemon@gmail.com" .  "~/Nextcloud/org/calendar/work-cal.org")
-                            ("12panp3nqdbmm9df4if9jigigo@group.calendar.google.com" .  "~/Nextcloud/org/calendar/home-cal.org"))))
-
-;; No backup files!
-(setq make-backup-files nil)
-
-;; Put backups in /tmp where they belong
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
-
-;; Always follow symlinks
-(setq vc-follow-symlinks t)
-
-;; Confirm before quitting emacs
-(setq confirm-kill-emacs 'y-or-n-p)
-
-;; dired config
-;; human readable
-(setq-default dired-listing-switches "-alh")
-
-;; Dired main config
-(use-package dired
-  :ensure nil
-  :bind
-  (("C-x C-j" . dired-jump)
-   ("C-x j" . dired-jump-other-window))
-  :custom
-  ;; Always delete and copy recursively
-  (dired-recursive-deletes 'always)
-  (dired-recursive-copies 'always)
-  ;; Auto refresh Dired, but be quiet about it
-  (global-auto-revert-non-file-buffers t)
-  (auto-revert-verbose nil)
-  ;; Quickly copy/move file in Dired
-  (dired-dwim-target t)
-  ;; Move files to trash when deleting
-  (delete-by-moving-to-trash t)
-  :config
-  ;; Reuse same dired buffer, to prevent numerous buffers while navigating in dired
-  (put 'dired-find-alternate-file 'disabled nil)
-  :hook
-  (dired-mode . (lambda ()
-                  (local-set-key (kbd "<mouse-2>") #'dired-find-alternate-file)
-                  (local-set-key (kbd "RET") #'dired-find-alternate-file)
-                  (local-set-key (kbd "^")
-                                 (lambda () (interactive) (find-alternate-file ".."))))))
-
-;; recursively copy by default
-(setq dired-recursive-copies 'always)
-
-;; y or n instead of yes or no
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; auto revert files
-(global-auto-revert-mode t)
-
-;; Inhibit splash
-(setq inhibit-splash-screen t)
-(setq inhibit-startup-message t)
-
-;; Display the current time
-(display-time-mode t)
-
-;; Enable narrow region (disabled by default)
-(put 'narrow-to-region 'disabled nil)
-
-;; Enable cursor position when reopening files
-(setq save-place-file "~/.emacs.d/saveplace")
-(setq-default save-place t)
-(require 'saveplace)
-
-;; Don't lock files
-(setq-default create-lockfiles nil)
-
-;; Windmove - use Shift and arrow keys to move in windows
-(when (fboundp 'windmove-default-keybindings)
-  (windmove-default-keybindings))
-
-;; Winner mode - undo and redo changes in window config
-;; with C-c left and C-c right
-(use-package winner
-  :ensure nil
-  :custom
-  (winner-boring-buffers
-   '("*Completions*"
-     "*Compile-Log*"
-     "*inferior-lisp*"
-     "*Fuzzy Completions*"
-     "*Apropos*"
-     "*Help*"
-     "*cvs*"
-     "*Buffer List*"
-     "*Ibuffer*"
-     "*esh command on file*"))
-  :config
-  (winner-mode 1))
-
-;; Don't ring the system bell
-(setq visible-bell t)
-
-;; Use a separation file for custom commands
-(setq custom-file "~/.emacs.d/custom-settings.el")
-(load custom-file t)
-
-;; Handling tabs (for programming)
-(setq-default tab-width 2)
-(setq-default tab-width 2 indent-tabs-mode nil)
-(setq-default indent-tabs-mode nil)
-(setq js-indent-level 2)
-(setq coffee-tab-width 2)
-(setq python-indent 2)
-(setq css-indent-offset 2)
-(add-hook 'sh-mode-hook
-	  (lambda ()
-	    (setq sh-basic-offset 2
-		  sh-indentation 2)))
-(setq web-mode-markup-indent-offset 2)
-
-;; flycheck syntax highlighting
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
-
-;; Auto-indent with RET
-(define-key global-map (kbd "RET") 'newline-and-indent)
-
-;; Highlight matching parens
-(show-paren-mode t)
-
-;; Code folding (hide show mode)
-;;- zc: Fold
-;;- za: Unfold
-;;- zR: Unfold everything
-(add-hook 'prog-mode-hook #'hs-minor-mode)
-
-;; Line numbers
-(add-hook 'prog-mode-hook '(lambda ()
-                             (if (version<= emacs-version "26.0.50")
-                                 (linum-mode)
-                               (display-line-numbers-mode))))
-
-;; Ivy
-;; from https://github.com/MatthewZMD/.emacs.d/blob/master/README.md#orgcfd324a
-(use-package ivy
-  :diminish
+;; EVIL
+(use-package evil
   :init
-  (use-package amx :defer t)
-  (use-package counsel :diminish :config (counsel-mode 1))
-  (use-package swiper :defer t)
-  (ivy-mode 1)
-  :bind
-  (("C-s" . swiper-isearch)
-   ("C-x C-f" . counsel-find-file)
-   ("C-x C-m" . counsel-M-x)
-   ("C-h f" . counsel-describe-function)
-   ("C-h v" . counsel-describe-variable)
-   ("C-z s" . counsel-rg)
-   ("C-x C-r" . counsel-recentf)
-   ("C-z b" . counsel-buffer-or-recentf)
-   ("C-z C-b" . counsel-ibuffer)
-   (:map ivy-minibuffer-map
-         ("C-r" . ivy-previous-line-or-history)
-         ("M-RET" . ivy-immediate-done))
-   (:map counsel-find-file-map
-         ("C-~" . counsel-goto-local-home)))
-  :custom
-  (ivy-use-virtual-buffers t)
-  (ivy-height 10)
-  (ivy-on-del-error-function nil)
-  (ivy-magic-slash-non-match-action 'ivy-magic-slash-non-match-create)
-  (ivy-count-format "【%d/%d】")
-  (ivy-wrap t)
   :config
-  (setq projectile-completion-system 'ivy)
-  (defun counsel-goto-local-home ()
-      "Go to the $HOME of the local machine."
-      (interactive)
-      (ivy--cd "~/")))
+  (setq evil-respect-visual-line-mode t)
+  (evil-mode 1))
 
-;; Jump to Characters and Words
-(use-package avy
-  :bind ("M-SPC" . avy-goto-char)
+;; which-key - for nice menu
+(use-package which-key
   :config
-  (setq avy-background t
-        avy-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)))
+  (which-key-mode))
 
-;; Ace Window
-(use-package ace-window
-  :bind (("C-x o" . ace-window)
-         ("M-2" . ace-window))
-  :init
-  (setq aw-background t
-        aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)))
-
-;; expand-region
-(use-package expand-region
-  :bind (("C-@" . er/expand-region)
-         ("C-=" . er/expand-region)
-         ("M-3" . er/expand-region)))
-
-(pending-delete-mode t)
-
-;; writeroom-mode
-(use-package writeroom-mode)
-
-;; browse-kill-ring
-(use-package browse-kill-ring
-  :bind ("C-x C-y" . browse-kill-ring)
-  :config
-  (setq browse-kill-ring-quit-action 'kill-and-delete-window))
-
-(setq save-interprogram-paste-before-kill t)
-
-;; better re-builder setup
-(use-package re-builder
-  :bind (("C-c R" . re-builder))
-  :config
-  (setq reb-re-syntax 'string))
-
-;; reduce size of images in eww
-(setq shr-max-image-proportion 0.4)
-
-;; reset 'r' to go forward in eww
-(add-hook 'eww-mode-hook
-          (lambda ()
-            (define-key eww-mode-map "r"
-              'eww-forward-url)))
-
-;; org mode config
+;; org mode!
 (use-package org
   :config
   (global-set-key "\C-cl" 'org-store-link)
@@ -584,17 +101,23 @@
   (org-clock-persistence-insinuate)
   (setq org-sort-agenda-notime-is-late nil)
   (setq org-agenda-span 'day)
-  (setq org-directory "~/Nextcloud/org")
-  (setq org-agenda-files (quote ("~/Nextcloud/org/todo.org"
-                                 "~/Nextcloud/org/projects.org"
-                                 "~/Nextcloud/org/habits.org"
-                                 "~/Nextcloud/org/dft.org"
-                                 "~/Nextcloud/org/calendar/home-cal.org"
-                                 "~/Nextcloud/org/calendar/work-cal.org")))
+  (setq org-directory "~/org")
+  (setq org-agenda-files (quote ("~/org/todo.org"
+				 "~/org/cal.org"
+                                 "~/org/projects.org"
+                                 "~/org/work.org"
+                                 "~/org/habits.org"
+                                 "~/org/calendar/home-cal.org"
+                                 "~/org/calendar/work-cal.org")))
   
   (setq org-default-notes-file (concat org-directory "/notes.org"))
-  (setq diary-file "~/Nextcloud/org/diary")
+  (setq org-agenda-window-setup 'current-window)
+  (setq org-agenda-start-with-log-mode t)
+  (setq org-log-done 'time)
+  (setq diary-file "~/org/diary")
   (setq org-agenda-include-diary t)
+  (setq org-agenda-diary-file "~/org/cal.org")
+  (setq org-agenda-show-future-repeats t)
   (setq org-agenda-show-future-repeats nil)
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
@@ -603,7 +126,7 @@
   (setq org-log-done-with-time 'note)
   (setq org-sort-agenda-notime-is-late nil)
 
-  (setq org-archive-location "~/Nextcloud/org/archive.org::* From %s")
+  (setq org-archive-location "~/org/archive.org::* From %s")
 
   (setq org-refile-targets (quote ((nil :maxlevel . 9)
                    (org-agenda-files :maxlevel . 9))))
@@ -617,27 +140,29 @@
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
         (quote (("t" "Templates for Tasks")
-                ("tp" "Task Personal" entry (file "~/Nextcloud/org/todo.org")
+                ("tp" "Task Personal" entry (file "~/org/todo.org")
                  "* TODO %?"
                  :prepend t)
-                ("tw" "Task Work" entry (file "~/Nextcloud/org/dft.org")
+                ("tw" "Task Work" entry (file "~/org/work.org")
                  "* TODO %?"
                  :prepend t)
-                ("j" "Journal" entry (file+datetree "~/Nextcloud/org/journal.org")
+                ("j" "Journal" entry (file+datetree "~/org/journal.org")
                  "* %?\nEntered on %U\n %i\n %a\n %l")
+                ("d" "Retrospective DONE" entry (file "~/org/todo.org")
+                 "* DONE %?\nCLOSED: %U")
                 ("w" "Work Notes and Journaling")
-                ("wn" "Note" entry (file+headline "~/Nextcloud/org/dft.org" "Notes")
+                ("wn" "Note" entry (file+headline "~/org/work.org" "Notes")
                  "* %?\n\t")
-                ("wc" "Note from Clipboard" entry (file+headline "~/Nextcloud/org/dft.org" "Notes")
+                ("wc" "Note from Clipboard" entry (file+headline "~/org/work.org" "Notes")
                  "* %?\n\t\n%c")
-                ("wr" "Note from Region" entry (file+headline "~/Nextcloud/org/dft.org" "Notes")
+                ("wr" "Note from Region" entry (file+headline "~/org/work.org" "Notes")
                  "* %?\n\t\n%i")
-                ("wj" "Journal" entry (file+olp+datetree "~/Nextcloud/org/dft.org" "Journal")
+                ("wj" "Journal" entry (file+olp+datetree "~/org/work.org" "Journal")
                  "* %?\n\tEntered on %U\n")
                 ("e" "Emacs Tip")
-                ("et" "Emacs Tip" entry (file+headline "~/Nextcloud/org/emacs-tips.org" "Emacs Tips")
+                ("et" "Emacs Tip" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
                  "* %?\n\t%a")
-                ("er" "Emacs Tip from Region" entry (file+headline "~/Nextcloud/org/emacs-tips.org" "Emacs Tips")
+                ("er" "Emacs Tip from Region" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
                  "* %?\n\t%i")
                 )))
   ;; Put state transition logs into a drawer called LOGBOOK
@@ -728,190 +253,44 @@
 
 (bind-key "<f5>" 'open-agenda)
 
-;; markdown
-(use-package markdown-mode)
-
-;; csvs!
-(use-package csv-mode
-  :mode ("\\.csv$" . csv-mode))
-
-;; Interactively Do Things (ido)
-(use-package ido
+;; elfeed
+(use-package elfeed
   :config
-  (ido-mode t)
-  (ido-everywhere t)
-  (setq ido-enable-flex-matching t))
-
-;; Which key
-(use-package which-key
-  :init
-  (which-key-mode))
-
-
-;; Python programming
-(use-package elpy
-  :ensure py-autopep8
-  :defer t
-  :config
-  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-  (setq elpy-rpc-python-command "python3")
-  (setq python-shell-interpreter "python3"
-        python-shell-interpreter-args "console --simple-prompt"
-        python-shell-prompt-detect-failure-warning nil)
-  (add-to-list 'python-shell-completion-native-disabled-interpreters
-               "python3")
-
-  (when (require 'flycheck nil t)
-    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode)))
-
-(use-package python-pytest
-  :bind
-  ("C-c ESC t" . python-pytest-popup)
-  )
-
-;; need this code to fix escape codes in compilation buffer
-;; (when running elpy test, for example)
-;; from https://stackoverflow.com/questions/3072648/cucumbers-ansi-colors-messing-up-emacs-compilation-buffer
-(require 'ansi-color)
-(defun colorize-compilation-buffer ()
-  (let ((inhibit-read-only t))
-    (ansi-color-apply-on-region (point-min) (point-max))))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-
-;; projectile
-(use-package projectile
-  :config
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  )
-
-;; Go programming
-(use-package lsp-mode
-  :hook (go-mode . lsp-deferred)
-  :hook (python-mode . lsp-deferred)
-  :commands (lsp lsp-deferred)
-  :config
-  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
-
-(use-package gotest)
-
-;; lsp-ui
-(use-package lsp-ui
-  :after lsp-mode
-  :diminish
-  :commands lsp-ui-mode
-  :custom-face
-  (lsp-ui-doc-background ((t (:background nil))))
-  (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
-  :bind (:map lsp-ui-mode-map
-              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-              ([remap xref-find-references] . lsp-ui-peek-find-references)
-              ("C-c u" . lsp-ui-imenu))
-  :custom
-  (lsp-ui-doc-enable t)
-  (lsp-ui-doc-header t)
-  (lsp-ui-doc-include-signature t)
-  (lsp-ui-doc-position 'top)
-  (lsp-ui-doc-border (face-foreground 'default))
-  (lsp-ui-sideline-enable nil)
-  (lsp-ui-sideline-ignore-duplicate t)
-  (lsp-ui-sideline-show-code-actions nil)
-  :config
-
-  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
-  ;; https://github.com/emacs-lsp/lsp-ui/issues/243
-  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
-    (setq mode-line-format nil)))
-
-
-
-;; Yasnippet
-(use-package yasnippet
-  :diminish yas-minor-mode
-  :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
-  :bind
-  (:map yas-minor-mode-map ("C-c C-n" . yas-expand-from-trigger-key))
-  (:map yas-keymap
-        (("TAB" . smarter-yas-expand-next-field)
-         ([(tab)] . smarter-yas-expand-next-field)))
-  :config
-  (use-package yasnippet-snippets)
-  (yas-reload-all)
-  (defun smarter-yas-expand-next-field ()
-    "Try to `yas-expand' then `yas-next-field' at current cursor position."
-    (interactive)
-    (let ((old-point (point))
-          (old-tick (buffer-chars-modified-tick)))
-      (yas-expand)
-      (when (and (eq old-point (point))
-                 (eq old-tick (buffer-chars-modified-tick)))
-        (ignore-errors (yas-next-field))))))
-
-;; this config works better with yasnippet
-(use-package company
-  :diminish company-mode
-  :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode ledger-mode) . company-mode)
-  :bind
-  (:map company-active-map
-        ([tab] . smarter-yas-expand-next-field-complete)
-        ("TAB" . smarter-yas-expand-next-field-complete))
-  :custom
-    (company-tooltip-align-annotations t)
-  (company-begin-commands '(self-insert-command))
-  (company-require-match 'never)
-  ;; Don't use company in the following modes
-  (company-global-modes '(not shell-mode eaf-mode))
-  ;; Trigger completion immediately.
-  (company-idle-delay 0.1)
-  ;; Number the candidates (use M-1, M-2 etc to select completions).
-  (company-show-numbers t)
-  :config
-  ;; clangd variable not present which was a problem
-;;  (unless *clangd* (delete 'company-clang company-backends))
-;;  (global-company-mode 1)
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 3)
-  (defun smarter-yas-expand-next-field-complete ()
-    "Try to `yas-expand' and `yas-next-field' at current cursor position.
-
-If failed try to complete the common part with `company-complete-common'"
-    (interactive)
-    (if yas-minor-mode
-        (let ((old-point (point))
-              (old-tick (buffer-chars-modified-tick)))
-          (yas-expand)
-          (when (and (eq old-point (point))
-                     (eq old-tick (buffer-chars-modified-tick)))
-            (ignore-errors (yas-next-field))
-            (when (and (eq old-point (point))
-                       (eq old-tick (buffer-chars-modified-tick)))
-              (company-complete-common))))
-      (company-complete-common))))
-
-;; this stuff from https://youtu.be/XeWZfruRu6k
-;; for c programming mainly
-(use-package company-irony
-  :config
-  (require 'company)
-  (add-to-list 'company-backends 'company-irony))
-
-(use-package irony
-  :config
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-
-(use-package ledger-mode
-  :mode ("\\.ledger\\'")
-  :config
-  (add-hook 'ledger-mode-hook
-            (lambda ()
-              (setq-local tab-always-indent 'complete)
-              (setq-local completion-cycle-threshold t)
-              (setq-local ledger-complete-in-steps t)))
-  :custom (ledger-clear-whole-transactions t))
-
-(setq lsp-gopls-staticcheck t)
-(setq lsp-eldoc-render-all t)
-(setq lsp-gopls-complete-unimported t)
+  (setq elfeed-feeds
+        '(("http://feeds.bbci.co.uk/news/rss.xml?edition=uk" news)
+          "https://www.feedspot.com/?followfeedid=4946040"
+          ("http://feeds.bbci.co.uk/news/technology/rss.xml" tech news)
+          ("https://dominiccummings.com/rss.xml" blog tech)
+          ("http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/rugby_union/rss.xml" rugby)
+          ("http://feeds.bbci.co.uk/news/video_and_audio/politics/rss.xml" news)
+          ("https://feeds.feedburner.com/arstechnica/open-source" opensource)
+          ("https://www.computerweekly.com/rss/IT-security.xml" cyber)
+          ("https://www.fsf.org/static/fsforg/rss/news.xml" opensource)
+          ("https://www.reddit.com/r/freebsd.rss" bsd)
+          ("https://www.reddit.com/r/emacs.rss" emacs)
+          ("https://www.reddit.com/r/rugbyunion/.rss" rugby)
+          ("http://pragmaticemacs.com/feed/" emacs)
+          ("https://200ok.ch/atom.xml" emacs)
+          "https://www.youtube.com/feeds/videos.xml?channel_id=UCkK9UDm_ZNrq_rIXCz3xCGA"
+          "https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA"
+          "https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA"
+          ("http://www.linuxinsider.com/perl/syndication/rssfull.pl" linux)
+          ("http://planet.debian.org/rss20.xml" debian linux)
+          ("http://feeds2.feedburner.com/Command-line-fu" linux)
+          ("https://opensource.org/news.xml" opensource)
+          ("https://feeds.feedburner.com/arstechnica/index" news tech)
+          ("https://www.wired.com/feed/rss" news tech)
+          ("https://sivers.org/en.atom" blog))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
