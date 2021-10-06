@@ -34,28 +34,90 @@
 
 (require 'use-package)
 
+;; auto package update
+(use-package auto-package-update
+  :if (not (daemonp))
+  :custom
+  (auto-package-update-interval 7) ;; in days
+  (auto-package-update-prompt-before-update t)
+  (auto-package-update-delete-old-versions t)
+  (auto-package-update-hide-results t)
+  :config
+  (auto-package-update-maybe))
+
+;; remove certain minor modes from the mode line
+(use-package diminish)
+
+;; some core bindings
+;; Use iBuffer instead of Buffer List
+(global-set-key (kbd "C-x C-b") #'ibuffer)
+;; Truncate lines
+(global-set-key (kbd "C-x C-l") #'toggle-truncate-lines)
+;; Adjust font size like web browsers
+(global-set-key (kbd "C-+") #'text-scale-increase)
+(global-set-key (kbd "C--") #'text-scale-decrease)
+;; Move up/down paragraph
+(global-set-key (kbd "M-n") #'forward-paragraph)
+(global-set-key (kbd "M-p") #'backward-paragraph)
+
+;; kill other buffers
+(defun kill-other-buffers ()
+   "Kill all other buffers."
+   (interactive)
+   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
+;; recentf
+(use-package recentf
+  :hook (after-init . recentf-mode)
+  :bind ("C-x C-r" . recentf-open-files)
+  :custom
+  (recentf-auto-cleanup "05:00am")
+  (recentf-exclude '((expand-file-name package-user-dir)
+                   ".cache"
+                   ".cask"
+                   ".elfeed"
+                   "bookmarks"
+                   "cache"
+                   "ido.*"
+                   "persp-confs"
+                   "recentf"
+                   "undo-tree-hist"
+                   "url"
+                   "COMMIT_EDITMSG\\'"))
+    (setq recentf-auto-cleanup 'never
+        recentf-max-saved-items 1000
+        recentf-save-file (concat user-emacs-directory ".recentf"))
+    (setq recentf-max-menu-items 25)
+    (setq recentf-max-saved-items 25)
+    (recentf-mode t))
+
+;; encoding
+(prefer-coding-system 'utf-8)
+(setq coding-system-for-read 'utf-8)
+(setq coding-system-for-write 'utf-8)
+
 ;; beacon mode
 (use-package beacon
   :config
   (setq beacon-color "OrangeRed")
   (beacon-mode 1))
 
-(use-package ivy
-  :bind (("C-s" . swiper)
-	 :map ivy-minibuffer-map
-	 ("TAB" . ivy-alt-done)
-	 ("C-l" . ivy-alt-done)
-	 ("C-j" . ivy-next-line)
-	 ("C-k" . ivy-previous-line)
-	 :map ivy-switch-buffer-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-l" . ivy-done)
-	 ("C-d" . ivy-switch-buffer-kill)
-	 :map ivy-reverse-i-search-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-d" . ivy-reverse-i-search-kill))
-  :config
-  (ivy-mode 1))
+;; (use-package ivy
+;;   :bind (("C-s" . swiper)
+;; 	 :map ivy-minibuffer-map
+;; 	 ("TAB" . ivy-alt-done)
+;; 	 ("C-l" . ivy-alt-done)
+;; 	 ("C-j" . ivy-next-line)
+;; 	 ("C-k" . ivy-previous-line)
+;; 	 :map ivy-switch-buffer-map
+;; 	 ("C-k" . ivy-previous-line)
+;; 	 ("C-l" . ivy-done)
+;; 	 ("C-d" . ivy-switch-buffer-kill)
+;; 	 :map ivy-reverse-i-search-map
+;; 	 ("C-k" . ivy-previous-line)
+;; 	 ("C-d" . ivy-reverse-i-search-kill))
+;;   :config
+;;   (ivy-mode 1))
 
 ;; Lisp programming
 (use-package paredit
@@ -88,11 +150,14 @@
 ;; which-key - for nice menu
 (use-package which-key
   :config
-  (which-key-mode))
+  (which-key-mode)
+  )
 
 ;; org mode!
 (use-package org
+  :hook (org-agenda-mode)
   :config
+  (define-key org-mode-agenda-map "j")
   (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cb" 'org-iswitchb)
@@ -102,7 +167,7 @@
   (setq org-sort-agenda-notime-is-late nil)
   (setq org-agenda-span 'day)
   (setq org-directory "~/org")
-  (setq org-agenda-files (quote ("~/org/todo.org"
+  (setq org-agenda-files (quote ("~/org/home.org"
 				 "~/org/cal.org"
                                  "~/org/projects.org"
                                  "~/org/work.org"
@@ -140,15 +205,17 @@
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
         (quote (("t" "Templates for Tasks")
-                ("tp" "Task Personal" entry (file "~/org/todo.org")
-                 "* TODO %?"
+                ("tp" "Task Personal Single Action" entry (file+headline "~/org/home.org" "Single Actions")
+                 "** TODO %?"
                  :prepend t)
                 ("tw" "Task Work" entry (file "~/org/work.org")
                  "* TODO %?"
                  :prepend t)
+                ("tn" "Home Note" entry (file+headline "~/org/home.org" "Notes")
+                 "** %?\n\t")
                 ("j" "Journal" entry (file+datetree "~/org/journal.org")
                  "* %?\nEntered on %U\n %i\n %a\n %l")
-                ("d" "Retrospective DONE" entry (file "~/org/todo.org")
+                ("d" "Retrospective Single Action" entry (file+headline "~/org/home.org" "Single Actions")
                  "* DONE %?\nCLOSED: %U")
                 ("w" "Work Notes and Journaling")
                 ("wn" "Note" entry (file+headline "~/org/work.org" "Notes")
@@ -281,13 +348,18 @@
           ("https://feeds.feedburner.com/arstechnica/index" news tech)
           ("https://www.wired.com/feed/rss" news tech)
           ("https://sivers.org/en.atom" blog))))
+
+;; Basic magit
+(use-package magit
+  :bind ("C-x g" . magit-status))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
+   '(magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
