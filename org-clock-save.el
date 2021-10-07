@@ -1,2 +1,2 @@
-;; org-clock-save.el - x201 at <2020-01-18 Sat 11:36>
-(setq org-clock-stored-history '(("/home/lemon/Nextcloud/org/habits.org" . 755)))
+;; org-clock-save.el - x220 at <2021-10-07 Thu 16:11>
+(setq org-clock-stored-history '(("/home/lemon/org/habits.org" . 368) ("/home/lemon/org/work.org" . 1422) ("/home/lemon/org/work.org" . 1) ("/home/lemon/org/work.org" . 452) ("/home/lemon/org/home.org" . 2204)))

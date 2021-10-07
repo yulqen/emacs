@@ -141,27 +141,31 @@
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 ;; EVIL
-(use-package evil
-  :init
-  :config
-  (setq evil-respect-visual-line-mode t)
-  (evil-mode 1))
+;; (use-package evil
+;;   :init
+;;   :config
+;;   (setq evil-respect-visual-line-mode t)
+;;   (evil-mode 1))
 
-;; which-key - for nice menu
+;; ;; which-key - for nice menu
+;; (use-package which-key
+;;   :config
+;;   (which-key-mode)
+;;   )
+
+;; which-key
 (use-package which-key
   :config
-  (which-key-mode)
-  )
+  (which-key-mode))
 
 ;; org mode!
 (use-package org
-  :hook (org-agenda-mode)
   :config
-  (define-key org-mode-agenda-map "j")
   (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cb" 'org-iswitchb)
   (global-set-key "\C-cc" 'org-capture)
+  (add-to-list 'org-modules 'org-habit)
   (setq org-clock-persist 'history)
   (org-clock-persistence-insinuate)
   (setq org-sort-agenda-notime-is-late nil)
@@ -190,6 +194,7 @@
   (setq org-habit-graph-column 35)
   (setq org-log-done-with-time 'note)
   (setq org-sort-agenda-notime-is-late nil)
+  (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %25TIMESTAMP_IA")
 
   (setq org-archive-location "~/org/archive.org::* From %s")
 
@@ -205,8 +210,11 @@
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
         (quote (("t" "Templates for Tasks")
-                ("tp" "Task Personal Single Action" entry (file+headline "~/org/home.org" "Single Actions")
+                ("tp" "Task Personal TODO" entry (file+headline "~/org/home.org" "Single Actions")
                  "** TODO %?"
+                 :prepend t)
+		("tp" "Task Personal NEXT" entry (file+headline "~/org/home.org" "Single Actions")
+                 "** NEXT %?"
                  :prepend t)
                 ("tw" "Task Work" entry (file "~/org/work.org")
                  "* TODO %?"
@@ -242,7 +250,7 @@
   
   (setq org-todo-keyword-faces
         (quote (("TODO" :foreground "red" :weight bold)
-                ("NEXT" :foreground "blue" :weight bold)
+                ("NEXT" :foreground "cyan" :weight bold)
                 ("DONE" :foreground "forest green" :weight bold)
                 ("WAITING" :foreground "orange" :weight bold)
                 ("HOLD" :foreground "magenta" :weight bold)
@@ -353,13 +361,31 @@
 (use-package magit
   :bind ("C-x g" . magit-status))
 
+
+;; helm
+(require 'helm-config)
+(global-set-key (kbd "M-x") #'helm-M-x)
+(global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+(global-set-key (kbd "C-x C-f") #'helm-find-files)
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+(helm-mode 1)
+
+
+;; ledger mode
+(autoload 'ledger-mode "ledger-mode" "A major mode for Ledger" t)
+(add-to-list 'auto-mode-alist '("\\.ledger%" . ledger-mode))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
+   '(helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
