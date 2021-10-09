@@ -3,18 +3,18 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored-marker"
- (filename . "~/org/cal.org")
- (front-context-string . "***** TODO Remov")
- (rear-context-string . "ue 08:30-11:00>\n")
- (position . 1167))
+ (filename . "~/org/home.org")
+ (front-context-string . "*** TODO Contact")
+ (rear-context-string . "2021-10-06 Wed]\n")
+ (position . 687))
 ("org-refile-last-stored"
- (filename . "~/org/cal.org")
- (front-context-string . "***** TODO Remov")
- (rear-context-string . "ue 08:30-11:00>\n")
- (position . 1167))
+ (filename . "~/org/home.org")
+ (front-context-string . "*** TODO Contact")
+ (rear-context-string . "2021-10-06 Wed]\n")
+ (position . 687))
 ("org-capture-last-stored"
- (filename . "~/org/work.org")
- (front-context-string . "* TODO Check out")
- (rear-context-string)
- (position . 1))
+ (filename . "~/org/home.org")
+ (front-context-string . "** TODO Contact ")
+ (rear-context-string . " Single Actions\n")
+ (position . 1188))
 )

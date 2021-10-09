@@ -85,7 +85,7 @@
                    "url"
                    "COMMIT_EDITMSG\\'"))
     (setq recentf-auto-cleanup 'never
-        recentf-max-saved-items 1000
+        recentf-max-saved-items 50
         recentf-save-file (concat user-emacs-directory ".recentf"))
     (setq recentf-max-menu-items 25)
     (setq recentf-max-saved-items 25)
@@ -191,7 +191,7 @@
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-reverse-note-order t)
-  (setq org-habit-graph-column 35)
+  (setq org-habit-graph-column 45)
   (setq org-log-done-with-time 'note)
   (setq org-sort-agenda-notime-is-late nil)
   (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %25TIMESTAMP_IA")
@@ -216,8 +216,8 @@
 		("tp" "Task Personal NEXT" entry (file+headline "~/org/home.org" "Single Actions")
                  "** NEXT %?"
                  :prepend t)
-                ("tw" "Task Work" entry (file "~/org/work.org")
-                 "* TODO %?"
+                ("tw" "Task Work TODO" entry (file+headline "~/org/work.org" "Work Single Actions")
+                 "** TODO %?"
                  :prepend t)
                 ("tn" "Home Note" entry (file+headline "~/org/home.org" "Notes")
                  "** %?\n\t")
@@ -234,6 +234,8 @@
                  "* %?\n\t\n%i")
                 ("wj" "Journal" entry (file+olp+datetree "~/org/work.org" "Journal")
                  "* %?\n\tEntered on %U\n")
+		("i" "Idea" entry (file+headline "~/org/home.org" "Ideas")
+		 "** IDEA %?\nEntered on %U\n")
                 ("e" "Emacs Tip")
                 ("et" "Emacs Tip" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
                  "* %?\n\t%a")
@@ -246,12 +248,15 @@
   (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
+	      (sequence "IDEA(i)" "|" "BADIDEA(b@/!)")
               (sequence "PHONE(o)" "MEETING(m)" "PROJECT(p)"))))
   
   (setq org-todo-keyword-faces
         (quote (("TODO" :foreground "red" :weight bold)
                 ("NEXT" :foreground "cyan" :weight bold)
                 ("DONE" :foreground "forest green" :weight bold)
+		("IDEA" :foreground "yellow" :weight bold)
+		("BADIDEA" :foreground "forest green" :weight bold)
                 ("WAITING" :foreground "orange" :weight bold)
                 ("HOLD" :foreground "magenta" :weight bold)
                 ("CANCELLED" :foreground "forest green" :weight bold)
@@ -361,18 +366,24 @@
 (use-package magit
   :bind ("C-x g" . magit-status))
 
+;; ido
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
+(ido-mode 1)
 
-;; helm
-(require 'helm-config)
-(global-set-key (kbd "M-x") #'helm-M-x)
-(global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
-(global-set-key (kbd "C-x C-f") #'helm-find-files)
-;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
-(global-unset-key (kbd "C-x c"))
-(helm-mode 1)
+
+;; ;; helm
+;; (require 'helm-config)
+;; (global-set-key (kbd "M-x") #'helm-M-x)
+;; (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+;; (global-set-key (kbd "C-x C-f") #'helm-find-files)
+;; ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+;; (global-set-key (kbd "C-c h") 'helm-command-prefix)
+;; (global-unset-key (kbd "C-x c"))
+;; (helm-mode 1)
 
 
 ;; ledger mode
