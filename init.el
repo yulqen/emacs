@@ -8,8 +8,10 @@
 
 (setq visible-bell t)
 
-(set-face-attribute 'default nil :font "Jetbrains Mono" :height 140)
-(load-theme 'tango-dark)
+;; (set-face-attribute 'default nil :font "Jetbrains Mono" :height 140)
+(set-face-attribute 'default nil :font "UbuntuMono Nerd Font Mono" :height 160)
+;;(load-theme 'tango-dark)
+(load-theme 'gruvbox-dark-soft t)
 
 ;; calendar proper Monday start
 (setq calendar-week-start-day 1)
@@ -119,6 +121,17 @@
 ;;   :config
 ;;   (ivy-mode 1))
 
+;; Auto completion
+(use-package company
+  :config
+  (setq company-idle-delay 0
+        company-minimum-prefix-length 3
+        company-selection-wrap-around t)
+  :config
+  (add-hook 'prog-mode-hook 'company-mode)
+  )
+;; (global-company-mode)
+
 ;; Lisp programming
 (use-package paredit
   :init
@@ -172,41 +185,61 @@
   (setq org-agenda-span 'day)
   (setq org-directory "~/org")
   (setq org-agenda-files (quote ("~/org/home.org"
-				 "~/org/cal.org"
                                  "~/org/projects.org"
                                  "~/org/work.org"
                                  "~/org/habits.org"
+				 "~/org/calendar/cal.org"
                                  "~/org/calendar/home-cal.org"
                                  "~/org/calendar/work-cal.org")))
-  
   (setq org-default-notes-file (concat org-directory "/notes.org"))
   (setq org-agenda-window-setup 'current-window)
   (setq org-agenda-start-with-log-mode t)
+  (setq org-M-RET-may-split-line '(default . nil))
+  (setq org-enforce-todo-dependencies t)
   (setq org-log-done 'time)
+  (setq org-log-done-with-time 'note)
   (setq diary-file "~/org/diary")
   (setq org-agenda-include-diary t)
-  (setq org-agenda-diary-file "~/org/cal.org")
+  (setq org-agenda-diary-file "~/org/calendar/cal.org")
   (setq org-agenda-show-future-repeats t)
-  (setq org-agenda-show-future-repeats nil)
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-reverse-note-order t)
   (setq org-habit-graph-column 45)
-  (setq org-log-done-with-time 'note)
   (setq org-sort-agenda-notime-is-late nil)
   (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %25TIMESTAMP_IA")
-
   (setq org-archive-location "~/org/archive.org::* From %s")
-
   (setq org-refile-targets (quote ((nil :maxlevel . 9)
-                   (org-agenda-files :maxlevel . 9))))
-
+				   (org-agenda-files :maxlevel . 9))))
   (setq org-agenda-custom-commands
-        '(("N" "Agenda and NEXT TODOs" ((agenda "") (todo "NEXT")))
-         ("a" "Agenda and All TODOS" ((agenda "") (alltodo "")))
-         ("w" "Agenda and WAITING" ((agenda "") (todo "WAITING")))
-         ("h" "Agenda and @home" ((agenda "") (tags-todo "@home")  (tags-todo "read")))
-         ("W" "Agenda and @work" ((agenda "") (tags-todo "@work")))))
+        '(
+	  ("N" "Agenda and NEXT TODOs"
+	   (
+	    (agenda "" ((org-deadline-warning-days 7)))
+	    (todo "NEXT")))
+          ("a" "Agenda and All TODOS"
+	   ((agenda "")
+	    (alltodo "")))
+          ("w" "Agenda and WAITING"
+	   (
+	    (agenda "")
+	    (todo "WAITING")))
+          ("h" "Agenda and @home"
+	   (
+	    (agenda "")
+	    (tags-todo "@home")
+	    ))
+	  ("p" "Work Project NEXT"
+	   (
+	    (agenda "")
+	    (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\"" ((org-agenda-overriding-header "Project Tasks")))
+	    )
+	   )
+          ("W" "Agenda and @work"
+	   (
+	    (agenda "")
+	    (tags-todo "@work")
+	    ))))
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
         (quote (("t" "Templates for Tasks")
@@ -246,10 +279,10 @@
   (setq org-log-into-drawer t)
   
   (setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
-	      (sequence "IDEA(i)" "|" "BADIDEA(b@/!)")
-              (sequence "PHONE(o)" "MEETING(m)" "PROJECT(p)"))))
+	(quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+		(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
+		(sequence "IDEA(i)" "|" "BADIDEA(b@/!)")
+		(sequence "PHONE(o)" "MEETING(m)" "PROJECT(p)"))))
   
   (setq org-todo-keyword-faces
         (quote (("TODO" :foreground "red" :weight bold)
@@ -276,8 +309,8 @@
 
   (setq org-priority-faces
         '((?A . (:foreground "#CC0000" :background "#FFE3E3"))
-    (?B . (:foreground "#64992C" :background "#EBF4DD"))
-    (?C . (:foreground "#64992C" :background "#FFFFFF"))))
+	  (?B . (:foreground "#64992C" :background "#EBF4DD"))
+	  (?C . (:foreground "#64992C" :background "#FFFFFF"))))
   (setq org-ellipsis "...")
   )
 
@@ -291,6 +324,7 @@
                       ("@work" . ?w)
                       ("@home" . ?h)
                       ("@errand" . ?e)
+		      ("@emacs" . ?E)
                       ;; Time
                       ("15min" . ?<)
                       ("30min" . ?=)
@@ -388,6 +422,7 @@
 
 ;; ledger mode
 (autoload 'ledger-mode "ledger-mode" "A major mode for Ledger" t)
+(setq ledger-clear-whole-transactions 1)
 (add-to-list 'auto-mode-alist '("\\.ledger%" . ledger-mode))
 
 (custom-set-variables
@@ -396,7 +431,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
+   '(gruvbox-theme company helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

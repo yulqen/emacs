@@ -1,2 +1,2 @@
-;; org-clock-save.el - x220 at <2021-10-09 Sat 20:58>
-(setq org-clock-stored-history '(("/home/lemon/org/work.org" . 1) ("/home/lemon/org/archive.org" . 24349) ("/home/lemon/org/archive.org" . 21942) ("/home/lemon/org/archive.org" . 13861)))
+;; org-clock-save.el - x220 at <2021-10-11 Mon 15:42>
+(setq org-clock-stored-history '(("/home/lemon/org/archive.org" . 27383) ("/home/lemon/org/home.org" . 2445) ("/home/lemon/org/archive.org" . 25951) ("/home/lemon/org/archive.org" . 25473) ("/home/lemon/org/work.org" . 85)))

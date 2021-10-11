@@ -13,8 +13,8 @@
  (rear-context-string . "2021-10-06 Wed]\n")
  (position . 687))
 ("org-capture-last-stored"
- (filename . "~/org/home.org")
- (front-context-string . "** TODO Contact ")
- (rear-context-string . " Single Actions\n")
- (position . 1188))
+ (filename . "~/org/emacs-tips.org")
+ (front-context-string . "** Update clock ")
+ (rear-context-string . "r-Settings.html\n")
+ (position . 51590))
 )
