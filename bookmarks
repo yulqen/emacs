@@ -4,17 +4,17 @@
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored-marker"
  (filename . "~/org/home.org")
- (front-context-string . "*** TODO Contact")
+ (front-context-string . "*** WAITING Keir")
  (rear-context-string . "2021-10-06 Wed]\n")
- (position . 687))
+ (position . 671))
 ("org-refile-last-stored"
  (filename . "~/org/home.org")
- (front-context-string . "*** TODO Contact")
+ (front-context-string . "*** WAITING Keir")
  (rear-context-string . "2021-10-06 Wed]\n")
- (position . 687))
+ (position . 671))
 ("org-capture-last-stored"
  (filename . "~/org/emacs-tips.org")
- (front-context-string . "** Update clock ")
- (rear-context-string . "r-Settings.html\n")
- (position . 51590))
+ (front-context-string . "** Paredit refer")
+ (rear-context-string . "red-mode is on.\n")
+ (position . 51958))
 )

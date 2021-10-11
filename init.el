@@ -213,31 +213,34 @@
 				   (org-agenda-files :maxlevel . 9))))
   (setq org-agenda-custom-commands
         '(("w" . "Work")
-	  ("wt" "Work TODO"
+	  ("wt" "Agenda + Work TODO"
 	   (
 	    (agenda "")
 	    (tags-todo "@work")
 	    ))
+	  ("wn" "Work NEXT"
+	   (
+	    (tags-todo "+@work+TODO=\"NEXT\"" ((org-agenda-overriding-header "Work NEXT")))
+	    ))
 	  ("wp" "Work Project NEXT"
 	   (
-	    (agenda "")
-	    (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\"" ((org-agenda-overriding-header "Project Tasks")))
+	    (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\"" ((org-agenda-overriding-header "Work Project NEXT actions")))
 	    ))
 	  ("H" . "Home")
-	  ("h" "Home TODO"
+	  ("h" "Agenda + Home TODO"
 	   (
 	    (agenda "")
 	    (tags-todo "@home")
 	    ))
-	  ("n" "All NEXT"
+	  ("n" "Agenda + All NEXT"
 	   (
 	    (agenda "")
 	    (todo "NEXT")))
-          ("t" "All TODO"
+          ("t" "Agenda + All TODO"
 	   (
 	    (agenda "")
 	    (alltodo "")))
-          ("W" "All WAITING"
+          ("W" "Agenda + All WAITING"
 	   (
 	    (agenda "")
 	    (todo "WAITING")))))
