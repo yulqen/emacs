@@ -212,34 +212,35 @@
   (setq org-refile-targets (quote ((nil :maxlevel . 9)
 				   (org-agenda-files :maxlevel . 9))))
   (setq org-agenda-custom-commands
-        '(
-	  ("N" "Agenda and NEXT TODOs"
-	   (
-	    (agenda "" ((org-deadline-warning-days 7)))
-	    (todo "NEXT")))
-          ("a" "Agenda and All TODOS"
-	   ((agenda "")
-	    (alltodo "")))
-          ("w" "Agenda and WAITING"
+        '(("w" . "Work")
+	  ("wt" "Work TODO"
 	   (
 	    (agenda "")
-	    (todo "WAITING")))
-          ("h" "Agenda and @home"
+	    (tags-todo "@work")
+	    ))
+	  ("wp" "Work Project NEXT"
+	   (
+	    (agenda "")
+	    (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\"" ((org-agenda-overriding-header "Project Tasks")))
+	    ))
+	  ("H" . "Home")
+	  ("h" "Home TODO"
 	   (
 	    (agenda "")
 	    (tags-todo "@home")
 	    ))
-	  ("p" "Work Project NEXT"
+	  ("n" "All NEXT"
 	   (
 	    (agenda "")
-	    (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\"" ((org-agenda-overriding-header "Project Tasks")))
-	    )
-	   )
-          ("W" "Agenda and @work"
+	    (todo "NEXT")))
+          ("t" "All TODO"
 	   (
 	    (agenda "")
-	    (tags-todo "@work")
-	    ))))
+	    (alltodo "")))
+          ("W" "All WAITING"
+	   (
+	    (agenda "")
+	    (todo "WAITING")))))
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
         (quote (("t" "Templates for Tasks")
