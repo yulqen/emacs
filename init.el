@@ -1,10 +1,33 @@
+;;; package -- Summary
 ;; Some basic UI stuff
+
+;;; Commentary:
+
+;;; Code:
 (setq inhibit-startup-message 1)
 
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (set-fringe-mode 10)
+
+;; Put backups in /tmp where they belong
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+;; recursively copy by default
+(setq dired-recursive-copies 'always)
+
+;; y or n instead of yes or no
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; auto revert files
+(global-auto-revert-mode t)
+
+;; Display the current time
+(display-time-mode t)
 
 (setq visible-bell t)
 
@@ -33,8 +56,38 @@
   (require 'use-package))
 (setq use-package-always-ensure t)
 
-
+;; start of use-package
 (require 'use-package)
+
+(use-package dired
+  :ensure nil
+  :bind
+  (("C-x C-j" . dired-jump)
+   ("C-x j" . dired-jump-other-window))
+  :custom
+  ;; Always delete and copy recursively
+  (dired-recursive-deletes 'always)
+  (dired-recursive-copies 'always)
+  ;; Auto refresh Dired, but be quiet about it
+  (global-auto-revert-non-file-buffers t)
+  (auto-revert-verbose nil)
+  ;; Quickly copy/move file in Dired
+  (dired-dwim-target t)
+  ;; Move files to trash when deleting
+  (delete-by-moving-to-trash t)
+  :config
+  ;; Reuse same dired buffer, to prevent numerous buffers while navigating in dired
+  (put 'dired-find-alternate-file 'disabled nil)
+  :hook
+  (dired-mode . (lambda ()
+                  (local-set-key (kbd "<mouse-2>") #'dired-find-alternate-file)
+                  (local-set-key (kbd "RET") #'dired-find-alternate-file)
+                  (local-set-key (kbd "^")
+                                 (lambda () (interactive) (find-alternate-file ".."))))))
+
+;; dired config
+;; human readable
+(setq-default dired-listing-switches "-alh")
 
 ;; auto package update
 (use-package auto-package-update
@@ -68,10 +121,116 @@
    (interactive)
    (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
+;; Windmove - use Shift and arrow keys to move in windows
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+
+;; Winner mode - undo and redo changes in window config
+;; with C-c left and C-c right
+(use-package winner
+  :ensure nil
+  :custom
+  (winner-boring-buffers
+   '("*Completions*"
+     "*Compile-Log*"
+     "*inferior-lisp*"
+     "*Fuzzy Completions*"
+     "*Apropos*"
+     "*Help*"
+     "*cvs*"
+     "*Buffer List*"
+     "*Ibuffer*"
+     "*esh command on file*"))
+  :config
+  (winner-mode 1))
+
+;; Handling tabs (for programming)
+(setq-default tab-width 2)
+(setq-default tab-width 2 indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
+(setq js-indent-level 2)
+(setq coffee-tab-width 2)
+(setq python-indent 2)
+(setq css-indent-offset 2)
+(add-hook 'sh-mode-hook
+	  (lambda ()
+	    (setq sh-basic-offset 2
+		  sh-indentation 2)))
+(setq web-mode-markup-indent-offset 2)
+
+;; flycheck syntax highlighting
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+;; Highlight matching parens
+(show-paren-mode t)
+
+;; Stop C-z suspending emacs
+(global-set-key (kbd "C-z") 'nil)
+
+(use-package ivy
+  :diminish
+  :init
+  (use-package amx :defer t)
+  (use-package counsel :diminish :config (counsel-mode 1))
+  (use-package swiper :defer t)
+  (ivy-mode 1)
+  :bind
+  (("C-s" . swiper-isearch)
+   ("C-x C-f" . counsel-find-file)
+   ("C-x C-m" . counsel-M-x)
+   ("C-h f" . counsel-describe-function)
+   ("C-h v" . counsel-describe-variable)
+   ("C-z s" . counsel-rg)
+   ("C-x C-r" . counsel-recentf)
+   ("C-z b" . counsel-buffer-or-recentf)
+   ("C-z C-b" . counsel-ibuffer)
+   (:map ivy-minibuffer-map
+         ("C-r" . ivy-previous-line-or-history)
+         ("M-RET" . ivy-immediate-done))
+   (:map counsel-find-file-map
+         ("C-~" . counsel-goto-local-home)))
+  :custom
+  (ivy-use-virtual-buffers t)
+  (ivy-height 10)
+  (ivy-on-del-error-function nil)
+  (ivy-magic-slash-non-match-action 'ivy-magic-slash-non-match-create)
+  (ivy-count-format "【%d/%d】")
+  (ivy-wrap t)
+  :config
+  (setq projectile-completion-system 'ivy)
+  (defun counsel-goto-local-home ()
+      "Go to the $HOME of the local machine."
+      (interactive)
+      (ivy--cd "~/")))
+
+;; Ace Window
+(use-package ace-window
+  :bind (("C-x o" . ace-window)
+         ("M-2" . ace-window))
+  :init
+  (setq aw-background t
+        aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)))
+
+;; expand-region
+(use-package expand-region
+  :bind (("C-@" . er/expand-region)
+         ("C-=" . er/expand-region)
+         ("M-3" . er/expand-region)))
+
+;; browse-kill-ring
+(use-package browse-kill-ring
+  :bind ("C-x C-y" . browse-kill-ring)
+  :config
+  (setq browse-kill-ring-quit-action 'kill-and-delete-window))
+
+(setq save-interprogram-paste-before-kill t)
+
+
 ;; recentf
 (use-package recentf
   :hook (after-init . recentf-mode)
-  :bind ("C-x C-r" . recentf-open-files)
   :custom
   (recentf-auto-cleanup "05:00am")
   (recentf-exclude '((expand-file-name package-user-dir)
@@ -121,16 +280,74 @@
 ;;   :config
 ;;   (ivy-mode 1))
 
-;; Auto completion
+
+;; Yasnippet
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
+  :bind
+  (:map yas-minor-mode-map ("C-c C-n" . yas-expand-from-trigger-key))
+  (:map yas-keymap
+        (("TAB" . smarter-yas-expand-next-field)
+         ([(tab)] . smarter-yas-expand-next-field)))
+  :config
+  (use-package yasnippet-snippets)
+  (yas-reload-all)
+  (defun smarter-yas-expand-next-field ()
+    "Try to `yas-expand' then `yas-next-field' at current cursor position."
+    (interactive)
+    (let ((old-point (point))
+          (old-tick (buffer-chars-modified-tick)))
+      (yas-expand)
+      (when (and (eq old-point (point))
+                 (eq old-tick (buffer-chars-modified-tick)))
+        (ignore-errors (yas-next-field))))))
+
+;; this config works better with yasnippet
 (use-package company
+  :diminish company-mode
+  :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode ledger-mode) . company-mode)
+  :bind
+  (:map company-active-map
+        ([tab] . smarter-yas-expand-next-field-complete)
+        ("TAB" . smarter-yas-expand-next-field-complete))
+  :custom
+    (company-tooltip-align-annotations t)
+  (company-begin-commands '(self-insert-command))
+  (company-require-match 'never)
+  ;; Don't use company in the following modes
+  (company-global-modes '(not shell-mode eaf-mode))
+  ;; Trigger completion immediately.
+  (company-idle-delay 0.1)
+  ;; Number the candidates (use M-1, M-2 etc to select completions).
+  (company-show-numbers t)
   :config
-  (setq company-idle-delay 0
-        company-minimum-prefix-length 3
-        company-selection-wrap-around t)
-  :config
-  (add-hook 'prog-mode-hook 'company-mode)
-  )
-;; (global-company-mode)
+  ;; clangd variable not present which was a problem
+;;  (unless *clangd* (delete 'company-clang company-backends))
+;;  (global-company-mode 1)
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 3)
+  (defun smarter-yas-expand-next-field-complete ()
+    "Try to `yas-expand' and `yas-next-field' at current cursor position.
+
+If failed try to complete the common part with `company-complete-common'"
+    (interactive)
+    (if yas-minor-mode
+        (let ((old-point (point))
+              (old-tick (buffer-chars-modified-tick)))
+          (yas-expand)
+          (when (and (eq old-point (point))
+                     (eq old-tick (buffer-chars-modified-tick)))
+            (ignore-errors (yas-next-field))
+            (when (and (eq old-point (point))
+                       (eq old-tick (buffer-chars-modified-tick)))
+              (company-complete-common))))
+      (company-complete-common))))
+
+
+;; Ace Jump
+(use-package ace-jump-mode
+  :bind ("C-M-SPC" . ace-jump-mode))
 
 ;; Lisp programming
 (use-package paredit
@@ -218,12 +435,14 @@
 	    (agenda "")
 	    (tags-todo "@work")
 	    ))
-	  ("wn" "Work NEXT"
+	  ("wn" "Agenda + Work NEXT"
 	   (
+	    (agenda)
 	    (tags-todo "+@work+TODO=\"NEXT\"" ((org-agenda-overriding-header "Work NEXT")))
 	    ))
 	  ("wp" "Work Project NEXT"
 	   (
+      (agenda)
 	    (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\"" ((org-agenda-overriding-header "Work Project NEXT actions")))
 	    ))
 	  ("H" . "Home")
@@ -405,10 +624,17 @@
   :bind ("C-x g" . magit-status))
 
 ;; ido
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
+
 (ido-mode 1)
+;; Interactively Do Things (ido)
+(use-package ido
+  :config
+  (ido-mode t)
+  (ido-everywhere t)
+  (setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
+  (setq ido-enable-flex-matching t))
 
 
 ;; ;; helm
@@ -423,11 +649,17 @@
 ;; (global-unset-key (kbd "C-x c"))
 ;; (helm-mode 1)
 
-
 ;; ledger mode
-(autoload 'ledger-mode "ledger-mode" "A major mode for Ledger" t)
-(setq ledger-clear-whole-transactions 1)
-(add-to-list 'auto-mode-alist '("\\.ledger%" . ledger-mode))
+(use-package ledger-mode
+  :mode ("\\.ledger\\'")
+  :config
+  (add-hook 'ledger-mode-hook
+            (lambda ()
+              (setq-local tab-always-indent 'complete)
+              (setq-local completion-cycle-threshold t)
+              (setq-local ledger-complete-in-steps t)))
+  :custom (ledger-clear-whole-transactions t))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -435,7 +667,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(gruvbox-theme company helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
+   '(yasnippet-snippets yasnippet browse-kill-ring expand-region ace-window amx flycheck ace-jump-mode gruvbox-theme company helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
