@@ -2,19 +2,38 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored-marker"
+(("(emacs) Hooks"
+ (front-context-string . "\nLisp variable w")
+ (rear-context-string . "cs.  A hook is a")
+ (position . 1622129)
+ (filename . "/usr/share/info/emacs")
+ (info-node . "Hooks")
+ (handler . Info-bookmark-jump))
+("(org) Custom Agenda Views"
+ (front-context-string . "11.6 Custom Agen")
+ (rear-context-string . ": Agenda Views\n\n")
+ (position . 373728)
+ (filename . "/usr/share/info/org")
+ (info-node . "Custom Agenda Views")
+ (handler . Info-bookmark-jump))
+("Defence Security Conditions"
+ (filename . "~/org/archive.org")
+ (front-context-string . "he DCSs (Defence")
+ (rear-context-string . "ace/\n:END:\n*** T")
+ (position . 24886))
+("org-capture-last-stored-marker"
  (filename . "~/org/home.org")
- (front-context-string . "*** WAITING Keir")
+ (front-context-string . "*** TODO Put up ")
  (rear-context-string . "2021-10-06 Wed]\n")
- (position . 671))
+ (position . 674))
 ("org-refile-last-stored"
  (filename . "~/org/home.org")
- (front-context-string . "*** WAITING Keir")
+ (front-context-string . "*** TODO Put up ")
  (rear-context-string . "2021-10-06 Wed]\n")
- (position . 671))
+ (position . 674))
 ("org-capture-last-stored"
- (filename . "~/org/emacs-tips.org")
- (front-context-string . "** Paredit refer")
- (rear-context-string . "red-mode is on.\n")
- (position . 51958))
+ (filename . "~/org/home.org")
+ (front-context-string . "** TODO Put all ")
+ (rear-context-string . " Single Actions\n")
+ (position . 2232))
 )
