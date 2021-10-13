@@ -105,7 +105,7 @@
 
 ;; some core bindings
 ;; Use iBuffer instead of Buffer List
-(global-set-key (kbd "C-x C-b") #'ibuffer)
+;;(global-set-key (kbd "C-x C-b") #'ibuffer)
 ;; Truncate lines
 (global-set-key (kbd "C-x C-l") #'toggle-truncate-lines)
 ;; Adjust font size like web browsers
@@ -404,8 +404,9 @@ If failed try to complete the common part with `company-complete-common'"
   (setq org-agenda-files (quote ("~/org/home.org"
                                  "~/org/projects.org"
                                  "~/org/work.org"
+                                 "~/org/notes.org"
                                  "~/org/habits.org"
-				 "~/org/calendar/cal.org"
+				                         "~/org/calendar/cal.org"
                                  "~/org/calendar/home-cal.org"
                                  "~/org/calendar/work-cal.org")))
   (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -427,49 +428,63 @@ If failed try to complete the common part with `company-complete-common'"
   (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %25TIMESTAMP_IA")
   (setq org-archive-location "~/org/archive.org::* From %s")
   (setq org-refile-targets (quote ((nil :maxlevel . 9)
-				   (org-agenda-files :maxlevel . 9))))
+				                           (org-agenda-files :maxlevel . 9))))
   (setq org-agenda-custom-commands
         '(("w" . "Work")
-	  ("wt" "Agenda + Work TODO"
-	   (
-	    (agenda "")
-	    (tags-todo "@work")
-	    ))
-	  ("wn" "Agenda + Work NEXT"
-	   (
-	    (agenda)
-	    (tags-todo "+@work+TODO=\"NEXT\"" ((org-agenda-overriding-header "Work NEXT")))
-	    ))
-	  ("wp" "Work Project NEXT"
-	   (
-      (agenda)
-	    (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\"" ((org-agenda-overriding-header "Work Project NEXT actions")))
-	    ))
-	  ("H" . "Home")
-	  ("h" "Agenda + Home TODO"
-	   (
-	    (agenda "")
-	    (tags-todo "@home")
-	    ))
-	  ("n" "Agenda + All NEXT"
-	   (
-	    (agenda "")
-	    (todo "NEXT")))
+	        ("wt" "Agenda + Work TODO"
+	         (
+	          (agenda "")
+	          (tags-todo "+@work-SCHEDULED>=\"<today>\""
+                       ((org-agenda-overriding-header "Work TODO UNSCHEDULED")))
+            (tags-todo "+@work+TODO=\"WAITING\""
+                       ((org-agenda-overriding-header "Work WAITING")))
+	          ))
+	        ("wn" "Agenda + Work NEXT"
+	         (
+	          (agenda)
+	          (tags-todo "+@work+TODO=\"NEXT\"-SCHEDULED>=\"<today>\""
+                       ((org-agenda-overriding-header "Work NEXT UNSCHEDULED")))
+            (tags-todo "+@work+TODO=\"WAITING\""
+                       ((org-agenda-overriding-header "Work WAITING")))
+	          ))
+	        ("wp" "Work Project NEXT"
+	         (
+            (agenda)
+	          (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\"" ((org-agenda-overriding-header "Work Project NEXT actions")))
+	          ))
+	        ("H" . "Home")
+	        ("Hh" "Agenda + Home TODO"
+	         (
+	          (agenda "")
+	          (tags-todo "@home" ((org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+	          ))
+          ("Hn" "Agenda + Home NEXT"
+	         (
+	          (agenda "")
+	          (tags-todo "+@home+TODO=\"NEXT\"" ((org-agenda-overriding-header "Home NEXT") (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+            (tags-todo "+@home+TODO=\"DOING\"" ((org-agenda-overriding-header "Home DOING")))
+	          ))
+	        ("n" "Agenda + All NEXT"
+	         (
+	          (agenda "")
+	          (todo "NEXT")))
           ("t" "Agenda + All TODO"
-	   (
-	    (agenda "")
-	    (alltodo "")))
+	         (
+	          (agenda "")
+	          (alltodo "")))
           ("W" "Agenda + All WAITING"
-	   (
-	    (agenda "")
-	    (todo "WAITING")))))
+	         (
+	          (agenda "")
+	          (todo "WAITING")))
+          ("i" tags "idea")
+          ))
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
         (quote (("t" "Templates for Tasks")
                 ("tp" "Task Personal TODO" entry (file+headline "~/org/home.org" "Single Actions")
                  "** TODO %?"
                  :prepend t)
-		("tp" "Task Personal NEXT" entry (file+headline "~/org/home.org" "Single Actions")
+		            ("tp" "Task Personal NEXT" entry (file+headline "~/org/home.org" "Single Actions")
                  "** NEXT %?"
                  :prepend t)
                 ("tw" "Task Work TODO" entry (file+headline "~/org/work.org" "Work Single Actions")
@@ -490,8 +505,8 @@ If failed try to complete the common part with `company-complete-common'"
                  "* %?\n\t\n%i")
                 ("wj" "Journal" entry (file+olp+datetree "~/org/work.org" "Journal")
                  "* %?\n\tEntered on %U\n")
-		("i" "Idea" entry (file+headline "~/org/home.org" "Ideas")
-		 "** IDEA %?\nEntered on %U\n")
+		            ("i" "Idea" entry (file+headline "~/org/home.org" "Ideas")
+		             "** IDEA %?\nEntered on %U\n")
                 ("e" "Emacs Tip")
                 ("et" "Emacs Tip" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
                  "* %?\n\t%a")
@@ -502,23 +517,18 @@ If failed try to complete the common part with `company-complete-common'"
   (setq org-log-into-drawer t)
   
   (setq org-todo-keywords
-	(quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-		(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
-		(sequence "IDEA(i)" "|" "BADIDEA(b@/!)")
-		(sequence "PHONE(o)" "MEETING(m)" "PROJECT(p)"))))
+	      (quote ((sequence "TODO(t)" "NEXT(n)" "DOING" "|" "DONE(d!)")
+		            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
+		            )))
   
   (setq org-todo-keyword-faces
         (quote (("TODO" :foreground "red" :weight bold)
                 ("NEXT" :foreground "cyan" :weight bold)
+                ("DOING" :foreground "orchid" :weight bold)
                 ("DONE" :foreground "forest green" :weight bold)
-		("IDEA" :foreground "yellow" :weight bold)
-		("BADIDEA" :foreground "forest green" :weight bold)
                 ("WAITING" :foreground "orange" :weight bold)
                 ("HOLD" :foreground "magenta" :weight bold)
-                ("CANCELLED" :foreground "forest green" :weight bold)
-                ("MEETING" :foreground "forest green" :weight bold)
-                ("PROJECT" :foreground "OrangeRed2" :weight bold)
-                ("PHONE" :foreground "forest green" :weight bold))))
+                ("CANCELLED" :foreground "forest green" :weight bold))))
 
   ;; tag stuff automatically dependent on a change of state
   (setq org-todo-state-tags-triggers
@@ -532,22 +542,28 @@ If failed try to complete the common part with `company-complete-common'"
 
   (setq org-priority-faces
         '((?A . (:foreground "#CC0000" :background "#FFE3E3"))
-	  (?B . (:foreground "#64992C" :background "#EBF4DD"))
-	  (?C . (:foreground "#64992C" :background "#FFFFFF"))))
+	        (?B . (:foreground "#64992C" :background "#EBF4DD"))
+	        (?C . (:foreground "#64992C" :background "#FFFFFF"))))
   (setq org-ellipsis "...")
   )
+
+;; turn on visual line mode in org mode
+(add-hook 'org-mode-hook 'visual-line-mode)
 
 ;; org tags
 (setq org-tag-alist '(
                       ;; Depth
                       ("@immersive" . ?i) ;; "Deep"
-                      ("@process" . ?p) ;; "Shallow"
-                      ("@offdesk" . ?o) ;; "Away from desk"
+                      ("@process" . ?p)   ;; "Shallow"
+                      ("@offdesk" . ?o)   ;; "Away from desk"
+                      ;; Type
+                      ("brainstorm" . ?b)
+                      ("idea" . ?d)
                       ;; Context
                       ("@work" . ?w)
                       ("@home" . ?h)
                       ("@errand" . ?e)
-		      ("@emacs" . ?E)
+		                  ("@emacs" . ?E)
                       ;; Time
                       ("15min" . ?<)
                       ("30min" . ?=)
@@ -653,6 +669,13 @@ If failed try to complete the common part with `company-complete-common'"
 (use-package ledger-mode
   :mode ("\\.ledger\\'")
   :config
+  (setq ledger-default-date-format "%d/%m/%Y")
+  (setq ledger-reports
+        '(("hsbc_current_account" "ledger [[ledger-mode-flags]] --date-format \"%d/%m/%Y\" -f /home/lemon/Documents/Budget/ledger/2021/budget2021.ledger reg Assets\\:HSBC\\:Current")
+          ("bal" "%(binary) -f %(ledger-file) bal")
+          ("reg" "%(binary) -f %(ledger-file) reg")
+          ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+          ("account" "%(binary) -f %(ledger-file) reg %(account)")))
   (add-hook 'ledger-mode-hook
             (lambda ()
               (setq-local tab-always-indent 'complete)
