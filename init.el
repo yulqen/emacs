@@ -453,24 +453,25 @@ If failed try to complete the common part with `company-complete-common'"
 	          (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\""
                        ((org-agenda-overriding-header "Work Project NEXT actions")))
 	          ))
-	        ("H" . "Home")
-	        ("Hh" "Agenda + Home TODO"
+	        ("h" . "Home")
+	        ("hh" "Agenda + Home TODO"
 	         (
 	          (agenda "")
-	          (tags-todo "@home-SCHEDULED>=\"<today>\"-TODO=\"WAITING\""
+	          (tags-todo "@home-SCHEDULED>=\"<today>\"-TODO=\"WAITING\"-TODO=\"DOING\""
                        ((org-agenda-overriding-header "Home TODO UNSCHEDULED")
                         (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
             (tags-todo "+@home+TODO=\"WAITING\""
                        ((org-agenda-overriding-header "Home WAITING")))
+            (tags-todo "+@home+TODO=\"DOING\"" ((org-agenda-overriding-header "Home in progress")))
 	          ))
-          ("Hn" "Agenda + Home NEXT"
+          ("hn" "Agenda + Home NEXT"
 	         (
 	          (agenda "")
 	          (tags-todo "+@home+TODO=\"NEXT\"-SCHEDULED>=\"<today\""
                        ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
                         (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
             (tags-todo "+@home+TODO=\"DOING\""
-                       ((org-agenda-overriding-header "Home DOING")))
+                       ((org-agenda-overriding-header "Home in progress")))
 	          ))
 	        ("n" "Agenda + All NEXT"
 	         (
