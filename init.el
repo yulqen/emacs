@@ -450,19 +450,27 @@ If failed try to complete the common part with `company-complete-common'"
 	        ("wp" "Work Project NEXT"
 	         (
             (agenda)
-	          (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\"" ((org-agenda-overriding-header "Work Project NEXT actions")))
+	          (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\""
+                       ((org-agenda-overriding-header "Work Project NEXT actions")))
 	          ))
 	        ("H" . "Home")
 	        ("Hh" "Agenda + Home TODO"
 	         (
 	          (agenda "")
-	          (tags-todo "@home" ((org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+	          (tags-todo "@home-SCHEDULED>=\"<today>\"-TODO=\"WAITING\""
+                       ((org-agenda-overriding-header "Home TODO UNSCHEDULED")
+                        (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+            (tags-todo "+@home+TODO=\"WAITING\""
+                       ((org-agenda-overriding-header "Home WAITING")))
 	          ))
           ("Hn" "Agenda + Home NEXT"
 	         (
 	          (agenda "")
-	          (tags-todo "+@home+TODO=\"NEXT\"" ((org-agenda-overriding-header "Home NEXT") (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-            (tags-todo "+@home+TODO=\"DOING\"" ((org-agenda-overriding-header "Home DOING")))
+	          (tags-todo "+@home+TODO=\"NEXT\"-SCHEDULED>=\"<today\""
+                       ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
+                        (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+            (tags-todo "+@home+TODO=\"DOING\""
+                       ((org-agenda-overriding-header "Home DOING")))
 	          ))
 	        ("n" "Agenda + All NEXT"
 	         (
@@ -669,7 +677,7 @@ If failed try to complete the common part with `company-complete-common'"
 (use-package ledger-mode
   :mode ("\\.ledger\\'")
   :config
-  (setq ledger-default-date-format "%d/%m/%Y")
+;;  (setq ledger-default-date-format "%d/%m/%Y")
   (setq ledger-reports
         '(("hsbc_current_account" "ledger [[ledger-mode-flags]] --date-format \"%d/%m/%Y\" -f /home/lemon/Documents/Budget/ledger/2021/budget2021.ledger reg Assets\\:HSBC\\:Current")
           ("bal" "%(binary) -f %(ledger-file) bal")
