@@ -34,7 +34,7 @@
 ;; (set-face-attribute 'default nil :font "Jetbrains Mono" :height 140)
 (set-face-attribute 'default nil :font "UbuntuMono Nerd Font Mono" :height 160)
 ;;(load-theme 'tango-dark)
-(load-theme 'gruvbox-dark-soft t)
+(load-theme 'gruvbox-dark-hard t)
 
 ;; calendar proper Monday start
 (setq calendar-week-start-day 1)
@@ -390,6 +390,11 @@ If failed try to complete the common part with `company-complete-common'"
 
 ;; org mode!
 (use-package org
+  :init
+  ;; turn on visual line mode in org mode
+  (add-hook 'org-mode-hook 'visual-line-mode)
+  ;; turn off flycheck-mode
+  (add-hook 'org-mode-hook (lambda () flycheck-mode -1))
   :config
   (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-ca" 'org-agenda)
@@ -434,7 +439,7 @@ If failed try to complete the common part with `company-complete-common'"
 	        ("wt" "Agenda + Work TODO"
 	         (
 	          (agenda "")
-	          (tags-todo "+@work-SCHEDULED>=\"<today>\""
+	          (tags-todo "+@work-TODO=\"WAITING\"-SCHEDULED>=\"<today>\""
                        ((org-agenda-overriding-header "Work TODO UNSCHEDULED")))
             (tags-todo "+@work+TODO=\"WAITING\""
                        ((org-agenda-overriding-header "Work WAITING")))
@@ -503,7 +508,7 @@ If failed try to complete the common part with `company-complete-common'"
 		            ("hi" "Home Idea" entry (file+headline "~/org/notes.org" "Notes")
 		             "** %? :idea:\nEntered on %U\n")
                 ("w" "Work Tasks & Notes")
-                ("wt" "Work TODO" entry (file+headline "~/org/work.org" "Work Single Actions")
+                ("wt" "Work TODO" entry (file+headline "~/org/work.org" "Single Actions")
                  "** TODO %?\nEntered on %U\n"
                  :prepend t)
 		            ("wn" "Work NEXT" entry (file+headline "~/org/work.org" "Single Actions")
@@ -559,8 +564,7 @@ If failed try to complete the common part with `company-complete-common'"
   (setq org-ellipsis "...")
   )
 
-;; turn on visual line mode in org mode
-(add-hook 'org-mode-hook 'visual-line-mode)
+
 
 ;; org tags
 (setq org-tag-alist '(
@@ -623,29 +627,41 @@ If failed try to complete the common part with `company-complete-common'"
   :config
   (setq elfeed-feeds
         '(("http://feeds.bbci.co.uk/news/rss.xml?edition=uk" news)
-          "https://www.feedspot.com/?followfeedid=4946040"
           ("http://feeds.bbci.co.uk/news/technology/rss.xml" tech news)
+          ("https://planet.emacslife.com/atom.xml" emacs)
+          ("https://irreal.org/blog/?feed=rss2" emacs)
+          ("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" emacs)
           ("https://dominiccummings.com/rss.xml" blog tech)
+          ("https://usesthis.com/feed.atom" tech blog)
+          ("https://plaintextproject.online/feed.xml" plaintext productivity)
+          ("https://feeds.feedburner.com/StudyHacks" productivity)
           ("http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/rugby_union/rss.xml" rugby)
           ("http://feeds.bbci.co.uk/news/video_and_audio/politics/rss.xml" news)
           ("https://feeds.feedburner.com/arstechnica/open-source" opensource)
           ("https://www.computerweekly.com/rss/IT-security.xml" cyber)
+          ("http://tonsky.me/blog/atom.xml" blog)
+          ("https://akkshaya.blog/feed" blob)
+          ("https://miguelmota.com/index.xml" blog)
+          ("https://www.computerweekly.com/rss/IT-security.xml" security)
           ("https://www.fsf.org/static/fsforg/rss/news.xml" opensource)
-          ("https://www.reddit.com/r/freebsd.rss" bsd)
           ("https://www.reddit.com/r/emacs.rss" emacs)
           ("https://www.reddit.com/r/rugbyunion/.rss" rugby)
           ("http://pragmaticemacs.com/feed/" emacs)
           ("https://200ok.ch/atom.xml" emacs)
-          "https://www.youtube.com/feeds/videos.xml?channel_id=UCkK9UDm_ZNrq_rIXCz3xCGA"
-          "https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA"
-          "https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA"
           ("http://www.linuxinsider.com/perl/syndication/rssfull.pl" linux)
           ("http://planet.debian.org/rss20.xml" debian linux)
           ("http://feeds2.feedburner.com/Command-line-fu" linux)
           ("https://opensource.org/news.xml" opensource)
-          ("https://feeds.feedburner.com/arstechnica/index" news tech)
           ("https://www.wired.com/feed/rss" news tech)
           ("https://sivers.org/en.atom" blog))))
+
+;; get scoring in elfeed
+(use-package elfeed-score
+  :ensure t
+  :config
+  (progn
+    (elfeed-score-enable)
+    (define-key elfeed-search-mode-map "=" elfeed-score-map)))
 
 ;; Basic magit
 (use-package magit
@@ -701,8 +717,11 @@ If failed try to complete the common part with `company-complete-common'"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-show-quick-access t nil nil "Customized with use-package company")
+ '(custom-safe-themes
+   '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" default))
  '(package-selected-packages
-   '(yasnippet-snippets yasnippet browse-kill-ring expand-region ace-window amx flycheck ace-jump-mode gruvbox-theme company helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
+   '(elfeed-score yasnippet-snippets yasnippet browse-kill-ring expand-region ace-window amx flycheck ace-jump-mode gruvbox-theme company helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
