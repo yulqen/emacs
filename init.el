@@ -467,7 +467,7 @@ If failed try to complete the common part with `company-complete-common'"
           ("hn" "Agenda + Home NEXT"
 	         (
 	          (agenda "")
-	          (tags-todo "+@home+TODO=\"NEXT\"-SCHEDULED>=\"<today\""
+	          (tags-todo "+@home+TODO=\"NEXT\"-SCHEDULED>=\"<today>\""
                        ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
                         (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
             (tags-todo "+@home+TODO=\"DOING\""
@@ -489,33 +489,36 @@ If failed try to complete the common part with `company-complete-common'"
           ))
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
-        (quote (("t" "Templates for Tasks")
-                ("tp" "Task Personal TODO" entry (file+headline "~/org/home.org" "Single Actions")
-                 "** TODO %?"
+        (quote (("h" "Home Tasks & Notes")
+                ("ht" "Home TODO" entry (file+headline "~/org/home.org" "Single Actions")
+                 "** TODO %?\nEntered on %U\n"
                  :prepend t)
-		            ("tp" "Task Personal NEXT" entry (file+headline "~/org/home.org" "Single Actions")
-                 "** NEXT %?"
+		            ("hn" "Home NEXT" entry (file+headline "~/org/home.org" "Single Actions")
+                 "** NEXT %?\nEntered on %U\n"
                  :prepend t)
-                ("tw" "Task Work TODO" entry (file+headline "~/org/work.org" "Work Single Actions")
-                 "** TODO %?"
+                ("hN" "Home Note" entry (file+headline "~/org/home.org" "Notes")
+                 "** %?\nEntered on %U\n")
+                ("hj" "Journal" entry (file+datetree "~/org/journal.org")
+                 "* %?\nEntered on %U\n")
+		            ("hi" "Home Idea" entry (file+headline "~/org/notes.org" "Notes")
+		             "** %? :idea:\nEntered on %U\n")
+                ("w" "Work Tasks & Notes")
+                ("wt" "Work TODO" entry (file+headline "~/org/work.org" "Work Single Actions")
+                 "** TODO %?\nEntered on %U\n"
                  :prepend t)
-                ("tn" "Home Note" entry (file+headline "~/org/home.org" "Notes")
-                 "** %?\n\t")
-                ("j" "Journal" entry (file+datetree "~/org/journal.org")
-                 "* %?\nEntered on %U\n %i\n %a\n %l")
-                ("d" "Retrospective Single Action" entry (file+headline "~/org/home.org" "Single Actions")
-                 "* DONE %?\nCLOSED: %U")
-                ("w" "Work Notes and Journaling")
-                ("wn" "Note" entry (file+headline "~/org/work.org" "Notes")
-                 "* %?\n\t")
+		            ("wn" "Work NEXT" entry (file+headline "~/org/work.org" "Single Actions")
+                 "** NEXT %?\nEntered on %U\n"
+                 :prepend t)
+                ("wN" "Note" entry (file+headline "~/org/work.org" "Notes")
+                 "* %?\nEntered on %U\n")
                 ("wc" "Note from Clipboard" entry (file+headline "~/org/work.org" "Notes")
                  "* %?\n\t\n%c")
                 ("wr" "Note from Region" entry (file+headline "~/org/work.org" "Notes")
                  "* %?\n\t\n%i")
                 ("wj" "Journal" entry (file+olp+datetree "~/org/work.org" "Journal")
-                 "* %?\n\tEntered on %U\n")
-		            ("i" "Idea" entry (file+headline "~/org/home.org" "Ideas")
-		             "** IDEA %?\nEntered on %U\n")
+                 "** %?\nEntered on %U\n")
+                ("wd" "Retrospective Single Action" entry (file+headline "~/org/work.org" "Single Actions")
+                 "* DONE %?\nCLOSED: %U")
                 ("e" "Emacs Tip")
                 ("et" "Emacs Tip" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
                  "* %?\n\t%a")
