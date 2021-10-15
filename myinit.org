@@ -1,239 +1,292 @@
+#+STARTUP: overview
+#+PROPERTY: header-args :comments yes :results silent
+
 * Main Org config
+
+I do not want visual line mode in org mode.
+
 #+begin_src emacs-lisp
-	    (use-package org
-	      :init
-	      ;; turn on visual line mode in org mode
-	      (add-hook 'org-mode-hook 'visual-line-mode)
-	      ;; turn off flycheck-mode
-	      (add-hook 'org-mode-hook (lambda () flycheck-mode -1))
-	      :config
-	      (global-set-key "\C-cl" 'org-store-link)
-	      (global-set-key "\C-ca" 'org-agenda)
-	      (global-set-key "\C-cb" 'org-iswitchb)
-	      (global-set-key "\C-cc" 'org-capture)
+(add-hook 'org-mode-hook 'visual-line-mode)
+#+end_src
 
-	      (setq org-clock-persist 'history)
-	      (org-clock-persistence-insinuate)
-	      (setq org-sort-agenda-notime-is-late nil)
-	      (setq org-agenda-span 'day)
-	      (setq org-directory "~/org")
-	      (setq org-agenda-files (quote ("~/org/home.org"
-					     "~/org/projects.org"
-					     "~/org/work.org"
-					     "~/org/notes.org"
-					     "~/org/habits.org"
-					     "~/org/calendar/cal.org"
-					     "~/org/calendar/home-cal.org"
-					     "~/org/calendar/work-cal.org")))
-	      (setq org-default-notes-file (concat org-directory "/notes.org"))
-	      (setq org-agenda-window-setup 'current-window)
-	      (setq org-agenda-start-with-log-mode t)
-	      (setq org-M-RET-may-split-line '(default . nil))
-	      (setq org-enforce-todo-dependencies t)
-	      (setq org-log-done 'time)
-	      (setq org-log-done-with-time 'note)
-	      (setq diary-file "~/org/diary")
-	      (setq org-agenda-include-diary t)
-	      (setq org-agenda-diary-file "~/org/calendar/cal.org")
-	      (setq org-agenda-show-future-repeats t)
-	      (setq org-agenda-skip-deadline-if-done t)
-	      (setq org-agenda-skip-scheduled-if-done t)
-	      (setq org-reverse-note-order t)
-	      (setq org-habit-graph-column 45)
-	      (setq org-sort-agenda-notime-is-late nil)
-	      (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %25TIMESTAMP_IA")
-	      (setq org-archive-location "~/org/archive.org::* From %s")
-	      (setq org-refile-targets (quote ((nil :maxlevel . 9)
-					       (org-agenda-files :maxlevel . 9))))
-	      (setq org-agenda-custom-commands
-		    '(("w" . "Work")
-		      ("wt" "Agenda + Work TODO"
-		       (
-			(agenda "")
-			(tags-todo "+@work-TODO=\"WAITING\"-SCHEDULED>=\"<today>\""
-				   ((org-agenda-overriding-header "Work TODO UNSCHEDULED")))
-			(tags-todo "+@work+TODO=\"WAITING\""
-				   ((org-agenda-overriding-header "Work WAITING")))
-			))
-		      ("wn" "Agenda + Work NEXT"
-		       (
-			(agenda)
-			(tags-todo "+@work+TODO=\"NEXT\"-SCHEDULED>=\"<today>\""
-				   ((org-agenda-overriding-header "Work NEXT UNSCHEDULED")))
-			(tags-todo "+@work+TODO=\"WAITING\""
-				   ((org-agenda-overriding-header "Work WAITING")))
-			))
-		      ("wp" "Work Project NEXT"
-		       (
-			(agenda)
-			(tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\""
-				   ((org-agenda-overriding-header "Work Project NEXT actions")))
-			))
-		      ("h" . "Home")
-		      ("hh" "Agenda + Home TODO"
-		       (
-			(agenda "")
-			(tags-todo "@home-SCHEDULED>=\"<today>\"-TODO=\"WAITING\"-TODO=\"DOING\""
-				   ((org-agenda-overriding-header "Home TODO UNSCHEDULED")
-				    (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-			(tags-todo "+@home+TODO=\"WAITING\""
-				   ((org-agenda-overriding-header "Home WAITING")))
-			(tags-todo "+@home+TODO=\"DOING\"" ((org-agenda-overriding-header "Home in progress")))
-			))
-		      ("hn" "Agenda + Home NEXT"
-		       (
-			(agenda "")
-			(tags-todo "+@home+TODO=\"NEXT\"-SCHEDULED>=\"<today>\""
-				   ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
-				    (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-			(tags-todo "+@home+TODO=\"DOING\""
-				   ((org-agenda-overriding-header "Home in progress")))
-			))
-		      ("n" "Agenda + All NEXT"
-		       (
-			(agenda "")
-			(todo "NEXT")))
-		      ("t" "Agenda + All TODO"
-		       (
-			(agenda "")
-			(alltodo "")))
-		      ("W" "Agenda + All WAITING"
-		       (
-			(agenda "")
-			(todo "WAITING")))
-		      ("i" tags "idea")
-		      ))
-	      (define-key global-map "\C-cc" 'org-capture)
-	      (setq org-capture-templates
-		    (quote (("h" "Home Tasks & Notes")
-			    ("ht" "Home TODO" entry (file+headline "~/org/home.org" "Single Actions")
-			     "** TODO %?\nEntered on %U\n"
-			     :prepend t)
-			    ("hn" "Home NEXT" entry (file+headline "~/org/home.org" "Single Actions")
-			     "** NEXT %?\nEntered on %U\n"
-			     :prepend t)
-			    ("hN" "Home Note" entry (file+headline "~/org/home.org" "Notes")
-			     "** %?\nEntered on %U\n")
-			    ("hj" "Journal" entry (file+datetree "~/org/journal.org")
-			     "* %?\nEntered on %U\n")
-			    ("hi" "Home Idea" entry (file+headline "~/org/notes.org" "Notes")
-			     "** %? :idea:\nEntered on %U\n")
-			    ("w" "Work Tasks & Notes")
-			    ("wt" "Work TODO" entry (file+headline "~/org/work.org" "Single Actions")
-			     "** TODO %?\nEntered on %U\n"
-			     :prepend t)
-			    ("wn" "Work NEXT" entry (file+headline "~/org/work.org" "Single Actions")
-			     "** NEXT %?\nEntered on %U\n"
-			     :prepend t)
-			    ("wN" "Note" entry (file+headline "~/org/work.org" "Notes")
-			     "* %?\nEntered on %U\n")
-			    ("wc" "Note from Clipboard" entry (file+headline "~/org/work.org" "Notes")
-			     "* %?\n\t\n%c")
-			    ("wr" "Note from Region" entry (file+headline "~/org/work.org" "Notes")
-			     "* %?\n\t\n%i")
-			    ("wj" "Journal" entry (file+olp+datetree "~/org/work.org" "Journal")
-			     "** %?\nEntered on %U\n")
-			    ("wd" "Retrospective Single Action" entry (file+headline "~/org/work.org" "Single Actions")
-			     "* DONE %?\nCLOSED: %U")
-			    ("e" "Emacs Tip")
-			    ("et" "Emacs Tip" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
-			     "* %?\n\t%a")
-			    ("er" "Emacs Tip from Region" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
-			     "* %?\n\t%i")
-			    )))
-	      ;; Put state transition logs into a drawer called LOGBOOK
-	      (setq org-log-into-drawer t)
+Nor do I want flycheck-mode on.
 
-	      (setq org-todo-keywords
-		    (quote ((sequence "TODO(t)" "NEXT(n)" "DOING" "|" "DONE(d!)")
-			    (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
-			    )))
+  #+begin_src emacs-lisp
+  ;; turn off flycheck-mode
+  (add-hook 'org-mode-hook (lambda () flycheck-mode -1))
+  #+end_src
 
-	      (setq org-todo-keyword-faces
-		    (quote (("TODO" :foreground "red" :weight bold)
-			    ("NEXT" :foreground "cyan" :weight bold)
-			    ("DOING" :foreground "orchid" :weight bold)
-			    ("DONE" :foreground "forest green" :weight bold)
-			    ("WAITING" :foreground "orange" :weight bold)
-			    ("HOLD" :foreground "magenta" :weight bold)
-			    ("CANCELLED" :foreground "forest green" :weight bold))))
 
-	      ;; tag stuff automatically dependent on a change of state
-	      (setq org-todo-state-tags-triggers
-		    (quote (("CANCELLED" ("CANCELLED" . t))
-			    ("WAITING" ("WAITING" . t))
-			    ("HOLD" ("WAITING") ("HOLD" . t))
-			    (done ("WAITING") ("HOLD"))
-			    ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-			    ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-			    ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+** Keybindings
 
-	      (setq org-priority-faces
-		    '((?A . (:foreground "#CC0000" :background "#FFE3E3"))
-		      (?B . (:foreground "#64992C" :background "#EBF4DD"))
-		      (?C . (:foreground "#64992C" :background "#FFFFFF"))))
-	      (setq org-ellipsis "...")
-	      )
+   Let's set some basic keybindings.
 
-	(setq org-tag-alist '(
-			      ;; Depth
-			      ("@immersive" . ?i) ;; "Deep"
-			      ("@process" . ?p)   ;; "Shallow"
-			      ("@offdesk" . ?o)   ;; "Away from desk"
-			      ;; Type
-			      ("brainstorm" . ?b)
-			      ("idea" . ?d)
-			      ;; Context
-			      ("@work" . ?w)
-			      ("@home" . ?h)
-			      ("@errand" . ?e)
-			      ("@emacs" . ?E)
-			      ;; Time
-			      ("15min" . ?<)
-			      ("30min" . ?=)
-			      ("1h" . ?>)
-			      ;; Energy
-			      ("Challenge" . ?1)
-			      ("Average" . ?2)
-			      ("Easy" . ?3)
-			      ;; Misc
-			      ("Maybe" . ?m)
-			      ))
+
+  #+begin_src emacs-lisp
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
+  (global-set-key "\C-cc" 'org-capture)
+  #+end_src
+
+
+Some agenda configuration.
+
+** Basic agenda config
+  
+  #+begin_src emacs-lisp
+    (setq org-clock-persist 'history)
+    (org-clock-persistence-insinuate)
+    (setq org-sort-agenda-notime-is-late nil)
+    (setq org-agenda-span 'day)
+    (setq org-directory "~/org")
+    (setq org-agenda-files (quote ("~/org/home.org"
+    "~/org/projects.org"
+    "~/org/work.org"
+    "~/org/notes.org"
+    "~/org/habits.org"
+    "~/org/calendar/cal.org"
+    "~/org/calendar/home-cal.org"
+    "~/org/calendar/work-cal.org")))
+    (setq org-default-notes-file (concat org-directory "/notes.org"))
+    (setq org-agenda-window-setup 'current-window)
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-M-RET-may-split-line '(default . nil))
+    (setq org-enforce-todo-dependencies t)
+    (setq org-log-done 'time)
+    (setq org-log-done-with-time 'note)
+    (setq diary-file "~/org/diary")
+    (setq org-agenda-include-diary t)
+    (setq org-agenda-diary-file "~/org/calendar/cal.org")
+    (setq org-agenda-show-future-repeats t)
+    (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-skip-scheduled-if-done t)
+    (setq org-reverse-note-order t)
+    (setq org-habit-graph-column 45)
+    (setq org-sort-agenda-notime-is-late nil)
+    (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %25TIMESTAMP_IA")
+    (setq org-archive-location "~/org/archive.org::* From %s")
+    (setq org-refile-targets (quote ((nil :maxlevel . 9)
+    (org-agenda-files :maxlevel . 9))))
+#+end_src
+
+As good a place to split it as any.
+
+This now is all about the agenda dispatcher - a critical piece of my configuraton and workflow.
+
+** Agenda Dispatcher
+
+   This took me a good couple of days to finesse and when I understood the syntax for tag searches that alowed me to much more productive. I started to set up the system to work the way I wanted it to.
+
+   One key element of my agenda workflow is for scheduled tasks to appear in the agenda grid, not in the blocks below.
+
+#+begin_src emacs-lisp
+  (setq org-agenda-custom-commands
+  '(("w" . "Work")
+  ("wt" "Agenda + Work TODO"
+  (
+  (agenda "")
+  (tags-todo "+@work-TODO=\"WAITING\"-SCHEDULED>=\"<today>\""
+  ((org-agenda-overriding-header "Work TODO UNSCHEDULED")))
+  (tags-todo "+@work+TODO=\"WAITING\""
+  ((org-agenda-overriding-header "Work WAITING")))
+  ))
+  ("wn" "Agenda + Work NEXT"
+  (
+  (agenda)
+  (tags-todo "+@work+TODO=\"NEXT\"-SCHEDULED>=\"<today>\""
+  ((org-agenda-overriding-header "Work NEXT UNSCHEDULED")))
+  (tags-todo "+@work+TODO=\"WAITING\""
+  ((org-agenda-overriding-header "Work WAITING")))
+  ))
+  ("wp" "Work Project NEXT"
+  (
+  (agenda)
+  (tags-todo "+@work+TODO=\"NEXT\"+CATEGORY=\"Project\""
+  ((org-agenda-overriding-header "Work Project NEXT actions")))
+  ))
+  ("h" . "Home")
+  ("hh" "Agenda + Home TODO"
+  (
+  (agenda "")
+  (tags-todo "@home-SCHEDULED>=\"<today>\"-TODO=\"WAITING\"-TODO=\"DOING\""
+  ((org-agenda-overriding-header "Home TODO UNSCHEDULED")
+  (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+  (tags-todo "+@home+TODO=\"WAITING\""
+  ((org-agenda-overriding-header "Home WAITING")))
+  (tags-todo "+@home+TODO=\"DOING\"" ((org-agenda-overriding-header "Home in progress")))
+  ))
+  ("hn" "Agenda + Home NEXT"
+  (
+  (agenda "")
+  (tags-todo "+@home+TODO=\"NEXT\"-SCHEDULED>=\"<today>\""
+  ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
+  (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+  (tags-todo "+@home+TODO=\"DOING\""
+  ((org-agenda-overriding-header "Home in progress")))
+  ))
+  ("n" "Agenda + All NEXT"
+  (
+  (agenda "")
+  (todo "NEXT")))
+  ("t" "Agenda + All TODO"
+  (
+  (agenda "")
+  (alltodo "")))
+  ("W" "Agenda + All WAITING"
+  (
+  (agenda "")
+  (todo "WAITING")))
+  ("i" tags "idea")
+  ))
+#+end_src
+
+** Capture templates
+
+   These have evoloved a bit over the years.
+
+#+begin_src emacs-lisp
+  (define-key global-map "\C-cc" 'org-capture)
+  (setq org-capture-templates
+  (quote (("h" "Home Tasks & Notes")
+  ("ht" "Home TODO" entry (file+headline "~/org/home.org" "Single Actions")
+  "** TODO %?\nEntered on %U\n"
+  :prepend t)
+  ("hn" "Home NEXT" entry (file+headline "~/org/home.org" "Single Actions")
+  "** NEXT %?\nEntered on %U\n"
+  :prepend t)
+  ("hN" "Home Note" entry (file+headline "~/org/home.org" "Notes")
+  "** %?\nEntered on %U\n")
+  ("hj" "Journal" entry (file+datetree "~/org/journal.org")
+  "* %?\nEntered on %U\n")
+  ("hi" "Home Idea" entry (file+headline "~/org/notes.org" "Notes")
+  "** %? :idea:\nEntered on %U\n")
+  ("w" "Work Tasks & Notes")
+  ("wt" "Work TODO" entry (file+headline "~/org/work.org" "Single Actions")
+  "** TODO %?\nEntered on %U\n"
+  :prepend t)
+  ("wn" "Work NEXT" entry (file+headline "~/org/work.org" "Single Actions")
+  "** NEXT %?\nEntered on %U\n"
+  :prepend t)
+  ("wN" "Note" entry (file+headline "~/org/work.org" "Notes")
+  "* %?\nEntered on %U\n")
+  ("wc" "Note from Clipboard" entry (file+headline "~/org/work.org" "Notes")
+  "* %?\n\t\n%c")
+  ("wr" "Note from Region" entry (file+headline "~/org/work.org" "Notes")
+  "* %?\n\t\n%i")
+  ("wj" "Journal" entry (file+olp+datetree "~/org/work.org" "Journal")
+  "** %?\nEntered on %U\n")
+  ("wd" "Retrospective Single Action" entry (file+headline "~/org/work.org" "Single Actions")
+  "* DONE %?\nCLOSED: %U")
+  ("e" "Emacs Tip")
+  ("et" "Emacs Tip" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
+  "* %?\n\t%a")
+  ("er" "Emacs Tip from Region" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
+  "* %?\n\t%i")
+  )))
+
+#+end_src
+
+** Handling TODO items
+
+#+begin_src emacs-lisp
+  ;; Put state transition logs into a drawer called LOGBOOK
+  (setq org-log-into-drawer t)
+
+  (setq org-todo-keywords
+  (quote ((sequence "TODO(t)" "NEXT(n)" "DOING" "|" "DONE(d!)")
+  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
+  )))
+
+  (setq org-todo-keyword-faces
+  (quote (("TODO" :foreground "red" :weight bold)
+  ("NEXT" :foreground "cyan" :weight bold)
+  ("DOING" :foreground "orchid" :weight bold)
+  ("DONE" :foreground "forest green" :weight bold)
+  ("WAITING" :foreground "orange" :weight bold)
+  ("HOLD" :foreground "magenta" :weight bold)
+  ("CANCELLED" :foreground "forest green" :weight bold))))
+
+  ;; tag stuff automatically dependent on a change of state
+  (setq org-todo-state-tags-triggers
+  (quote (("CANCELLED" ("CANCELLED" . t))
+  ("WAITING" ("WAITING" . t))
+  ("HOLD" ("WAITING") ("HOLD" . t))
+  (done ("WAITING") ("HOLD"))
+  ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+  ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+  ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+  (setq org-priority-faces
+  '((?A . (:foreground "#CC0000" :background "#FFE3E3"))
+  (?B . (:foreground "#64992C" :background "#EBF4DD"))
+  (?C . (:foreground "#64992C" :background "#FFFFFF"))))
+  (setq org-ellipsis "...")
+
+#+END_SRC
+
+* Stuff that didn't get into that block for some reason
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-tag-alist '(
+            ;; Depth
+            ("@immersive" . ?i) ;; "Deep"
+            ("@process" . ?p)   ;; "Shallow"
+            ("@offdesk" . ?o)   ;; "Away from desk"
+            ;; Type
+            ("brainstorm" . ?b)
+            ("idea" . ?d)
+            ;; Context
+            ("@work" . ?w)
+            ("@home" . ?h)
+            ("@errand" . ?e)
+            ("@emacs" . ?E)
+            ;; Time
+            ("15min" . ?<)
+            ("30min" . ?=)
+            ("1h" . ?>)
+            ;; Energy
+            ("Challenge" . ?1)
+            ("Average" . ?2)
+            ("Easy" . ?3)
+            ;; Misc
+            ("Maybe" . ?m)
+            ))
 
     (setq org-use-speed-commands t
-	  org-speed-commands-user
-	  '(("N" org-narrow-to-subtree)
-	    ("$" org-archive-subtree)
-	    ("A" org-archive-subtree)
-	    ("W" widen)
-	    ("d" org-down-element)
-	    ("k" org-cut-subtree)
-	    ("m" org-mark-subtree)
-	    ("s" org-sort)
-	    ;; ("x" smex-major-mode-commands)
-	    ("X" org-todo-done)
-	    ("R" org-done-and-archive)
-	    ("y" org-todo-yesterday)))
+    org-speed-commands-user
+    '(("N" org-narrow-to-subtree)
+      ("$" org-archive-subtree)
+      ("A" org-archive-subtree)
+      ("W" widen)
+      ("d" org-down-element)
+      ("k" org-cut-subtree)
+      ("m" org-mark-subtree)
+      ("s" org-sort)
+      ;; ("x" smex-major-mode-commands)
+      ("X" org-todo-done)
+      ("R" org-done-and-archive)
+      ("y" org-todo-yesterday)))
 
     ;; org agenda should be full screen
     (defun open-agenda ()
       "Open the org-agenda."
       (interactive)
       (let ((agenda "*Org Agenda*"))
-	(if (equal (get-buffer agenda) nil)
-	    (org-agenda-list)
-	  (unless (equal (buffer-name (current-buffer)) agenda)
-	    (switch-to-buffer agenda))
-	  (org-agenda-redo t)
-	  (beginning-of-buffer))))
+  (if (equal (get-buffer agenda) nil)
+      (org-agenda-list)
+    (unless (equal (buffer-name (current-buffer)) agenda)
+      (switch-to-buffer agenda))
+    (org-agenda-redo t)
+    (beginning-of-buffer))))
 
     (bind-key "<f5>" 'open-agenda)
 
-#+end_src
+#+END_SRC
 
 * Rest of config
   
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;;; Code:
 (setq inhibit-startup-message 1)
 
@@ -709,4 +762,4 @@ If failed try to complete the common part with `company-complete-common'"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-#+end_src
+#+END_SRC

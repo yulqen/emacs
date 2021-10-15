@@ -2,7 +2,14 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("(emacs) Hooks"
+(("(org) Matching tags and properties"
+ (front-context-string . "11.3.3 Matching ")
+ (rear-context-string . "n Agenda Views\n\n")
+ (position . 330027)
+ (filename . "/usr/share/info/org")
+ (info-node . "Matching tags and properties")
+ (handler . Info-bookmark-jump))
+("(emacs) Hooks"
  (front-context-string . "\nLisp variable w")
  (rear-context-string . "cs.  A hook is a")
  (position . 1622129)
@@ -32,8 +39,8 @@
  (rear-context-string . "2021-10-06 Wed]\n")
  (position . 674))
 ("org-capture-last-stored"
- (filename . "~/org/home.org")
- (front-context-string . "** TODO Put all ")
+ (filename . "~/org/work.org")
+ (front-context-string . "** NEXT Remind A")
  (rear-context-string . " Single Actions\n")
- (position . 2232))
+ (position . 108))
 )
