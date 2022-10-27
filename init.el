@@ -30,8 +30,9 @@
  '(company-show-quick-access t nil nil "Customized with use-package company")
  '(custom-safe-themes
    '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" default))
+ '(ledger-binary-path "hledger")
  '(org-agenda-files
-   '("~/org/home.org" "~/org/projects.org" "~/org/work.org" "~/org/notes.org" "~/org/habits.org" "~/org/calendar/cal.org"))
+   '("~/org/journal.org" "/home/lemon/org/home.org" "/home/lemon/org/projects.org" "/home/lemon/org/work.org" "/home/lemon/org/notes.org" "/home/lemon/org/habits.org" "/home/lemon/org/calendar/cal.org"))
  '(package-selected-packages
    '(elfeed-score yasnippet-snippets yasnippet browse-kill-ring expand-region ace-window amx flycheck ace-jump-mode gruvbox-theme company helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
 (custom-set-faces
