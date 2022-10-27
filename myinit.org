@@ -319,10 +319,10 @@ This now is all about the agenda dispatcher - a critical piece of my configurato
 
   (setq visible-bell t)
 
-  (set-face-attribute 'default nil :font "Liberation Mono" :height 100)
+  (set-face-attribute 'default nil :font "Iosevka Regular" :height 130)
   ;;(set-face-attribute 'default nil :font "UbuntuMono Nerd Font Mono" :height 160)
-  (load-theme 'tango-dark)
-  ;;(load-theme 'gruvbox-dark-hard t)
+  ;;(load-theme 'tango-dark)
+  (load-theme 'gruvbox-dark-hard t)
 
   ;; calendar proper Monday start
   (setq calendar-week-start-day 1)
@@ -392,8 +392,9 @@ This now is all about the agenda dispatcher - a critical piece of my configurato
      (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
   ;; Windmove - use Shift and arrow keys to move in windows
-  (when (fboundp 'windmove-default-keybindings)
-    (windmove-default-keybindings))
+  ;; this fucks around with org mode - we want to shift timestamps and stuff
+  ;;(when (fboundp 'windmove-default-keybindings)
+  ;; (windmove-default-keybindings))
 
   ;; Winner mode - undo and redo changes in window config
   ;; with C-c left and C-c right
@@ -441,6 +442,19 @@ This now is all about the agenda dispatcher - a critical piece of my configurato
 
   ;; Stop C-z suspending emacs
   (global-set-key (kbd "C-z") 'nil)
+
+  ;; elpy for python
+  (use-package elpy
+    :ensure t
+    :config
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode)
+    :init
+    (elpy-enable))
+
+  (when (load "flycheck" t t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
 
   (use-package ivy
     :diminish
