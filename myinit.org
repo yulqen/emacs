@@ -216,6 +216,11 @@ This now is all about the agenda dispatcher - a critical piece of my configurato
   ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
   ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
+  ;; Get more priority options
+  (setq org-highest-priority ?A)
+  (setq org-default-priority ?C)
+  (setq org-lowest-priority ?E)
+
   (setq org-priority-faces
   '((?A . (:foreground "#CC0000" :background "#FFE3E3"))
   (?B . (:foreground "#64992C" :background "#EBF4DD"))
@@ -314,7 +319,7 @@ This now is all about the agenda dispatcher - a critical piece of my configurato
 
   (setq visible-bell t)
 
-  (set-face-attribute 'default nil :font "Jetbrains Mono" :height 140)
+  (set-face-attribute 'default nil :font "Liberation Mono" :height 100)
   ;;(set-face-attribute 'default nil :font "UbuntuMono Nerd Font Mono" :height 160)
   (load-theme 'tango-dark)
   ;;(load-theme 'gruvbox-dark-hard t)
@@ -639,24 +644,23 @@ This now is all about the agenda dispatcher - a critical piece of my configurato
     (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
   ;; EVIL
-  ;; (use-package evil
-  ;;   :init
-  ;;   :config
-  ;;   (setq evil-respect-visual-line-mode t)
-  ;;   (evil-mode 1))
+   (use-package evil
+    :init
+    :config
+    (setq evil-respect-visual-line-mode t)
+    (setq evil-default-state 'emacs)
+    (evil-mode 1))
 
-  ;; ;; which-key - for nice menu
-  ;; (use-package which-key
-  ;;   :config
-  ;;   (which-key-mode)
-  ;;   )
+  ; ;; which-key - for nice menu
+  ; (use-package which-key
+  ;   :config
+  ;   (which-key-mode)
+  ;   )
 
   ;; which-key
   (use-package which-key
     :config
     (which-key-mode))
-
-
 
   ;; elfeed
   (use-package elfeed

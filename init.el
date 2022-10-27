@@ -22,3 +22,21 @@
 (add-to-list 'org-modules 'org-habit)
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-show-quick-access t nil nil "Customized with use-package company")
+ '(custom-safe-themes
+   '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" default))
+ '(org-agenda-files
+   '("~/org/home.org" "~/org/projects.org" "~/org/work.org" "~/org/notes.org" "~/org/habits.org" "~/org/calendar/cal.org"))
+ '(package-selected-packages
+   '(elfeed-score yasnippet-snippets yasnippet browse-kill-ring expand-region ace-window amx flycheck ace-jump-mode gruvbox-theme company helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
