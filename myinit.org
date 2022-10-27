@@ -41,12 +41,11 @@ Some agenda configuration.
     (setq org-directory "~/org")
     (setq org-agenda-files (quote ("~/org/home.org"
     "~/org/projects.org"
+    "~/org/journal.org"
     "~/org/work.org"
     "~/org/notes.org"
     "~/org/habits.org"
-    "~/org/calendar/cal.org"
-    "~/org/calendar/home-cal.org"
-    "~/org/calendar/work-cal.org")))
+    "~/org/calendar/cal.org")))
     (setq org-default-notes-file (concat org-directory "/notes.org"))
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-start-with-log-mode t)
