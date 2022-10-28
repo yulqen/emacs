@@ -34,7 +34,7 @@
  '(org-agenda-files
    '("~/org/home.org" "~/org/projects.org" "~/org/journal.org" "~/org/work.org" "~/org/notes.org" "~/org/habits.org" "~/org/calendar/cal.org"))
  '(package-selected-packages
-   '(elfeed-score yasnippet-snippets yasnippet browse-kill-ring expand-region ace-window amx flycheck ace-jump-mode gruvbox-theme company helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
+   '(epdfinfo pdf-tools elfeed-score yasnippet-snippets yasnippet browse-kill-ring expand-region ace-window amx flycheck ace-jump-mode gruvbox-theme company helm auto-package-update ledger-mode magit elfeed-org which-key use-package rainbow-delimiters paredit evil counsel)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

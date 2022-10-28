@@ -1,4 +1,4 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8 -*-
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
@@ -39,8 +39,8 @@
  (rear-context-string . " Christmas 2021\n")
  (position . 2261))
 ("org-capture-last-stored"
- (filename . "~/org/work.org")
- (front-context-string . "** NEXT Make sur")
+ (filename . "~/org/home.org")
+ (front-context-string . "** TODO Book tic")
  (rear-context-string . " Single Actions\n")
- (position . 108))
+ (position . 18))
 )
