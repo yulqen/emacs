@@ -34,67 +34,72 @@
 * Fundamentals
 #+BEGIN_SRC emacs-lisp
 
-(setq inhibit-startup-message 1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(set-fringe-mode 10)
+  (setq inhibit-startup-message 1)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (set-fringe-mode 10)
 
-(put 'narrow-to-defun  'disabled nil)
-(put 'narrow-to-page   'disabled nil)
-(put 'narrow-to-region 'disabled nil)
+  (put 'narrow-to-defun  'disabled nil)
+  (put 'narrow-to-page   'disabled nil)
+  (put 'narrow-to-region 'disabled nil)
 
-;; Put backups in /tmp where they belong
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+  ;; Put backups in /tmp where they belong
+  (setq backup-directory-alist
+        `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
 
-;; recursively copy by default
-(setq dired-recursive-copies 'always)
+  ;; recursively copy by default
+  (setq dired-recursive-copies 'always)
 
-;; y or n instead of yes or no
-(fset 'yes-or-no-p 'y-or-n-p)
+  ;; y or n instead of yes or no
+  (fset 'yes-or-no-p 'y-or-n-p)
 
-;; auto revert files
-(global-auto-revert-mode t)
+  ;; auto revert files
+  (global-auto-revert-mode t)
 
-;; Display the current time
-(display-time-mode t)
+  ;; Display the current time
+  (display-time-mode t)
 
-(setq visible-bell t)
+  (setq visible-bell t)
 
-(set-face-attribute 'default nil :font "Iosevka Regular" :height 130)
+  (set-frame-font "Hack-10" nil t)
 
-(load-theme 'gruvbox-dark-hard t)
+  (use-package gruber-darker-theme
+    :ensure t
+    :config
+    (load-theme 'gruber-darker t))
 
-;; calendar proper Monday start
-(setq calendar-week-start-day 1)
-(setq calendar-date-style (quote european))
+  ;; (load-theme 'gruvbox-dark-hard t)
 
-;; Handling tabs (for programming)
-(setq-default tab-width 2)
-(setq-default tab-width 2 indent-tabs-mode nil)
-(setq-default indent-tabs-mode nil)
-(setq js-indent-level 2)
-(setq python-indent 2)
-(setq css-indent-offset 2)
-(add-hook 'sh-mode-hook
-    (lambda ()
-      (setq sh-basic-offset 2
-      sh-indentation 2)))
-(setq web-mode-markup-indent-offset 2)
+  ;; calendar proper Monday start
+  (setq calendar-week-start-day 1)
+  (setq calendar-date-style (quote european))
 
-;; Highlight matching parens
-(show-paren-mode t)
+  ;; Handling tabs (for programming)
+  (setq-default tab-width 2)
+  (setq-default tab-width 2 indent-tabs-mode nil)
+  (setq-default indent-tabs-mode nil)
+  (setq js-indent-level 2)
+  (setq python-indent 2)
+  (setq css-indent-offset 2)
+  (add-hook 'sh-mode-hook
+      (lambda ()
+        (setq sh-basic-offset 2
+        sh-indentation 2)))
+  (setq web-mode-markup-indent-offset 2)
 
-;; Stop C-z suspending emacs
-(global-set-key (kbd "C-z") 'nil)
+  ;; Highlight matching parens
+  (show-paren-mode t)
 
-;; encoding
-(prefer-coding-system 'utf-8)
-(setq coding-system-for-read 'utf-8)
-(setq coding-system-for-write 'utf-8)
+  ;; Stop C-z suspending emacs
+  (global-set-key (kbd "C-z") 'nil)
+
+  ;; encoding
+  (prefer-coding-system 'utf-8)
+  (setq coding-system-for-read 'utf-8)
+  (setq coding-system-for-write 'utf-8)
 #+END_SRC
 * Packages
 ** yasnippet
