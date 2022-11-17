@@ -26,3 +26,4 @@ org-caldav-*
 /.last-package-update-day
 /forge-database.sqlite
 myinit.el
+init.el
