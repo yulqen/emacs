@@ -34,6 +34,17 @@
 * Fundamentals
 #+BEGIN_SRC emacs-lisp
 
+  (setq user-full-name "Matthew Lemon"
+        user-mail-address "matt@matthewlemon.com")
+
+  (defun establish-machine ()
+    (let ((sys (system-name)))
+      (if (string= sys "archdesk")
+          (setq mrl/computer 'desktop)
+        (setq mrl/computer 'laptop))))
+
+  (establish-machine)
+
   (setq inhibit-startup-message 1)
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
@@ -43,7 +54,7 @@
   (put 'narrow-to-defun  'disabled nil)
   (put 'narrow-to-page   'disabled nil)
   (put 'narrow-to-region 'disabled nil)
-  
+
   ;; we don't want the old buffer list!
   (global-unset-key (kbd "C-x C-b")) 
 
@@ -74,7 +85,12 @@
     :config
     (load-theme 'gruber-darker t))
 
-  ;; (load-theme 'gruvbox-dark-hard t)
+  (setq display-line-numbers-type `relative)
+  (setq undo-limit 8000000) ; raise limit to 80Mb
+  (setq truncate-string-ellipsis "…") ; better than using dots
+  (setq scroll-preserve-screen-position 'always) ; experimental
+  (setq scroll-margin 3) ; bit of space
+
 
   ;; calendar proper Monday start
   (setq calendar-week-start-day 1)
@@ -88,9 +104,9 @@
   (setq python-indent 2)
   (setq css-indent-offset 2)
   (add-hook 'sh-mode-hook
-      (lambda ()
-        (setq sh-basic-offset 2
-        sh-indentation 2)))
+            (lambda ()
+              (setq sh-basic-offset 2
+                    sh-indentation 2)))
   (setq web-mode-markup-indent-offset 2)
 
   ;; Highlight matching parens
@@ -269,6 +285,11 @@ If failed try to complete the common part with `company-complete-common'"
 (use-package magit
   :bind ("C-x g" . magit-status))
 #+END_SRC
+** clojure
+#+begin_src emacs-lisp
+  (use-package cider
+    :ensure t)
+#+end_src
 ** ido
 #+BEGIN_SRC emacs-lisp
 ;; Interactively Do Things (ido)
@@ -297,23 +318,24 @@ If failed try to complete the common part with `company-complete-common'"
 #+END_SRC
 ** ledger
 #+BEGIN_SRC emacs-lisp
-;; ledger mode
-(use-package ledger-mode
-  :mode ("\\.ledger\\'")
-  :config
-;;  (setq ledger-default-date-format "%d/%m/%Y")
-  (setq ledger-reports
-        '(("hsbc_current_account" "ledger [[ledger-mode-flags]] --date-format \"%d/%m/%Y\" -f /home/lemon/Documents/Budget/ledger/2021/budget2021.ledger reg Assets\\:HSBC\\:Current")
-          ("bal" "%(binary) -f %(ledger-file) bal")
-          ("reg" "%(binary) -f %(ledger-file) reg")
-          ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
-          ("account" "%(binary) -f %(ledger-file) reg %(account)")))
-  (add-hook 'ledger-mode-hook
-            (lambda ()
-              (setq-local tab-always-indent 'complete)
-              (setq-local completion-cycle-threshold t)
-              (setq-local ledger-complete-in-steps t)))
-  :custom (ledger-clear-whole-transactions t))
+  ;; ledger mode
+  (use-package ledger-mode
+    :ensure t
+    :mode ("\\.ledger\\'")
+    :config
+    ;;  (setq ledger-default-date-format "%d/%m/%Y")
+    (setq ledger-reports
+          '(("hsbc_current_account" "ledger [[ledger-mode-flags]] --date-format \"%d/%m/%Y\" -f /home/lemon/Documents/Budget/ledger/2021/budget2021.ledger reg Assets\\:HSBC\\:Current")
+            ("bal" "%(binary) -f %(ledger-file) bal")
+            ("reg" "%(binary) -f %(ledger-file) reg")
+            ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+            ("account" "%(binary) -f %(ledger-file) reg %(account)")))
+    (add-hook 'ledger-mode-hook
+              (lambda ()
+                (setq-local tab-always-indent 'complete)
+                (setq-local completion-cycle-threshold t)
+                (setq-local ledger-complete-in-steps t)))
+    :custom (ledger-clear-whole-transactions t))
 #+END_SRC
 ** ivy (disabled)
 #+BEGIN_SRC emacs-lisp
