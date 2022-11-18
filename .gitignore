@@ -26,4 +26,6 @@ org-caldav-*
 /.last-package-update-day
 /forge-database.sqlite
 myinit.el
-init.el
+/org-roam.db
+/eln-cache/
+org-clock-save.el

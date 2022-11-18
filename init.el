@@ -30,11 +30,11 @@
  '(display-line-numbers-type 'relative)
  '(display-time-mode t)
  '(package-selected-packages
-   '(deft cider org-roam org yasnippet-snippets which-key vterm use-package rainbow-delimiters pdf-tools paredit notmuch magit ledger-mode gruvbox-theme flycheck expand-region evil elpy elfeed-score diminish counsel cmake-mode browse-kill-ring beacon auto-package-update amx ace-window ace-jump-mode))
+   '(unicode-fonts deft cider org-roam org yasnippet-snippets which-key vterm use-package rainbow-delimiters pdf-tools paredit notmuch magit ledger-mode gruvbox-theme flycheck expand-region evil elpy elfeed-score diminish counsel cmake-mode browse-kill-ring beacon auto-package-update amx ace-window ace-jump-mode))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Hack" :foundry "SRC" :slant normal :weight normal :height 120 :width normal)))))
+ '(default ((t (:family "Hack Nerd Font" :foundry "SRC" :slant normal :weight normal :height 120 :width normal)))))

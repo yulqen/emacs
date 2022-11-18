@@ -604,46 +604,53 @@ If failed try to complete the common part with `company-complete-common'"
 #+END_SRC
 ** org-roam
 #+BEGIN_SRC emacs-lisp
-      (use-package org-roam
-        :ensure t
-        :custom
-        (org-roam-dailies-directory "daily/")
-        (org-roam-directory "~/org-roam")
-        (org-roam-capture-templates
-              '(("d" "default" plain
-                 "%?"
-                 :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-                 :unnarrowed t)
-                ("e" "encrypted" plain
-                 "%?"
-                 :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
-                 :unnarrowed t)))
-        (org-roam-dailies-capture-templates
-              '(("d" "default" entry "* %<%T>: %?"
-                 :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n")
-                 :unnarrowed t)))
-        :bind (("C-c n l" . org-roam-buffer-toggle)
-               ("C-c n f" . org-roam-node-find)
-               ("C-c n i" . org-roam-node-insert)
-               ("C-c n n" . org-roam-dailies-capture-today)
-               ("C-c n t" . org-roam-dailies-goto-today)
-               :map org-roam-mode-map
-               ("y" . org-roam-dailies-goto-previous-note)
-               ("t" . org-roam-dailies-goto-next-note)
-               ("d" . org-roam-dailies-goto-date)
-               ("D" . org-roam-dailies-capture-date))
-        :bind-keymap ("C-c n D" . org-roam-mode-map)
-        :config
-        (org-roam-db-autosync-mode)
-        ;; Bind this to C-c n I
-        (defun org-roam-node-insert-immediate (arg &rest args)
-          (interactive "P")
-          (let ((args (cons arg args))
-                (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                        '(:immediate-finish t)))))
-            (apply #'org-roam-node-insert args)))
-        :bind (("C-c n I" . org-roam-node-insert-immediate)))
+  (use-package org-roam
+    :ensure t
+    :custom
+    (org-roam-dailies-directory "daily/")
+    (org-roam-directory "~/org-roam")
+    (org-roam-capture-templates
+          '(("d" "default" plain
+             "%?"
+             :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+             :unnarrowed t)
+            ("e" "encrypted" plain
+             "%?"
+             :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
+             :unnarrowed t)))
+    (org-roam-dailies-capture-templates
+          '(("d" "default" entry "* %<%T>: %?"
+             :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n")
+             :unnarrowed t)))
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n n" . org-roam-dailies-capture-today)
+           ("C-c n t" . org-roam-dailies-goto-today)
+           :map org-roam-mode-map
+           ("y" . org-roam-dailies-goto-previous-note)
+           ("t" . org-roam-dailies-goto-next-note)
+           ("d" . org-roam-dailies-goto-date)
+           ("D" . org-roam-dailies-capture-date))
+    :bind-keymap ("C-c n D" . org-roam-mode-map)
+    :config
+    (org-roam-db-autosync-mode)
+    ;; Bind this to C-c n I
+    (defun org-roam-node-insert-immediate (arg &rest args)
+      (interactive "P")
+      (let ((args (cons arg args))
+            (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                    '(:immediate-finish t)))))
+        (apply #'org-roam-node-insert args)))
+    :bind (("C-c n I" . org-roam-node-insert-immediate)))
 #+END_SRC
+** unicode fonts
+#+begin_src emacs-lisp
+  (use-package unicode-fonts
+   :ensure t
+   :config
+    (unicode-fonts-setup))
+#+end_src
 * Keybindings
 ** movement
 #+begin_src emacs-lisp
