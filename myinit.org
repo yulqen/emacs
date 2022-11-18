@@ -884,15 +884,15 @@ If failed try to complete the common part with `company-complete-common'"
                 
 
   (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "red" :weight bold)
-                ("NEXT" :foreground "cyan" :weight bold)
-                ("PROJ" :foreground "pink" :weight bold)
-                ("DOING" :foreground "orchid" :weight bold)
+        (quote (("TODO" :foreground "tomato4" :weight bold)
+                ("NEXT" :foreground "turquoise4" :weight bold)
+                ("PROJ" :foreground "DarkViolet" :weight bold)
+                ("DOING" :foreground "brown" :weight bold)
                 ("DONE" :foreground "forest green" :weight bold)
                 ("WAITING" :foreground "orange" :weight bold)
                 ("SOMEDAY" :foreground "blue" :weight bold)
                 ("HOLD" :foreground "magenta" :weight bold)
-                ("CANCELLED" :foreground "forest green" :weight bold))))
+                ("CANCELLED" :foreground "snow4" :weight bold))))
 #+END_SRC
 ** org todo state triggers
 #+BEGIN_SRC emacs-lisp
