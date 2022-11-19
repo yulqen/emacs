@@ -678,7 +678,7 @@ If failed try to complete the common part with `company-complete-common'"
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
                      ((org-agenda-overriding-header "MOD NEXT UNSCHEDULED")
                       (org-agenda-sorting-strategy '(deadline-up priority-down))))
-          (tags-todo "TODO=\"PROJ\"" ((org-agenda-overriding-header "Projects")))
+          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")))
           (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
                                       (org-agenda-sorting-strategy '(deadline-up scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
@@ -694,7 +694,7 @@ If failed try to complete the common part with `company-complete-common'"
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
                      ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
                       (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-          (tags-todo "TODO=\"PROJ\"" ((org-agenda-overriding-header "Projects")))
+          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")))
           (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
                                       (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO"))))
@@ -789,19 +789,19 @@ If failed try to complete the common part with `company-complete-common'"
       (beginning-of-buffer))))
 
 (setq org-stuck-projects
-      '("+LEVEL=2/+PROJ" ("NEXT" "DOING") nil ""))
+      '("+LEVEL=2/+PROJECT" ("NEXT" "DOING") nil ""))
 
 (setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "DOING(D)" "PROJ(p)"  "|" "DONE(d!)")
+      (quote ((sequence "TODO(t)" "NEXT(n)" "DOING(D)" "PROJECT(p)"  "|" "DONE(d!)")
               (sequence "WAITING(w@/!)" "SOMEDAY(s@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
 
 (setq org-todo-keyword-faces
       (quote (("TODO" :foreground "tomato4" :weight bold)
-              ("NEXT" :foreground "turquoise4" :weight bold)
-              ("PROJ" :foreground "DarkViolet" :weight bold)
+              ("NEXT" :foreground "LemonChiffon" :weight bold)
+              ("PROJECT" :foreground "ForestGreen" :weight bold)
               ("DOING" :foreground "brown" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
+              ("DONE" :foreground "SlateGray" :weight bold)
               ("WAITING" :foreground "orange" :weight bold)
               ("SOMEDAY" :foreground "blue" :weight bold)
               ("HOLD" :foreground "magenta" :weight bold)
