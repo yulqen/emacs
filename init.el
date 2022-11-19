@@ -658,7 +658,7 @@ If failed try to complete the common part with `company-complete-common'"
                                "~/org/mod.org"
                                "~/org/notes.org"
                                "~/org/habits.org")))
-(setq org-agenda-window-setup 'current-window)
+(setq org-agenda-window-setup 'other-window)
 (setq org-agenda-start-with-log-mode t)
 (setq org-agenda-include-diary nil)
 (setq org-agenda-diary-file "~/org/calendar/cal.org")
