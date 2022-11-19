@@ -1,3 +1,8 @@
+;;; package --- MR Lemon emacs config
+;;; Commentary:
+;;; basic config
+;;; Code:
+
 ;; packages
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
