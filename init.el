@@ -165,6 +165,19 @@
  (prefer-coding-system 'utf-8)
  (setq coding-system-for-read 'utf-8)
  (setq coding-system-for-write 'utf-8)
+(setq coding-system-for-write 'utf-8)
+
+;; calfw
+(use-package calfw-org
+  :ensure t
+  :config
+  (setq cfw:org-agenda-schedule-args '(:timestamp))
+  (defun mrl/calf-org-calendar ()
+    (interactive)
+    (cfw:open-calendar-buffer
+     :contents-sources
+     (list
+      (cfw:org-create-source "Orange")))))
 
 ;; Yasnippet
 (use-package yasnippet
