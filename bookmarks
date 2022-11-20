@@ -1,4 +1,4 @@
-;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8; mode: lisp-data -*-
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8 -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
@@ -39,8 +39,8 @@
  (rear-context-string . " Christmas 2021\n")
  (position . 2261))
 ("org-capture-last-stored"
- (filename . "~/org-roam/daily/2022-11-18.org")
- (front-context-string . "* 09:05:43: Yay!")
- (rear-context-string . "tle: 2022-11-18\n")
- (position . 88))
+ (filename . "~/org/home.org")
+ (front-context-string . "** Walk around t")
+ (rear-context-string . "at 10:30-11:15>\n")
+ (position . 15984))
 )
