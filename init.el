@@ -164,7 +164,6 @@
  ;; encoding
  (prefer-coding-system 'utf-8)
  (setq coding-system-for-read 'utf-8)
- (setq coding-system-for-write 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
 ;; calfw
@@ -181,25 +180,25 @@
 
 ;; Yasnippet
 (use-package yasnippet
-:diminish yas-minor-mode
- :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
- :bind
- (:map yas-minor-mode-map ("C-c C-n" . yas-expand-from-trigger-key))
- (:map yas-keymap
-       (("TAB" . smarter-yas-expand-next-field)
-        ([(tab)] . smarter-yas-expand-next-field)))
- :config
- (use-package yasnippet-snippets)
- (yas-reload-all)
- (defun smarter-yas-expand-next-field ()
-   "Try to `yas-expand' then `yas-next-field' at current cursor position."
-   (interactive)
-   (let ((old-point (point))
-         (old-tick (buffer-chars-modified-tick)))
-     (yas-expand)
-     (when (and (eq old-point (point))
-                (eq old-tick (buffer-chars-modified-tick)))
-                (ignore-errors (yas-next-field))))))
+  :diminish yas-minor-mode
+  :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
+  :bind
+  (:map yas-minor-mode-map ("C-c C-n" . yas-expand-from-trigger-key))
+  (:map yas-keymap
+        (("TAB" . smarter-yas-expand-next-field)
+         ([(tab)] . smarter-yas-expand-next-field)))
+  :config
+  (use-package yasnippet-snippets)
+  (yas-reload-all)
+  (defun smarter-yas-expand-next-field ()
+    "Try to `yas-expand' then `yas-next-field' at current cursor position."
+    (interactive)
+    (let ((old-point (point))
+          (old-tick (buffer-chars-modified-tick)))
+      (yas-expand)
+      (when (and (eq old-point (point))
+                 (eq old-tick (buffer-chars-modified-tick)))
+        (ignore-errors (yas-next-field))))))
 
 ;; this config works better with yasnippet
 (use-package company
@@ -210,7 +209,7 @@
         ([tab] . smarter-yas-expand-next-field-complete)
         ("TAB" . smarter-yas-expand-next-field-complete))
   :custom
-    (company-tooltip-align-annotations t)
+  (company-tooltip-align-annotations t)
   (company-begin-commands '(self-insert-command))
   (company-require-match 'never)
   ;; Don't use company in the following modes
@@ -221,8 +220,8 @@
   (company-show-numbers t)
   :config
   ;; clangd variable not present which was a problem
-;;  (unless *clangd* (delete 'company-clang company-backends))
-;;  (global-company-mode 1)
+  ;;  (unless *clangd* (delete 'company-clang company-backends))
+  ;;  (global-company-mode 1)
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 3)
   (defun smarter-yas-expand-next-field-complete ()
@@ -752,10 +751,6 @@ If failed try to complete the common part with `company-complete-common'"
                :prepend t)
               ("hS" "Home Someday" entry (file+headline "~/org/home.org" "Someday")
                "** SOMEDAY %?\nEntered on %U\n")
-              ;; ("hN" "Home Note" entry (file+headline "~/org/home.org" "Notes")
-              ;;  "** %?\nEntered on %U\n")
-              ;; ("hj" "Journal" entry (file+olp+datetree "~/org/home.org" "Journal")
-              ;;  "* %?\nEntered on %U\n")
               ("hi" "Home Idea" entry (file+headline "~/org/home.org" "Notes")
                "** %? :idea:\nEntered on %U\n")
               ("hs" "Home Calendar - Single" entry (file+headline "~/org/home.org" "Calendar")
@@ -801,13 +796,14 @@ If failed try to complete the common part with `company-complete-common'"
                      ("idea" . ?d)
                      ;; Context
                      ("work" . ?w)
+                     ("computer" .?c)
                      ("home" . ?h)
                      ("errand" . ?e)
                      ("emacs" . ?E)
                      ("orgmode" . ?o)
                      ("joanna" . ?j)
                      ("harvey" . ?H)
-                     ("sophie" . ?s)))
+                     ("sophie" . ?S)))
 
 (defun open-agenda ()
   "Open the org-agenda."
