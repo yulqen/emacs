@@ -35,12 +35,17 @@
  (position . 2261))
 ("org-refile-last-stored"
  (filename . "~/org/home.org")
- (front-context-string . "*** NEXT Add chr")
- (rear-context-string . " Christmas 2021\n")
- (position . 2261))
+ (front-context-string . "** DEFERRED Chec")
+ (rear-context-string . ":55]\n* Deferred\n")
+ (position . 5024))
 ("org-capture-last-stored"
  (filename . "~/org/home.org")
  (front-context-string . "** Walk around t")
  (rear-context-string . "at 10:30-11:15>\n")
  (position . 15984))
+
+ (filename . "~/org/emacs-tips.org")
+ (front-context-string . "** To evaluate a")
+ (rear-context-string . "1-14 Mon 16:44]\n")
+ (position . 26724))
 )

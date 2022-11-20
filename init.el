@@ -31,6 +31,13 @@
 ;; Garbage collection
 (setq gc-cons-percentage 0.6)
 
+;; Babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (python . t)
+   (clojure . t)))
+
 ;; MISC optimizations
 (setq idle-update-delay 1.0)
 (setq-default bidi-display-reordering 'left-to-right
@@ -46,21 +53,23 @@
 ;; turn off flycheck-mode
 (add-hook 'org-mode-hook (lambda () flycheck-mode -1))
 
+;; ID basics
 (setq user-full-name "Matthew Lemon"
       user-mail-address "matt@matthewlemon.com")
 
+;; redundant function
 (defun establish-machine ()
   (let ((sys (system-name)))
     (if (string= sys "archdesk")
         (setq mrl/computer 'desktop)
       (setq mrl/computer 'laptop))))
-
 (establish-machine)
 
 ;; handier undo
 (global-unset-key "\C-z")
 (global-set-key "\C-z" 'advertised-undo)
 
+;; UI
 (setq inhibit-startup-message 1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
@@ -104,6 +113,7 @@
 ;; Display the current time
 (display-time-mode t)
 
+;; Simply has to be done
 (setq visible-bell t)
 
 ;; font
@@ -115,6 +125,7 @@
   (when (member "Hack" (font-family-list))
     (add-to-list 'default-frame-alist '(font . "Hack-10")))))
 
+;; theme
  (use-package gruber-darker-theme
    :ensure t
    :config
@@ -153,29 +164,41 @@
  ;; encoding
  (prefer-coding-system 'utf-8)
  (setq coding-system-for-read 'utf-8)
- (setq coding-system-for-write 'utf-8)
+(setq coding-system-for-write 'utf-8)
+
+;; calfw
+(use-package calfw-org
+  :ensure t
+  :config
+  (setq cfw:org-agenda-schedule-args '(:timestamp))
+  (defun mrl/calf-org-calendar ()
+    (interactive)
+    (cfw:open-calendar-buffer
+     :contents-sources
+     (list
+      (cfw:org-create-source "Orange")))))
 
 ;; Yasnippet
 (use-package yasnippet
-:diminish yas-minor-mode
- :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
- :bind
- (:map yas-minor-mode-map ("C-c C-n" . yas-expand-from-trigger-key))
- (:map yas-keymap
-       (("TAB" . smarter-yas-expand-next-field)
-        ([(tab)] . smarter-yas-expand-next-field)))
- :config
- (use-package yasnippet-snippets)
- (yas-reload-all)
- (defun smarter-yas-expand-next-field ()
-   "Try to `yas-expand' then `yas-next-field' at current cursor position."
-   (interactive)
-   (let ((old-point (point))
-         (old-tick (buffer-chars-modified-tick)))
-     (yas-expand)
-     (when (and (eq old-point (point))
-                (eq old-tick (buffer-chars-modified-tick)))
-                (ignore-errors (yas-next-field))))))
+  :diminish yas-minor-mode
+  :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
+  :bind
+  (:map yas-minor-mode-map ("C-c C-n" . yas-expand-from-trigger-key))
+  (:map yas-keymap
+        (("TAB" . smarter-yas-expand-next-field)
+         ([(tab)] . smarter-yas-expand-next-field)))
+  :config
+  (use-package yasnippet-snippets)
+  (yas-reload-all)
+  (defun smarter-yas-expand-next-field ()
+    "Try to `yas-expand' then `yas-next-field' at current cursor position."
+    (interactive)
+    (let ((old-point (point))
+          (old-tick (buffer-chars-modified-tick)))
+      (yas-expand)
+      (when (and (eq old-point (point))
+                 (eq old-tick (buffer-chars-modified-tick)))
+        (ignore-errors (yas-next-field))))))
 
 ;; this config works better with yasnippet
 (use-package company
@@ -186,7 +209,7 @@
         ([tab] . smarter-yas-expand-next-field-complete)
         ("TAB" . smarter-yas-expand-next-field-complete))
   :custom
-    (company-tooltip-align-annotations t)
+  (company-tooltip-align-annotations t)
   (company-begin-commands '(self-insert-command))
   (company-require-match 'never)
   ;; Don't use company in the following modes
@@ -197,8 +220,8 @@
   (company-show-numbers t)
   :config
   ;; clangd variable not present which was a problem
-;;  (unless *clangd* (delete 'company-clang company-backends))
-;;  (global-company-mode 1)
+  ;;  (unless *clangd* (delete 'company-clang company-backends))
+  ;;  (global-company-mode 1)
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 3)
   (defun smarter-yas-expand-next-field-complete ()
@@ -728,10 +751,6 @@ If failed try to complete the common part with `company-complete-common'"
                :prepend t)
               ("hS" "Home Someday" entry (file+headline "~/org/home.org" "Someday")
                "** SOMEDAY %?\nEntered on %U\n")
-              ;; ("hN" "Home Note" entry (file+headline "~/org/home.org" "Notes")
-              ;;  "** %?\nEntered on %U\n")
-              ;; ("hj" "Journal" entry (file+olp+datetree "~/org/home.org" "Journal")
-              ;;  "* %?\nEntered on %U\n")
               ("hi" "Home Idea" entry (file+headline "~/org/home.org" "Notes")
                "** %? :idea:\nEntered on %U\n")
               ("hs" "Home Calendar - Single" entry (file+headline "~/org/home.org" "Calendar")
@@ -777,13 +796,14 @@ If failed try to complete the common part with `company-complete-common'"
                      ("idea" . ?d)
                      ;; Context
                      ("work" . ?w)
+                     ("computer" .?c)
                      ("home" . ?h)
                      ("errand" . ?e)
                      ("emacs" . ?E)
                      ("orgmode" . ?o)
                      ("joanna" . ?j)
                      ("harvey" . ?H)
-                     ("sophie" . ?s)))
+                     ("sophie" . ?S)))
 
 (defun open-agenda ()
   "Open the org-agenda."
@@ -800,7 +820,8 @@ If failed try to complete the common part with `company-complete-common'"
       '("+LEVEL=2/+PROJECT" ("NEXT" "DOING") nil ""))
 
 (setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "DOING(D)" "PROJECT(p)"  "|" "DONE(d!)")
+      (quote ((sequence "TODO(t)" "|" "DEFERRED(r@/!)")
+              (sequence "TODO(t)" "NEXT(n)" "DOING(D)" "PROJECT(p)"  "|" "DONE(d!)")
               (sequence "WAITING(w@/!)" "SOMEDAY(s@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
 
