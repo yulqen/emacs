@@ -31,6 +31,13 @@
 ;; Garbage collection
 (setq gc-cons-percentage 0.6)
 
+;; Babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (python . t)
+   (clojure . t)))
+
 ;; MISC optimizations
 (setq idle-update-delay 1.0)
 (setq-default bidi-display-reordering 'left-to-right
