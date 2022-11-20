@@ -693,16 +693,19 @@ If failed try to complete the common part with `company-complete-common'"
         ("h" "Home"
          (
           (agenda)
-          (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
+          (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")
+                                                                        (org-agenda-sorting-strategy '(priority-down alpha-up))))
           (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "Home WAITING")
                                          (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
                      ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
-                      (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")))
+                      (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
+          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
+                                         (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
-                                      (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO"))))
+                                      (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
+          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
+                                      (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down)))))
          ((org-agenda-category-filter-preset '("+home" "+habits" "+refile"))))
         ("i" tags "idea")
         ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
@@ -779,7 +782,7 @@ If failed try to complete the common part with `company-complete-common'"
                      ("emacs" . ?E)
                      ("orgmode" . ?o)
                      ("joanna" . ?j)
-                     ("harvey" . ?h)
+                     ("harvey" . ?H)
                      ("sophie" . ?s)))
 
 (defun open-agenda ()
