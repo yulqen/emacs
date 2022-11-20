@@ -53,21 +53,23 @@
 ;; turn off flycheck-mode
 (add-hook 'org-mode-hook (lambda () flycheck-mode -1))
 
+;; ID basics
 (setq user-full-name "Matthew Lemon"
       user-mail-address "matt@matthewlemon.com")
 
+;; redundant function
 (defun establish-machine ()
   (let ((sys (system-name)))
     (if (string= sys "archdesk")
         (setq mrl/computer 'desktop)
       (setq mrl/computer 'laptop))))
-
 (establish-machine)
 
 ;; handier undo
 (global-unset-key "\C-z")
 (global-set-key "\C-z" 'advertised-undo)
 
+;; UI
 (setq inhibit-startup-message 1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
@@ -111,6 +113,7 @@
 ;; Display the current time
 (display-time-mode t)
 
+;; Simply has to be done
 (setq visible-bell t)
 
 ;; font
@@ -122,6 +125,7 @@
   (when (member "Hack" (font-family-list))
     (add-to-list 'default-frame-alist '(font . "Hack-10")))))
 
+;; theme
  (use-package gruber-darker-theme
    :ensure t
    :config
