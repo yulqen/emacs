@@ -800,7 +800,8 @@ If failed try to complete the common part with `company-complete-common'"
       '("+LEVEL=2/+PROJECT" ("NEXT" "DOING") nil ""))
 
 (setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "DOING(D)" "PROJECT(p)"  "|" "DONE(d!)")
+      (quote ((sequence "TODO(t)" "|" "DEFERRED(r@/!)")
+              (sequence "TODO(t)" "NEXT(n)" "DOING(D)" "PROJECT(p)"  "|" "DONE(d!)")
               (sequence "WAITING(w@/!)" "SOMEDAY(s@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
 
