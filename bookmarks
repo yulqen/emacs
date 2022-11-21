@@ -43,7 +43,7 @@
  (front-context-string . "** Walk around t")
  (rear-context-string . "at 10:30-11:15>\n")
  (position . 15984))
-
+("org-capture-last-stored"
  (filename . "~/org/emacs-tips.org")
  (front-context-string . "** To evaluate a")
  (rear-context-string . "1-14 Mon 16:44]\n")
