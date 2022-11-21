@@ -23,6 +23,13 @@
 ;; notmuch is apparently already installed with notmuch from arch
 (require 'notmuch)
 
+;; org and notmuch
+(add-to-list 'load-path "~/.emacs.d/lisp")
+(require 'org-notmuch)
+(org-link-set-parameters "notmuch"
+			 :follow 'org-notmuch-open
+			 :store 'org-notmuch-store-link)
+
 ;; set custom file
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
