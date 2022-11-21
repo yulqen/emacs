@@ -278,13 +278,13 @@ If failed try to complete the common part with `company-complete-common'"
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-;; EVIL
- (use-package evil
-  :init
-  :config
-  (setq evil-respect-visual-line-mode t)
-  (setq evil-default-state 'emacs)
-  (evil-mode 0))
+;; ;; EVIL
+;;  (use-package evil
+;;   :init
+;;   :config
+;;   (setq evil-respect-visual-line-mode t)
+;;   (setq evil-default-state 'emacs)
+;;   (evil-mode 0))
 
 ;; which-key
 (use-package which-key
