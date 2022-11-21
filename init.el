@@ -174,14 +174,55 @@
 (use-package notmuch
   :defer t
   :config
+  (define-key notmuch-show-mode-map "S"
+    (lambda ()
+      "mark message as spam"
+      (interactive)
+      (notmuch-show-tag (list "+spam" "-inbox"))))
+  (define-key notmuch-search-mode-map "S"
+    (lambda ()
+      "mark message as spam"
+      (interactive)
+      (notmuch-search-tag (list "+spam" "-inbox"))))
+  (define-key notmuch-search-mode-map "d"
+    (lambda ()
+      "toggle deleted tag for message"
+      (interactive)
+      (if (member "deleted" (notmuch-search-get-tags))
+          (notmuch-search-tag (list "-deleted"))
+        (notmuch-search-tag (list "+deleted")))))
   (setq send-mail-function 'sendmail-send-it
         sendmail-program "/usr/bin/msmtp"
         message-kill-buffer-on-exit t
+        notmuch-draft-folder "fastmail/Drafts"
         notmuch-fcc-dirs "fastmail/Sent +sent -unread -inbox"
         notmuch-search-oldest-first t
         mail-specify-envelope-from t
+        message-signature "\n\n-- \nMatthew"
+        mm-text-html-renderer 'lynx
         message-sendmail-envelope-from 'header
-        mail-envelope-from 'header))
+        mail-envelope-from 'header
+        notmuch-saved-searches '((:name "Inbox"
+                                        :query "tag:inbox"
+                                        :count-query "tag:inbox and tag:unread"
+                                        :sort-order newest-first
+                                        :key "i")
+                                 (:name "Unread"
+                                        :query "tag:unread"
+                                        :sort-order newest-first
+                                        :key "u")
+                                 (:name "Sent"
+                                        :query "tag:sent"
+                                        :sort-order newest-first
+                                        :key "s")
+                                 (:name "All Mail"
+                                        :query "*"
+                                        :sort-order newest-first
+                                        :key "a")
+                                 (:name "Deleted"
+                                        :query "tag:deleted"
+                                        :sort-order newest-first
+                                        :key "d"))))
 
 ;; calfw
 (use-package calfw-org
