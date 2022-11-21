@@ -587,7 +587,7 @@ If failed try to complete the common part with `company-complete-common'"
       :unnarrowed t)))
   (org-roam-dailies-capture-templates
    '(("d" "default" entry "* %<%T>: %?"
-      :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n")
+      :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
       :unnarrowed t)))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
