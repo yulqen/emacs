@@ -20,6 +20,9 @@
 (setq use-package-always-ensure t)
 (require 'use-package)
 
+;; notmuch is apparently already installed with notmuch from arch
+(require 'notmuch)
+
 ;; set custom file
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
@@ -165,6 +168,20 @@
  (prefer-coding-system 'utf-8)
  (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
+
+;; PACKAGES
+
+(use-package notmuch
+  :defer t
+  :config
+  (setq send-mail-function 'sendmail-send-it
+        sendmail-program "/usr/bin/msmtp"
+        message-kill-buffer-on-exit t
+        notmuch-fcc-dirs "fastmail/Sent +sent -unread -inbox"
+        notmuch-search-oldest-first t
+        mail-specify-envelope-from t
+        message-sendmail-envelope-from 'header
+        mail-envelope-from 'header))
 
 ;; calfw
 (use-package calfw-org
