@@ -1,7 +1,15 @@
+;;; init.el --- emacs configuration. -*- lexical-binding: t -*-
 ;;; package --- MR Lemon emacs config
 ;;; Commentary:
 ;;; basic config
 ;;; Code:
+
+(defvar mrl/startup-time (current-time))
+(defun mrl/emacs-load-time ()
+  (let ((time (float-time (time-subtract (current-time) mrl/startup-time))))
+    (message "Emacs config loaded in %s seconds"
+             (format "%.2f" time))))
+(add-hook 'emacs-startup-hook #'mrl/emacs-load-time t)
 
 ;; packages
 (require 'package)
@@ -19,6 +27,41 @@
   (require 'use-package))
 (setq use-package-always-ensure t)
 (require 'use-package)
+
+(global-set-key (kbd "C-c R") (lambda () (interactive) (revert-buffer t t)))
+
+;; start-stop emacs
+(defun mrl/stop-emacs-1 ()
+  (if (daemonp)
+      (save-buffers-kill-emacs)
+    (save-buffers-kill-terminal)))
+
+(defun mrl/stop-emacs (arg)
+  "Close emacs, with a prefix arg restart it.
+Restart works only on graphic display."
+  (interactive "P")
+  (let ((confirm-kill-emacs (unless (and arg (display-graphic-p))
+                              'y-or-n-p))
+        (kill-emacs-query-functions
+         (if (and arg (display-graphic-p))
+             (append (list
+                      (lambda ()
+                        (when (y-or-n-p (format "Really restart %s? "
+                                                (capitalize (invocation-name))))
+                          (add-hook 'kill-emacs-hook
+                                    (lambda ()
+                                      (call-process-shell-command
+                                       (format "(%s &)"
+                                               ;; eselect-emacs.sh
+                                               ;; should have kept
+                                               ;; only one of
+                                               ;; emacs/remacs.
+                                               (or (executable-find "emacs")
+                                                   (executable-find "remacs")))))
+                                    t))))
+                     kill-emacs-query-functions)
+           kill-emacs-query-functions)))
+    (mrl/stop-emacs-1)))
 
 ;; notmuch is apparently already installed with notmuch from arch
 (require 'notmuch)
@@ -419,6 +462,7 @@ If failed try to complete the common part with `company-complete-common'"
 (use-package magit
   :bind ("C-x g" . magit-status))
 
+;; cider
 (use-package cider
   :ensure t)
 
@@ -428,7 +472,7 @@ If failed try to complete the common part with `company-complete-common'"
   (ido-mode t)
   (setq ido-enable-flex-matching t)
   (setq ido-create-new-buffer 'always)
-  (setq ido-everywhere t)  ; nil because incompatible with Helm
+  (setq ido-everywhere nil)  ; nil because incompatible with Helm
   (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
   (setq ido-enable-flex-matching t))
 
