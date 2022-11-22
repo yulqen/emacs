@@ -8,8 +8,8 @@
  (rear-context-string . ": home\n\n* Tasks\n")
  (position . 119))
 ("org-capture-last-stored"
- (filename . "~/org-roam/daily/2022-11-22.org")
- (front-context-string . "* 08:23:36: Inst")
- (rear-context-string . "s in the title!\n")
- (position . 141))
+ (filename . "~/org/mod.org")
+ (front-context-string . "** NEXT Find and")
+ (rear-context-string . "ewhere.\n* Tasks\n")
+ (position . 13430))
 )
