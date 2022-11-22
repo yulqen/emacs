@@ -862,6 +862,7 @@ If failed try to complete the common part with `company-complete-common'"
                      ("idea" . ?d)
                      ;; Context
                      ("work" . ?w)
+                     ("offscreen" . ?O)
                      ("computer" .?c)
                      ("home" . ?h)
                      ("errand" . ?e)
