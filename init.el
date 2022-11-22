@@ -732,7 +732,6 @@ If failed try to complete the common part with `company-complete-common'"
   (setq org-deadline-warning-days 4)
   (setq org-clock-persist 'history)
   (org-clock-persistence-insinuate)
-  (setq org-default-notes-file (concat org-directory "/notes.org"))
   (setq org-M-RET-may-split-line '(default . nil))
   (setq org-enforce-todo-dependencies t)
   (setq org-log-done 'time)
@@ -750,10 +749,8 @@ If failed try to complete the common part with `company-complete-common'"
 (setq org-agenda-span 'day)
 (setq org-agenda-start-day "today")
 (setq org-agenda-files (quote ("~/org/home.org"
-                               "~/org/projects.org"
                                "~/org/refile.org"
                                "~/org/mod.org"
-                               "~/org/notes.org"
                                "~/org/habits.org")))
 (setq org-agenda-window-setup 'other-window)
 (setq org-agenda-start-with-log-mode t)
