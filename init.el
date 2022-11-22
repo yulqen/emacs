@@ -821,6 +821,7 @@ If failed try to complete the common part with `company-complete-common'"
 (setq org-agenda-diary-file "~/org/calendar/cal.org")
 (setq org-agenda-show-future-repeats t)
 (setq org-agenda-skip-deadline-if-done t)
+(setq org-agenda-skip-deadline-prewarning-if-scheduled t)
 (setq org-agenda-skip-scheduled-if-done t)
 (setq org-agenda-sort-notime-is-late nil)
 
