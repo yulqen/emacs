@@ -782,6 +782,12 @@ If failed try to complete the common part with `company-complete-common'"
          ("C-c b" . 'org-iswitchb)
          ("C-c c" . 'org-capture))
   :config
+  ;; advice function to immediately narrow to subtree from org-agenda-goto
+  ;; which is hitting TAB to view an item in the agenda
+  ;; from https://emacs.stackexchange.com/questions/17797/how-to-narrow-to-subtree-in-org-agenda-follow-mode
+  (advice-add 'org-agenda-goto :after
+            (lambda (&rest args)
+              (org-narrow-to-subtree)))
   (setq org-src-tab-acts-natively t)
   (setq org-directory "~/org/")
   (setq org-highest-priority ?A)
