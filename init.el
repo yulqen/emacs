@@ -960,11 +960,11 @@ If failed try to complete the common part with `company-complete-common'"
 
 
 (setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "tomato4" :weight bold)
-              ("NEXT" :foreground "LemonChiffon" :weight bold)
-              ("PROJECT" :foreground "ForestGreen" :weight bold)
-              ("DOING" :foreground "brown" :weight bold)
-              ("DONE" :foreground "SlateGray" :weight bold)
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "cyan" :weight bold)
+              ("PROJECT" :foreground "blue" :weight bold)
+              ("DOING" :foreground "orchid" :weight bold)
+              ("DONE" :foreground "ForestGreen" :weight bold)
               ("WAITING" :foreground "orange" :weight bold)
               ("SOMEDAY" :foreground "blue" :weight bold)
               ("HOLD" :foreground "magenta" :weight bold)
