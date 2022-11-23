@@ -1,4 +1,4 @@
-;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8; mode: lisp-data -*-
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8 -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
@@ -8,8 +8,8 @@
  (rear-context-string . ": home\n\n* Tasks\n")
  (position . 119))
 ("org-capture-last-stored"
- (filename . "~/org/mod.org")
- (front-context-string . "** NEXT Find and")
- (rear-context-string . "ewhere.\n* Tasks\n")
- (position . 13430))
+ (filename . "~/org/home.org")
+ (front-context-string . "** NEXT Call Maw")
+ (rear-context-string . ": home\n\n* Tasks\n")
+ (position . 119))
 )
