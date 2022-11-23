@@ -3,13 +3,13 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-refile-last-stored"
+ (filename . "~/org/mod.org")
+ (front-context-string . "*** NEXT Generat")
+ (rear-context-string . "chnical project\n")
+ (position . 11116))
+("org-capture-last-stored"
  (filename . "~/org/home.org")
- (front-context-string . "** DONE Work out")
+ (front-context-string . "** TODO Put some")
  (rear-context-string . ": home\n\n* Tasks\n")
  (position . 119))
-("org-capture-last-stored"
- (filename . "~/org/mod.org")
- (front-context-string . "** NEXT Find and")
- (rear-context-string . "ewhere.\n* Tasks\n")
- (position . 13430))
 )
