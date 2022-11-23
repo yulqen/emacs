@@ -233,20 +233,6 @@ Restart works only on graphic display."
 (use-package popup
   :ensure t)
 
-;; helm
-;; for all the options, look at https://github.com/thierryvolpiatto/emacs-config/blob/main/init-helm.el
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/helm/") ; facultative when installed with make install
-(use-package helm
-  :config
-  (require 'helm-config)
-  (helm-mode 1))
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-unset-key (kbd "C-x c"))
-(global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "M-x") 'helm-M-x)
-
 ;; notmuch
 (use-package notmuch
   :defer t
@@ -523,7 +509,7 @@ If failed try to complete the common part with `company-complete-common'"
   (ido-mode t)
   (setq ido-enable-flex-matching t)
   (setq ido-create-new-buffer 'always)
-  (setq ido-everywhere nil)  ; nil because incompatible with Helm
+  (setq ido-everywhere t)  ; nil because incompatible with Helm
   (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
   (setq ido-enable-flex-matching t))
 
@@ -558,41 +544,41 @@ If failed try to complete the common part with `company-complete-common'"
               (setq-local ledger-complete-in-steps t)))
   :custom (ledger-clear-whole-transactions t))
 
-;; (use-package ivy
-;;   :diminish
-;;   :init
-;;   (use-package amx :defer t)
-;;   (use-package counsel :diminish :config (counsel-mode 1))
-;;   (use-package swiper :defer t)
-;;   (ivy-mode 1)
-;;   :bind
-;;   (("C-s" . swiper-isearch)
-;;    ("C-x C-f" . counsel-find-file)
-;;    ("C-x C-m" . counsel-M-x)
-;;    ("C-h f" . counsel-describe-function)
-;;    ("C-h v" . counsel-describe-variable)
-;;    ("C-z s" . counsel-rg)
-;;    ("C-x C-r" . counsel-recentf)
-;;    ("C-z b" . counsel-buffer-or-recentf)
-;;    ("C-z C-b" . counsel-ibuffer)
-;;    (:map ivy-minibuffer-map
-;;          ("C-r" . ivy-previous-line-or-history)
-;;          ("M-RET" . ivy-immediate-done))
-;;    (:map counsel-find-file-map
-;;          ("C-~" . counsel-goto-local-home)))
-;;   :custom
-;;   (ivy-use-virtual-buffers t)
-;;   (ivy-height 13)
-;;   (ivy-on-del-error-function nil)
-;;   (ivy-magic-slash-non-match-action 'ivy-magic-slash-non-match-create)
-;;   (ivy-count-format "【%d/%d】")
-;;   (ivy-wrap t)
-;;   :config
-;;   (setq projectile-completion-system 'ivy)
-;;   (defun counsel-goto-local-home ()
-;;     "Go to the $HOME of the local machine."
-;;     (interactive)
-;;     (ivy--cd "~/")))
+(use-package ivy
+  :diminish
+  :init
+  (use-package amx :defer t)
+  (use-package counsel :diminish :config (counsel-mode 1))
+  (use-package swiper :defer t)
+  (ivy-mode 1)
+  :bind
+  (("C-s" . swiper-isearch)
+   ("C-x C-f" . counsel-find-file)
+   ("C-x C-m" . counsel-M-x)
+   ("C-h f" . counsel-describe-function)
+   ("C-h v" . counsel-describe-variable)
+   ("C-z s" . counsel-rg)
+   ("C-x C-r" . counsel-recentf)
+   ("C-z b" . counsel-buffer-or-recentf)
+   ("C-z C-b" . counsel-ibuffer)
+   (:map ivy-minibuffer-map
+         ("C-r" . ivy-previous-line-or-history)
+         ("M-RET" . ivy-immediate-done))
+   (:map counsel-find-file-map
+         ("C-~" . counsel-goto-local-home)))
+  :custom
+  (ivy-use-virtual-buffers t)
+  (ivy-height 13)
+  (ivy-on-del-error-function nil)
+  (ivy-magic-slash-non-match-action 'ivy-magic-slash-non-match-create)
+  (ivy-count-format "【%d/%d】")
+  (ivy-wrap t)
+  :config
+  (setq projectile-completion-system 'ivy)
+  (defun counsel-goto-local-home ()
+    "Go to the $HOME of the local machine."
+    (interactive)
+    (ivy--cd "~/")))
 
 ;; beacon mode
 (use-package beacon
