@@ -221,6 +221,10 @@ Restart works only on graphic display."
 
 ;; PACKAGES
 
+;; eglot language server protocol client
+(use-package eglot
+  :ensure t)
+
 ;; emacs-async - for helm
 (use-package async
   :ensure t)
@@ -638,18 +642,18 @@ If failed try to complete the common part with `company-complete-common'"
   :config
   (winner-mode 1))
 
-;; elpy for python
-(use-package elpy
-  :ensure t
-  :config
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode)
-  :init
-  (elpy-enable))
+;; ;; elpy for python
+;; (use-package elpy
+;;   :ensure t
+;;   :config
+;;   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+;;   (add-hook 'elpy-mode-hook 'flycheck-mode)
+;;   :init
+;;   (elpy-enable))
 
-(when (load "flycheck" t t)
-(setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-(add-hook 'elpy-mode-hook 'flycheck-mode))
+;; (when (load "flycheck" t t)
+;; (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+;; (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 ;; Ace Window
 (use-package ace-window
