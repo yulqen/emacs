@@ -973,11 +973,10 @@ If failed try to complete the common part with `company-complete-common'"
                "* %?\n\t%i"))))
 
 (setq org-tag-alist '(
-                     ;; Type
                      ("brainstorm" . ?b)
                      ("idea" . ?d)
-                     ;; Context
                      ("work" . ?w)
+                     ("baes" . ?B)
                      ("offscreen" . ?O)
                      ("computer" .?c)
                      ("home" . ?h)
