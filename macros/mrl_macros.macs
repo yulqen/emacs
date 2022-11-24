@@ -1,0 +1,2 @@
+(fset 'mrl/markdown-clear-check-box
+   (kmacro-lambda-form [?\C-f backspace ?  ?\C-n ?\C-f ?\C-b ?\C-b] 0 "%d"))

@@ -28,6 +28,10 @@
 (setq use-package-always-ensure t)
 (require 'use-package)
 
+;; my macros
+(add-to-list 'load-path "~/.emacs.d/macros/mrl_macros.macs")
+
+;; easy revert buffer, which I never use
 (global-set-key (kbd "C-c R") (lambda () (interactive) (revert-buffer t t)))
 
 ;; start-stop emacs
@@ -224,7 +228,8 @@ Restart works only on graphic display."
 ;; markdown mode
 (use-package markdown-mode
   :ensure t
-  :config
+  :bind (:map markdown-mode-map
+              ("C-c C-v" . mrl/markdown-clear-checkbox))
   :hook (markdown-mode-hook . (lambda ()
                                 (when buffer-file-name
                                   (add-hook 'after-save-hook
