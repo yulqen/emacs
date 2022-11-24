@@ -221,6 +221,16 @@ Restart works only on graphic display."
 
 ;; PACKAGES
 
+;; markdown mode
+(use-package markdown-mode
+  :ensure t
+  :config
+  :hook (markdown-mode-hook . (lambda ()
+                                (when buffer-file-name
+                                  (add-hook 'after-save-hook
+                                            'check-parens
+                                            nil t)))))
+
 ;; eglot language server protocol client
 (use-package eglot
   :ensure t)
