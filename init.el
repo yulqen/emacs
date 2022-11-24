@@ -227,10 +227,20 @@ Restart works only on graphic display."
 ;; PACKAGES
 
 ;; markdown mode
+
+(defun mrl/clear-check-single-line ()
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (forward-char 3)
+    (delete-char 1)
+    (insert-char ?\s))
+  (next-line))
+
 (use-package markdown-mode
   :ensure t
   :bind (:map markdown-mode-map
-              ("C-c C-v" . mrl/markdown-clear-checkbox))
+              ("C-c C-v" . mrl/clear-check-single-line))
   :hook (markdown-mode-hook . (lambda ()
                                 (when buffer-file-name
                                   (add-hook 'after-save-hook
