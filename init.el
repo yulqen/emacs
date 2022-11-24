@@ -224,18 +224,21 @@ Restart works only on graphic display."
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
+;; for markdown mode
+;; do this for a region next
+(defun mrl/clear-check-single-line (&optional lines)
+  "Remove the check from LINES number of markdown checkbox lines."
+  (interactive "p")
+  (while (> lines 0)
+    (save-excursion
+      (beginning-of-line)
+      (forward-char 3)
+      (delete-char 1)
+      (insert-char ?\s))
+    (next-line)
+    (setq lines (- lines 1))))
+
 ;; PACKAGES
-
-;; markdown mode
-
-(defun mrl/clear-check-single-line ()
-  (interactive)
-  (save-excursion
-    (beginning-of-line)
-    (forward-char 3)
-    (delete-char 1)
-    (insert-char ?\s))
-  (next-line))
 
 (use-package markdown-mode
   :ensure t
