@@ -72,10 +72,11 @@ Restart works only on graphic display."
 
 ;; org and notmuch
 (add-to-list 'load-path "~/.emacs.d/lisp")
+
 (require 'org-notmuch)
 (org-link-set-parameters "notmuch"
-			 :follow 'org-notmuch-open
-			 :store 'org-notmuch-store-link)
+			                   :follow 'org-notmuch-open
+			                   :store 'org-notmuch-store-link)
 
 ;; set custom file
 (setq custom-file (concat user-emacs-directory "custom.el"))
@@ -183,44 +184,44 @@ Restart works only on graphic display."
     (add-to-list 'default-frame-alist '(font . "Hack-10")))))
 
 ;; theme
- (use-package gruber-darker-theme
-   :ensure t
-   :config
-   (load-theme 'gruber-darker t))
+(use-package gruber-darker-theme
+  :ensure t
+  :config
+  (load-theme 'gruber-darker t))
 
- (setq display-line-numbers-type `relative)
- (setq undo-limit 8000000) ; raise limit to 80Mb
- (setq truncate-string-ellipsis "…") ; better than using dots
- (setq scroll-preserve-screen-position 'always) ; experimental
- (setq scroll-margin 3) ; bit of space
+(setq display-line-numbers-type `relative)
+(setq undo-limit 8000000) ; raise limit to 80Mb
+(setq truncate-string-ellipsis "…") ; better than using dots
+(setq scroll-preserve-screen-position 'always) ; experimental
+(setq scroll-margin 3) ; bit of space
 
 
- ;; calendar proper Monday start
- (setq calendar-week-start-day 1)
- (setq calendar-date-style (quote european))
+;; calendar proper Monday start
+(setq calendar-week-start-day 1)
+(setq calendar-date-style (quote european))
 
- ;; Handling tabs (for programming)
- (setq-default tab-width 2)
- (setq-default tab-width 2 indent-tabs-mode nil)
- (setq-default indent-tabs-mode nil)
- (setq js-indent-level 2)
- (setq python-indent 2)
- (setq css-indent-offset 2)
- (add-hook 'sh-mode-hook
-           (lambda ()
-             (setq sh-basic-offset 2
-                   sh-indentation 2)))
- (setq web-mode-markup-indent-offset 2)
+;; Handling tabs (for programming)
+(setq-default tab-width 2)
+(setq-default tab-width 2 indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
+(setq js-indent-level 2)
+(setq python-indent 2)
+(setq css-indent-offset 2)
+(add-hook 'sh-mode-hook
+          (lambda ()
+            (setq sh-basic-offset 2
+                  sh-indentation 2)))
+(setq web-mode-markup-indent-offset 2)
 
- ;; Highlight matching parens
- (show-paren-mode t)
+;; Highlight matching parens
+(show-paren-mode t)
 
- ;; Stop C-z suspending emacs
- (global-set-key (kbd "C-z") 'nil)
+;; Stop C-z suspending emacs
+(global-set-key (kbd "C-z") 'nil)
 
- ;; encoding
- (prefer-coding-system 'utf-8)
- (setq coding-system-for-read 'utf-8)
+;; encoding
+(prefer-coding-system 'utf-8)
+(setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
 ;; PACKAGES
