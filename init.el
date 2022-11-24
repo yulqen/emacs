@@ -4,8 +4,6 @@
 ;;; basic config
 ;;; Code:
 
-
-
 (defvar mrl/startup-time (current-time))
 (defun mrl/emacs-load-time ()
   (let ((time (float-time (time-subtract (current-time) mrl/startup-time))))
@@ -71,7 +69,7 @@ Restart works only on graphic display."
 
 ;; load my crap
 (add-to-list 'load-path "~/.emacs.d/lisp")
-(require 'mrl_functions)
+(require 'mrl-functions)
 
 (require 'org-notmuch)
 (org-link-set-parameters "notmuch"

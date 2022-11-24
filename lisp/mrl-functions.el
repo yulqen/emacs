@@ -45,5 +45,5 @@ of lines to run through."
       (insert-char ?\s))
     (next-line)
     (setq lines (- lines 1))))
-(provide 'mrl_functions)
+(provide 'mrl-functions)
 ;;; mrl_functions ends here
