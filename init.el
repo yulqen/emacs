@@ -621,7 +621,7 @@ If failed try to complete the common part with `company-complete-common'"
   (ivy-height 13)
   (ivy-on-del-error-function nil)
   (ivy-magic-slash-non-match-action 'ivy-magic-slash-non-match-create)
-  (ivy-count-format "【%d/%d】")
+  ;; (ivy-count-format "【%d/%d】")
   (ivy-wrap t)
   :config
   (setq projectile-completion-system 'ivy)
