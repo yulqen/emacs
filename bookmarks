@@ -8,8 +8,8 @@
  (rear-context-string . "chnical project\n")
  (position . 11116))
 ("org-capture-last-stored"
- (filename . "~/org-roam/daily/2022-11-24.org")
- (front-context-string . "* 23:02:53: Impr")
- (rear-context-string . "ngle-line. Yay!\n")
- (position . 841))
+ (filename . "~/org-roam/daily/2022-11-25.org")
+ (front-context-string . "* 06:48:04: Morn")
+ (rear-context-string . "iday 2022-11-25\n")
+ (position . 95))
 )
