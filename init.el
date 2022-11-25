@@ -31,6 +31,9 @@
 ;; easy revert buffer, which I never use
 (global-set-key (kbd "C-c R") (lambda () (interactive) (revert-buffer t t)))
 
+;; make sure you require this - otherwise it will not work...
+(require 'org-protocol)
+
 ;; start-stop emacs
 (defun mrl/stop-emacs-1 ()
   (if (daemonp)
@@ -137,7 +140,7 @@ Restart works only on graphic display."
 (put 'narrow-to-region 'disabled nil)
 
 ;; we don't want the old buffer list!
-(global-unset-key (kbd "C-x C-b")) 
+;;; (global-unset-key (kbd "C-x C-b")) 
 
 ;; Put backups in /tmp where they belong
 (setq backup-directory-alist

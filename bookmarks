@@ -9,7 +9,7 @@
  (position . 11116))
 ("org-capture-last-stored"
  (filename . "~/org-roam/daily/2022-11-25.org")
- (front-context-string . "* 06:48:04: Morn")
- (rear-context-string . "iday 2022-11-25\n")
- (position . 95))
+ (front-context-string . "* 14:47:27: What")
+ (rear-context-string . "morning. :baes:\n")
+ (position . 730))
 )
