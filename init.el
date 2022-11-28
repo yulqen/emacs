@@ -11,6 +11,9 @@
              (format "%.2f" time))))
 (add-hook 'emacs-startup-hook #'mrl/emacs-load-time t)
 
+;; cursor colour
+(set-cursor-color "magenta")
+
 ;; packages
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -636,7 +639,7 @@ If failed try to complete the common part with `company-complete-common'"
 ;; beacon mode
 (use-package beacon
   :config
-  (setq beacon-color "OrangeRed")
+  (setq beacon-color "DarkViolet")
   (beacon-mode 1))
 
 ;; flycheck syntax highlighting
