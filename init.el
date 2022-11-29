@@ -179,13 +179,13 @@ Restart works only on graphic display."
 (setq visible-bell t)
 
 ;; font
-(cond
- ((string-equal (system-name) "archdesk")
-  (when (member "Hack" (font-family-list))
-    (add-to-list 'default-frame-alist '(font . "Hack-14"))))
- ((string-equal (system-name) "pop_os")
-  (when (member "Hack" (font-family-list))
-    (add-to-list 'default-frame-alist '(font . "Hack-10")))))
+;; (cond
+;;  ((string-equal (system-name) "archdesk")
+;;   (when (member "Hack" (font-family-list))
+;;     (add-to-list 'default-frame-alist '(font . "Hack-14"))))
+;;  ((string-equal (system-name) "pop_os")
+;;   (when (member "Hack" (font-family-list))
+;;     (add-to-list 'default-frame-alist '(font . "Hack-10")))))
 
 ;; theme
 (use-package gruber-darker-theme
