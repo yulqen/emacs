@@ -8,15 +8,8 @@
  (rear-context-string . ": home\n\n* Tasks\n")
  (position . 119))
 ("org-capture-last-stored"
-<<<<<<< HEAD
  (filename . "~/org/refile.org")
  (front-context-string . "** TODO Review E")
  (rear-context-string . "1-27 Sun 15:05]\n")
  (position . 639))
-=======
- (filename . "~/org/home.org")
- (front-context-string . "** TODO Get blue")
- (rear-context-string . ": home\n\n* Tasks\n")
- (position . 119))
->>>>>>> 81a4e8c58baff24a49e1b4392ec9ee6906f88047
 )
