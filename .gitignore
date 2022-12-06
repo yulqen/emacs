@@ -30,3 +30,7 @@ myinit.el
 /eln-cache/
 org-clock-save.el
 org-clock-save.el
+/elfeed.stats
+/history
+/projects
+/tramp
