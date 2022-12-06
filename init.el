@@ -228,10 +228,13 @@ Restart works only on graphic display."
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
-
 ;; PACKAGES
 
-;; embark
+(use-package undo-tree
+  :ensure t
+  :init
+  (global-undo-tree-mode))
+
 (use-package marginalia
   :ensure t
   :config
