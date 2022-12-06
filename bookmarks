@@ -1,15 +1,20 @@
-;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8; mode: lisp-data -*-
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8 -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-refile-last-stored"
+(("org-capture-last-stored-marker"
+ (filename . "~/org/mod.org")
+ (front-context-string . "*** NEXT Continu")
+ (rear-context-string . "t Strategy 2023\n")
+ (position . 4347))
+("org-refile-last-stored"
  (filename . "~/org/home.org")
- (front-context-string . "** DOING Structu")
- (rear-context-string . ": home\n\n* Tasks\n")
- (position . 119))
+ (front-context-string . "** DEFERRED Read")
+ (rear-context-string . ":24]\n* Deferred\n")
+ (position . 10887))
 ("org-capture-last-stored"
  (filename . "~/org/refile.org")
- (front-context-string . "** TODO Review E")
- (rear-context-string . "1-27 Sun 15:05]\n")
- (position . 639))
+ (front-context-string . "** TODO Review A")
+ (rear-context-string . "2-05 Mon 15:34]\n")
+ (position . 773))
 )
