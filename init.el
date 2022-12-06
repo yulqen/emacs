@@ -1062,11 +1062,11 @@ If failed try to complete the common part with `company-complete-common'"
 
 (setq org-todo-keyword-faces
       (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "cyan" :weight bold)
+              ("NEXT" :foreground "MediumBlue" :weight bold)
               ("PROJECT" :foreground "blue" :weight bold)
               ("DOING" :foreground "orchid" :weight bold)
               ("DONE" :foreground "ForestGreen" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
+              ("WAITING" :foreground "black" :background "yellow" :weight bold)
               ("SOMEDAY" :foreground "blue" :weight bold)
               ("HOLD" :foreground "magenta" :weight bold)
               ("CANCELLED" :foreground "snow4" :weight bold))))
