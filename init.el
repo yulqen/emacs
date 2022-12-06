@@ -473,6 +473,7 @@ If failed try to complete the common part with `company-complete-common'"
   (setq elfeed-feeds
         '(("https://hnrss.org/newcomments?q=openbsd")
           ("https://hnrss.org/newest?q=openbsd")
+          ("https://planet.clojure.in/atom.xml")
           ("https://hnrss.org/newest?q=plaintext")
           ("https://hnrss.org/newest?q=taskwarrior")
           ("https://hnrss.org/newest?q=Roam")
