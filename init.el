@@ -606,41 +606,41 @@ If failed try to complete the common part with `company-complete-common'"
               (setq-local ledger-complete-in-steps t)))
   :custom (ledger-clear-whole-transactions t))
 
-(use-package ivy
-  :diminish
-  :init
-  (use-package amx :defer t)
-  (use-package counsel :diminish :config (counsel-mode 1))
-  (use-package swiper :defer t)
-  (ivy-mode 1)
-  :bind
-  (("C-s" . swiper-isearch)
-   ("C-x C-f" . counsel-find-file)
-   ("C-x C-m" . counsel-M-x)
-   ("C-h f" . counsel-describe-function)
-   ("C-h v" . counsel-describe-variable)
-   ("C-z s" . counsel-rg)
-   ("C-x C-r" . counsel-recentf)
-   ("C-z b" . counsel-buffer-or-recentf)
-   ("C-z C-b" . counsel-ibuffer)
-   (:map ivy-minibuffer-map
-         ("C-r" . ivy-previous-line-or-history)
-         ("M-RET" . ivy-immediate-done))
-   (:map counsel-find-file-map
-         ("C-~" . counsel-goto-local-home)))
-  :custom
-  (ivy-use-virtual-buffers t)
-  (ivy-height 13)
-  (ivy-on-del-error-function nil)
-  (ivy-magic-slash-non-match-action 'ivy-magic-slash-non-match-create)
-  ;; (ivy-count-format "【%d/%d】")
-  (ivy-wrap t)
-  :config
-  (setq projectile-completion-system 'ivy)
-  (defun counsel-goto-local-home ()
-    "Go to the $HOME of the local machine."
-    (interactive)
-    (ivy--cd "~/")))
+;; (use-package ivy
+;;   :diminish
+;;   :init
+;;   (use-package amx :defer t)
+;;   (use-package counsel :diminish :config (counsel-mode 1))
+;;   (use-package swiper :defer t)
+;;   (ivy-mode 1)
+;;   :bind
+;;   (("C-s" . swiper-isearch)
+;;    ("C-x C-f" . counsel-find-file)
+;;    ("C-x C-m" . counsel-M-x)
+;;    ("C-h f" . counsel-describe-function)
+;;    ("C-h v" . counsel-describe-variable)
+;;    ("C-z s" . counsel-rg)
+;;    ("C-x C-r" . counsel-recentf)
+;;    ("C-z b" . counsel-buffer-or-recentf)
+;;    ("C-z C-b" . counsel-ibuffer)
+;;    (:map ivy-minibuffer-map
+;;          ("C-r" . ivy-previous-line-or-history)
+;;          ("M-RET" . ivy-immediate-done))
+;;    (:map counsel-find-file-map
+;;          ("C-~" . counsel-goto-local-home)))
+;;   :custom
+;;   (ivy-use-virtual-buffers t)
+;;   (ivy-height 13)
+;;   (ivy-on-del-error-function nil)
+;;   (ivy-magic-slash-non-match-action 'ivy-magic-slash-non-match-create)
+;;   ;; (ivy-count-format "【%d/%d】")
+;;   (ivy-wrap t)
+;;   :config
+;;   (setq projectile-completion-system 'ivy)
+;;   (defun counsel-goto-local-home ()
+;;     "Go to the $HOME of the local machine."
+;;     (interactive)
+;;     (ivy--cd "~/")))
 
 ;; beacon mode
 (use-package beacon
@@ -770,10 +770,11 @@ If failed try to complete the common part with `company-complete-common'"
 
 ;; recentf
 (use-package recentf
-:hook (after-init . recentf-mode)
-:custom
-(recentf-auto-cleanup "05:00am")
-(recentf-exclude '((expand-file-name package-user-dir)
+  :hook (after-init . recentf-mode)
+  :bind (("C-x C-r" . recentf-open-files))
+  :custom
+  (recentf-auto-cleanup "05:00am")
+  (recentf-exclude '((expand-file-name package-user-dir)
                ".cache"
                ".cask"
                ".elfeed"
@@ -785,12 +786,12 @@ If failed try to complete the common part with `company-complete-common'"
                "undo-tree-hist"
                "url"
                "COMMIT_EDITMSG\\'"))
-(setq recentf-auto-cleanup 'never
-    recentf-max-saved-items 50
-    recentf-save-file (concat user-emacs-directory ".recentf"))
-(setq recentf-max-menu-items 25)
-(setq recentf-max-saved-items 25)
-(recentf-mode t))
+  (setq recentf-auto-cleanup 'never
+        recentf-max-saved-items 50
+        recentf-save-file (concat user-emacs-directory ".recentf"))
+  (setq recentf-max-menu-items 25)
+  (setq recentf-max-saved-items 25)
+  (recentf-mode t))
 
 (use-package org-roam
   :ensure t
