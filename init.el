@@ -14,6 +14,9 @@
 ;; cursor colour
 (set-cursor-color "magenta")
 
+;; theme
+(load-theme 'light-blue)
+
 ;; packages
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -188,17 +191,16 @@ Restart works only on graphic display."
 ;;     (add-to-list 'default-frame-alist '(font . "Hack-10")))))
 
 ;; theme
-(use-package gruber-darker-theme
-  :ensure t
-  :config
-  (load-theme 'gruber-darker t))
+;; (use-package gruber-darker-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'gruber-darker t))
 
 (setq display-line-numbers-type `relative)
 (setq undo-limit 8000000) ; raise limit to 80Mb
 (setq truncate-string-ellipsis "…") ; better than using dots
 (setq scroll-preserve-screen-position 'always) ; experimental
 (setq scroll-margin 3) ; bit of space
-
 
 ;; calendar proper Monday start
 (setq calendar-week-start-day 1)
@@ -289,8 +291,8 @@ Restart works only on graphic display."
   :ensure t)
 
 ;; popup - for helm
-(use-package popup
-  :ensure t)
+;; (use-package popup
+;;   :ensure t)
 
 ;; notmuch
 (use-package notmuch
