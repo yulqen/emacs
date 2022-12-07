@@ -428,6 +428,7 @@ Restart works only on graphic display."
 (use-package undo-tree
   :ensure t
   :init
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d./.cache"))) ; from https://github.com/syl20bnr/spacemacs/issues/15426
   (global-undo-tree-mode))
 
 (use-package marginalia
@@ -439,7 +440,6 @@ Restart works only on graphic display."
 
 (use-package embark
   :ensure t
-
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
    ("C-;" . embark-dwim)        ;; good alternative: M-.
