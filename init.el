@@ -232,6 +232,16 @@ Restart works only on graphic display."
 
 ;; PACKAGES
 
+(use-package denote
+  :ensure t
+  :config
+  (setq denote-directory (expand-file-name "~/Documents/denote/"))
+  (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work"))
+  (setq denote-file-type nil)
+  (setq denote-prompts '(title keywords))
+  (setq denote-date-prompt-use-org-read-date t)
+  )
+
 ;; Enable vertico
 (use-package vertico
   :ensure t
