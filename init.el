@@ -664,7 +664,7 @@ If failed try to complete the common part with `company-complete-common'"
   :config
   (defun mrl/kill-deft ()
       (kill-buffer "*Deft*"))
-  (setq deft-directory "~/org-roam"
+  (setq deft-directory "~/Notes/Archive"
         deft-extensions '("org" "md" "txt")
         deft-recursive t
         deft-file-limit 40
@@ -1029,55 +1029,55 @@ If failed try to complete the common part with `company-complete-common'"
   (setq recentf-max-saved-items 25)
   (recentf-mode t))
 
-(use-package org-roam
-  :ensure t
-  :custom
-  (org-roam-dailies-directory "daily/")
-  (org-roam-directory "~/org-roam")
-  (org-roam-capture-ref-templates
-   '(("d" "default" plain
-      "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t)))
-  (org-roam-capture-templates
-   '(("d" "default" plain
-      "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t)
-     ("e" "encrypted" plain
-      "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
-      :unnarrowed t)))
-  (org-roam-dailies-capture-templates
-   '(("d" "default" entry "* %<%T>: %?"
-      :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
-      :unnarrowed t)))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n n" . org-roam-dailies-capture-today)
-         ("C-c n t" . org-roam-dailies-goto-today)
-         :map org-roam-mode-map
-         ("y" . org-roam-dailies-goto-previous-note)
-         ("t" . org-roam-dailies-goto-next-note)
-         ("d" . org-roam-dailies-goto-date)
-         ("D" . org-roam-dailies-capture-date))
-  :bind-keymap ("C-c n D" . org-roam-mode-map)
-  :config
-  (defun mrl/search-roam ()
-    "Run consult-ripgrep on the org roam directory"
-    (interactive)
-    (consult-ripgrep org-roam-directory nil))
-  (require 'org-roam-protocol)
-  (org-roam-db-autosync-mode)
-  ;; Bind this to C-c n I
-  (defun org-roam-node-insert-immediate (arg &rest args)
-    (interactive "P")
-    (let ((args (cons arg args))
-          (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                    '(:immediate-finish t)))))
-      (apply #'org-roam-node-insert args)))
-  :bind (("C-c n I" . org-roam-node-insert-immediate)))
+;; (use-package org-roam
+;;   :ensure t
+;;   :custom
+;;   (org-roam-dailies-directory "daily/")
+;;   (org-roam-directory "~/org-roam")
+;;   (org-roam-capture-ref-templates
+;;    '(("d" "default" plain
+;;       "%?"
+;;       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+;;       :unnarrowed t)))
+;;   (org-roam-capture-templates
+;;    '(("d" "default" plain
+;;       "%?"
+;;       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+;;       :unnarrowed t)
+;;      ("e" "encrypted" plain
+;;       "%?"
+;;       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
+;;       :unnarrowed t)))
+;;   (org-roam-dailies-capture-templates
+;;    '(("d" "default" entry "* %<%T>: %?"
+;;       :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
+;;       :unnarrowed t)))
+;;   :bind (("C-c n l" . org-roam-buffer-toggle)
+;;          ("C-c n f" . org-roam-node-find)
+;;          ("C-c n i" . org-roam-node-insert)
+;;          ("C-c n n" . org-roam-dailies-capture-today)
+;;          ("C-c n t" . org-roam-dailies-goto-today)
+;;          :map org-roam-mode-map
+;;          ("y" . org-roam-dailies-goto-previous-note)
+;;          ("t" . org-roam-dailies-goto-next-note)
+;;          ("d" . org-roam-dailies-goto-date)
+;;          ("D" . org-roam-dailies-capture-date))
+;;   :bind-keymap ("C-c n D" . org-roam-mode-map)
+;;   :config
+;;   (defun mrl/search-roam ()
+;;     "Run consult-ripgrep on the org roam directory"
+;;     (interactive)
+;;     (consult-ripgrep org-roam-directory nil))
+;;   (require 'org-roam-protocol)
+;;   (org-roam-db-autosync-mode)
+;;   ;; Bind this to C-c n I
+;;   (defun org-roam-node-insert-immediate (arg &rest args)
+;;     (interactive "P")
+;;     (let ((args (cons arg args))
+;;           (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+;;                                                     '(:immediate-finish t)))))
+;;       (apply #'org-roam-node-insert args)))
+;;   :bind (("C-c n I" . org-roam-node-insert-immediate)))
 
 (use-package unicode-fonts
  :ensure t
