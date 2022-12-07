@@ -10,7 +10,7 @@
  '(display-time-mode t)
  '(ispell-dictionary nil)
  '(package-selected-packages
-   '(undo-tree embark-consult embark marginalia markdown-mode eglot helm popup async notmuch ivy calfw-org calfw unicode-fonts deft cider org-roam org yasnippet-snippets which-key vterm use-package rainbow-delimiters pdf-tools paredit magit ledger-mode gruvbox-theme flycheck expand-region evil elpy elfeed-score diminish counsel cmake-mode browse-kill-ring beacon auto-package-update amx ace-window ace-jump-mode))
+   '(orderless consult-lsp undo-tree embark-consult embark marginalia markdown-mode eglot helm popup async notmuch ivy calfw-org calfw unicode-fonts deft cider org-roam org yasnippet-snippets which-key vterm use-package rainbow-delimiters pdf-tools paredit magit ledger-mode gruvbox-theme flycheck expand-region evil elpy elfeed-score diminish counsel cmake-mode browse-kill-ring beacon auto-package-update amx ace-window ace-jump-mode))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
