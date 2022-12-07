@@ -14,6 +14,22 @@
 ;; cursor colour
 (set-cursor-color "magenta")
 
+;; timestamps
+;; from: https://gist.github.com/takehiko/306021460b21f5d1520c32293cd831e0
+(defun mrl/insert-timestamp-default ()
+  "Insert the current timestamp"
+  (interactive)
+  (insert (current-time-string)))
+
+(defun mrl/insert-timestamp-iso ()
+  "Insert the current timestamp (ISO 8601 format)"
+  (interactive)
+  (insert
+   (concat
+    (format-time-string "%Y-%m-%dT%T")
+    ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
+     (format-time-string "%z")))))
+
 ;; theme
 (load-theme 'light-blue)
 
@@ -234,12 +250,20 @@ Restart works only on graphic display."
 
 (use-package denote
   :ensure t
+  :init
+  (add-hook 'dired-mode-hook #'denote-dired-mode)
   :config
   (setq denote-directory (expand-file-name "~/Documents/denote/"))
   (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work"))
   (setq denote-file-type nil)
   (setq denote-prompts '(title keywords))
   (setq denote-date-prompt-use-org-read-date t)
+  (defun mrl/denote-journal ()
+    "Create an entry tagged 'journal' with the date as its title."
+    (interactive)
+    (denote
+     (format-time-string "%A %e %B %Y") ; format like Tuesday 14 June 2022
+     '("journal"))) ; multiple keywords are a list of strings: '("one" "two")
   )
 
 ;; Enable vertico
