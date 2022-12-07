@@ -232,6 +232,10 @@ Restart works only on graphic display."
 
 ;; PACKAGES
 
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region))
+
 (use-package undo-tree
   :ensure t
   :init
