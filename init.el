@@ -258,13 +258,30 @@ Restart works only on graphic display."
   (setq denote-file-type nil)
   (setq denote-prompts '(title keywords))
   (setq denote-date-prompt-use-org-read-date t)
+  (defun mrl/is-todays-journal? (f)
+    "If f is today's journal in denote, f is returned"
+    (let* ((month-regexp (car (calendar-current-date)))
+           (day-regexp (nth 1 (calendar-current-date)))
+           (year-regexp (nth 2 (calendar-current-date)))
+           (journal-files (directory-files (denote-directory) nil "_journal"))
+           (day-match?
+            (string-match-p "\\(monday\\|tuesday\\|wednesday\\|thursday\\|friday\\|saturday\\|sunday\\)" f))
+           (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
+           (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
+      (when (and day-match? year-match? month-match?)
+          f)))
+
   (defun mrl/denote-journal ()
     "Create an entry tagged 'journal' with the date as its title."
     (interactive)
-    (denote
-     (format-time-string "%A %e %B %Y") ; format like Tuesday 14 June 2022
-     '("journal"))) ; multiple keywords are a list of strings: '("one" "two")
+    (let ((today-journal (mapcar #'mrl/is-todays-journal? (directory-files (denote-directory) nil "_journal"))))
+      (if 'today-journal
+          (find-file (concat (denote-directory) (car today-journal)))
+        (denote
+         (format-time-string "%A %e %B %Y")
+         '("journal"))))) ; multiple keywords are a list of strings: '("one" "two")
   )
+
 
 ;; Enable vertico
 (use-package vertico
