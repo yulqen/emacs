@@ -246,6 +246,8 @@ Restart works only on graphic display."
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
+
+
 ;; PACKAGES
 
 (use-package denote
@@ -258,30 +260,37 @@ Restart works only on graphic display."
   (setq denote-file-type nil)
   (setq denote-prompts '(title keywords))
   (setq denote-date-prompt-use-org-read-date t)
+
   (defun mrl/is-todays-journal? (f)
     "If f is today's journal in denote, f is returned"
     (let* ((month-regexp (car (calendar-current-date)))
            (day-regexp (nth 1 (calendar-current-date)))
            (year-regexp (nth 2 (calendar-current-date)))
            (journal-files (directory-files (denote-directory) nil "_journal"))
-           (day-match?
-            (string-match-p "\\(monday\\|tuesday\\|wednesday\\|thursday\\|friday\\|saturday\\|sunday\\)" f))
+           (day-match? (string-match-p (concat "......0" (number-to-string day-regexp)) f))
            (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
            (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
       (when (and day-match? year-match? month-match?)
-          f)))
+        f)))
 
-  (defun mrl/denote-journal ()
-    "Create an entry tagged 'journal' with the date as its title."
-    (interactive)
-    (let ((today-journal (mapcar #'mrl/is-todays-journal? (directory-files (denote-directory) nil "_journal"))))
-      (if 'today-journal
-          (find-file (concat (denote-directory) (car today-journal)))
-        (denote
-         (format-time-string "%A %e %B %Y")
-         '("journal"))))) ; multiple keywords are a list of strings: '("one" "two")
+(defun mrl/denote-journal ()
+  "Create an entry tagged 'journal' with the date as its title."
+  (interactive)
+  (let* ((today-journal (mapcar #'mrl/is-todays-journal? (directory-files (denote-directory) nil "_journal")))
+         (journal (if (> (length today-journal) 1)
+                   (car (cdr today-journal))
+                 nil)))
+    (if journal
+        (progn
+          (find-file (concat (denote-directory) journal)))
+      (denote
+       (format-time-string "%A %e %B %Y")
+       '("journal")))))
+  :bind (("C-c n n" . denote-create-note)
+         ("C-c n d" . mrl/denote-journal)
+         ("C-c n t" . denote-type))
   )
-
+(denote (format-time-string "%A %e %B %Y") '("journal") 'text (concat (denote-directory) "/journals"))
 
 ;; Enable vertico
 (use-package vertico
