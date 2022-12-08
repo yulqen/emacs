@@ -267,7 +267,7 @@ Restart works only on graphic display."
            (day-regexp (nth 1 (calendar-current-date)))
            (year-regexp (nth 2 (calendar-current-date)))
            (journal-files (directory-files (denote-directory) nil "_journal"))
-           (day-match? (string-match-p (concat "......0" (number-to-string day-regexp)) f)) ;; TODO this is going to fail on 10th
+           (day-match? (string-match-p (concat "......" (format "%02d" day-regexp)) f))
            (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
            (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
       (when (and day-match? year-match? month-match?)
