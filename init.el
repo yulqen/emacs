@@ -250,6 +250,9 @@ Restart works only on graphic display."
 
 ;; PACKAGES
 
+(use-package pass
+  :ensure t)
+
 (use-package denote
   :ensure t
   :init
