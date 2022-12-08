@@ -273,19 +273,19 @@ Restart works only on graphic display."
       (when (and day-match? year-match? month-match?)
         f)))
 
-(defun mrl/denote-journal ()
-  "Create an entry tagged 'journal' with the date as its title."
-  (interactive)
-  (let* ((today-journal (mapcar #'mrl/is-todays-journal? (directory-files (denote-directory) nil "_journal")))
-         (journal (if (> (length today-journal) 1)
-                   (car (cdr today-journal))
-                 nil)))
-    (if journal
-        (progn
-          (find-file (concat (denote-directory) journal)))
-      (denote
-       (format-time-string "%A %e %B %Y")
-       '("journal")))))
+  (defun mrl/denote-journal ()
+    "Create an entry tagged 'journal' with the date as its title."
+    (interactive)
+    (let* ((today-journal (mapcar #'mrl/is-todays-journal? (directory-files (denote-directory) nil "_journal")))
+           (journal (if (> (length today-journal) 1)
+                        (car (cdr today-journal))
+                      nil)))
+      (if journal
+          (progn
+            (find-file (concat (denote-directory) journal)))
+        (denote
+         (format-time-string "%A %e %B %Y")
+         '("journal")))))
   :bind (("C-c n n" . denote-create-note)
          ("C-c n d" . mrl/denote-journal)
          ("C-c n t" . denote-type))
