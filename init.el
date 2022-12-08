@@ -277,7 +277,7 @@ Restart works only on graphic display."
     "Create an entry tagged 'journal' with the date as its title."
     (interactive)
     (let* ((today-journal (mapcar #'mrl/is-todays-journal? (directory-files (denote-directory) nil "_journal")))
-           (journal (if (> (length today-journal) 1)
+           (journal (if (> (length today-journal) 1) ; need to apply the -non-nil LIST func here to remove nils
                         (car (cdr today-journal))
                       nil)))
       (if journal
