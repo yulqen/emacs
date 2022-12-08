@@ -290,7 +290,8 @@ Restart works only on graphic display."
   
   :bind (("C-c n n" . denote-create-note)
          ("C-c n d" . mrl/denote-journal)
-         ("C-c n t" . denote-type))
+         ("C-c n t" . denote-type)
+         ("C-c n l" . denote-link))
   )
 
 ;; Enable vertico
