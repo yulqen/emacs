@@ -277,12 +277,12 @@ Restart works only on graphic display."
   (interactive)
   (let* ((today-journal
           (car (-non-nil
-                (mapcar #'mrl/is-todays-journal? (directory-files (denote-directory) nil "_journal"))))))
+                (mapcar #'mrl/is-todays-journal? (directory-files (concat (denote-directory) "journals") nil "_journal"))))))
     (if today-journal
-        (find-file (concat (denote-directory )today-journal))
+        (find-file (concat (denote-directory) "journals/" today-journal))
       (denote
        (format-time-string "%A %e %B %Y")
-       '("journal")))))
+       '("journal") nil (concat (denote-directory) "journals")))))
   
   :bind (("C-c n n" . denote-create-note)
          ("C-c n d" . mrl/denote-journal)
