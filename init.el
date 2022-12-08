@@ -290,7 +290,6 @@ Restart works only on graphic display."
          ("C-c n d" . mrl/denote-journal)
          ("C-c n t" . denote-type))
   )
-(denote (format-time-string "%A %e %B %Y") '("journal") 'text (concat (denote-directory) "/journals"))
 
 ;; Enable vertico
 (use-package vertico
