@@ -13,8 +13,8 @@
  (rear-context-string . "Initial Liaison\n")
  (position . 23945))
 ("org-capture-last-stored"
- (filename . "~/org/refile.org")
- (front-context-string . "** Denote Emacs ")
- (rear-context-string . "2-05 Mon 15:34]\n")
- (position . 472))
+ (filename . "~/org/home.org")
+ (front-context-string . "** NEXT Check ou")
+ (rear-context-string . ": home\n\n* Tasks\n")
+ (position . 119))
 )
