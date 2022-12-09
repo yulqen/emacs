@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored-marker"
+(("denote"
+ (filename . "~/Documents/denote/")
+ (front-context-string . "20221115T090528-")
+ (rear-context-string . "90 Dec  7 16:06 ")
+ (position . 227))
+("org-capture-last-stored-marker"
  (filename . "~/org/mod.org")
  (front-context-string . "**** NEXT Make a")
  (rear-context-string . "Initial Liaison\n")
