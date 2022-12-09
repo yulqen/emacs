@@ -270,23 +270,24 @@ Restart works only on graphic display."
            (day-regexp (nth 1 (calendar-current-date)))
            (year-regexp (nth 2 (calendar-current-date)))
            (journal-files (directory-files (denote-directory) nil "_journal"))
-           (day-match? (string-match-p (concat "......" (format "%02d" day-regexp)) f))
+           (day-match? (string-match-p (concat "^......" (format "%02d" day-regexp)) f))
            (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
            (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
       (when (and day-match? year-match? month-match?)
         f)))
+
   (defun mrl/denote-journal ()
-  "Create an entry tagged 'journal' with the date as its title."
-  (interactive)
-  (let* ((journal-dir (concat (denote-directory) "journals"))
-         (today-journal
-          (car (-non-nil
-                (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
-    (if today-journal
-        (find-file (concat journal-dir "/" today-journal))
-      (denote
-       (format-time-string "%A %e %B %Y")
-       '("journal") nil journal-dir))))
+    "Create an entry tagged 'journal' with the date as its title."
+    (interactive)
+    (let* ((journal-dir (concat (denote-directory) "journals"))
+           (today-journal
+            (car (-non-nil
+                  (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
+      (if today-journal
+          (find-file (concat journal-dir "/" today-journal))
+        (denote
+         (format-time-string "%A %e %B %Y")
+         '("journal") nil journal-dir))))
   
   :bind (("C-c n n" . denote-create-note)
          ("C-c n d" . mrl/denote-journal)
