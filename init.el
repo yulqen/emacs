@@ -264,6 +264,13 @@ Restart works only on graphic display."
   (setq denote-prompts '(title keywords))
   (setq denote-date-prompt-use-org-read-date t)
 
+  (defun mrl/denote-find-file ()
+      "Find file in the current `denote-directory'."
+      (interactive)
+      (require 'consult)
+      (require 'denote)
+      (consult-find (denote-directory)))
+
   (defun mrl/is-todays-journal? (f)
     "If f is today's journal in denote, f is returned"
     (let* ((month-regexp (car (calendar-current-date)))
@@ -292,6 +299,7 @@ Restart works only on graphic display."
   :bind (("C-c n n" . denote-create-note)
          ("C-c n d" . mrl/denote-journal)
          ("C-c n t" . denote-type)
+         ("C-c n f" . mrl/denote-find-file)
          ("C-c n l" . denote-link))
   )
 
