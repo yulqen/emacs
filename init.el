@@ -264,33 +264,42 @@ Restart works only on graphic display."
   (setq denote-prompts '(title keywords))
   (setq denote-date-prompt-use-org-read-date t)
 
+  (defun mrl/denote-find-file ()
+      "Find file in the current `denote-directory'."
+      (interactive)
+      (require 'consult)
+      (require 'denote)
+      (consult-find (denote-directory)))
+
   (defun mrl/is-todays-journal? (f)
     "If f is today's journal in denote, f is returned"
     (let* ((month-regexp (car (calendar-current-date)))
            (day-regexp (nth 1 (calendar-current-date)))
            (year-regexp (nth 2 (calendar-current-date)))
            (journal-files (directory-files (denote-directory) nil "_journal"))
-           (day-match? (string-match-p (concat "......" (format "%02d" day-regexp)) f))
+           (day-match? (string-match-p (concat "^......" (format "%02d" day-regexp)) f))
            (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
            (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
       (when (and day-match? year-match? month-match?)
         f)))
+
   (defun mrl/denote-journal ()
-  "Create an entry tagged 'journal' with the date as its title."
-  (interactive)
-  (let* ((journal-dir (concat (denote-directory) "journals"))
-         (today-journal
-          (car (-non-nil
-                (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
-    (if today-journal
-        (find-file (concat journal-dir "/" today-journal))
-      (denote
-       (format-time-string "%A %e %B %Y")
-       '("journal") nil journal-dir))))
+    "Create an entry tagged 'journal' with the date as its title."
+    (interactive)
+    (let* ((journal-dir (concat (denote-directory) "journals"))
+           (today-journal
+            (car (-non-nil
+                  (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
+      (if today-journal
+          (find-file (concat journal-dir "/" today-journal))
+        (denote
+         (format-time-string "%A %e %B %Y")
+         '("journal") nil journal-dir))))
   
   :bind (("C-c n n" . denote-create-note)
          ("C-c n d" . mrl/denote-journal)
          ("C-c n t" . denote-type)
+         ("C-c n f" . mrl/denote-find-file)
          ("C-c n l" . denote-link))
   )
 
@@ -1167,7 +1176,7 @@ If failed try to complete the common part with `company-complete-common'"
                                "~/org/refile.org"
                                "~/org/mod.org"
                                "~/org/habits.org")))
-(setq org-agenda-window-setup 'only-window)
+(setq org-agenda-window-setup 'other-window)
 (setq org-agenda-start-with-log-mode t)
 (setq org-agenda-include-diary nil)
 (setq org-agenda-diary-file "~/org/calendar/cal.org")
