@@ -572,11 +572,17 @@ Restart works only on graphic display."
           (notmuch-search-tag (list "-deleted"))
         (notmuch-search-tag (list "+deleted")))))
   (setq send-mail-function 'sendmail-send-it
+        notmuch-search-result-format '(("date" . "%12s ")
+                                       ("count" . "%7s ")
+                                       ("authors" . "%-20s ")
+                                       ("subject" . "%-80s ")
+                                       ("tags" . "(%s) "))
         sendmail-program "/usr/bin/msmtp"
+        notmuch-archive-tags '("-inbox" "+archived" "-new")
         message-kill-buffer-on-exit t
         notmuch-draft-folder "fastmail/Drafts"
         notmuch-fcc-dirs "fastmail/Sent +sent -unread -inbox"
-        notmuch-search-oldest-first t
+        notmuch-search-oldest-first nil
         mail-specify-envelope-from t
         message-signature "\n\n-- \nMatthew"
         mm-text-html-renderer 'lynx
@@ -599,6 +605,10 @@ Restart works only on graphic display."
                                         :query "*"
                                         :sort-order newest-first
                                         :key "a")
+                                 (:name "School"
+                                        :query "tag:school"
+                                        :sort-order newest-first
+                                        :key "S")                                 
                                  (:name "Deleted"
                                         :query "tag:deleted"
                                         :sort-order newest-first
