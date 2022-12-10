@@ -250,6 +250,23 @@ Restart works only on graphic display."
 
 ;; PACKAGES
 
+(use-package consult-notes
+  :ensure t
+  :bind (("C-c d" . consult-notes))
+  :commands (consult-notes
+             consult-notes-search-in-all-notes
+             ;; if using org-roam 
+             consult-notes-org-roam-find-node
+             consult-notes-org-roam-find-node-relation)
+  :config
+  (setq consult-notes-sources
+        '(("Denote"  ?d  "~/Documents/denote/")
+          ("Mod-Denote"  ?m  "~/Documents/mod-denote/")
+          ("Notes archive"  ?n  "~/Notes/Archive"))) ;; Set notes dir(s), see below
+  ;; Set org-roam integration OR denote integration
+    (when (locate-library "denote")
+  (consult-notes-denote-mode)))
+
 (use-package pass
   :ensure t)
 
