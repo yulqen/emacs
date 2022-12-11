@@ -16,8 +16,7 @@
      (:name "All Mail" :query "*" :sort-order newest-first :key "a")
      (:name "School" :query "tag:school" :sort-order newest-first :key "S")
      (:name "Deleted" :query "tag:deleted" :sort-order newest-first :key "d")
-     (:name "todo" :query "tag:todo")
-     (:name "receipt" :query "subject:receipt")))
+     (:name "new" :query "tag:new")))
  '(package-selected-packages
    '(consult-notes flycheck-clj-kondo pass vertico denote orderless consult-lsp undo-tree embark-consult embark marginalia markdown-mode eglot helm popup async notmuch ivy calfw-org calfw unicode-fonts deft cider org-roam org yasnippet-snippets which-key vterm use-package rainbow-delimiters pdf-tools paredit magit ledger-mode gruvbox-theme flycheck expand-region evil elpy elfeed-score diminish counsel cmake-mode browse-kill-ring beacon auto-package-update amx ace-window ace-jump-mode))
  '(safe-local-variable-values
