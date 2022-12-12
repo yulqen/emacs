@@ -281,7 +281,7 @@ Restart works only on graphic display."
   (mapc #'disable-theme custom-enabled-themes)
 
   ;; Load the theme of choice:
-  (load-theme 'ef-summer :no-confirm)
+  (load-theme 'ef-spring :no-confirm)
   ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
   ;;(ef-themes-select 'ef-summer)
 
