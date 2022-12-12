@@ -297,6 +297,23 @@ Restart works only on graphic display."
   ;; - `ef-themes-preview-colors-current'
   )
 
+(use-package consult-notes
+  :ensure t
+  :bind (("C-c d" . consult-notes))
+  :commands (consult-notes
+             consult-notes-search-in-all-notes
+             ;; if using org-roam 
+             consult-notes-org-roam-find-node
+             consult-notes-org-roam-find-node-relation)
+  :config
+  (setq consult-notes-sources
+        '(("Denote"  ?d  "~/Documents/denote/")
+          ("Mod-Denote"  ?m  "~/Documents/mod-denote/")
+          ("Notes archive"  ?n  "~/Notes/Archive"))) ;; Set notes dir(s), see below
+  ;; Set org-roam integration OR denote integration
+    (when (locate-library "denote")
+  (consult-notes-denote-mode)))
+
 (use-package pass
   :ensure t)
 
@@ -619,7 +636,13 @@ Restart works only on graphic display."
           (notmuch-search-tag (list "-deleted"))
         (notmuch-search-tag (list "+deleted")))))
   (setq send-mail-function 'sendmail-send-it
+        notmuch-search-result-format '(("date" . "%12s ")
+                                       ("count" . "%7s ")
+                                       ("authors" . "%-20s ")
+                                       ("subject" . "%-80s ")
+                                       ("tags" . "(%s) "))
         sendmail-program "/usr/bin/msmtp"
+        notmuch-archive-tags '("-inbox" "+archived" "-new")
         message-kill-buffer-on-exit t
         notmuch-draft-folder "fastmail/Drafts"
         notmuch-fcc-dirs "fastmail/Sent +sent -unread -inbox"
@@ -646,6 +669,10 @@ Restart works only on graphic display."
                                         :query "*"
                                         :sort-order newest-first
                                         :key "a")
+                                 (:name "School"
+                                        :query "tag:school"
+                                        :sort-order newest-first
+                                        :key "S")                                 
                                  (:name "Deleted"
                                         :query "tag:deleted"
                                         :sort-order newest-first
