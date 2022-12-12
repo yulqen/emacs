@@ -31,7 +31,7 @@
      (format-time-string "%z")))))
 
 ;; theme
-(load-theme 'light-blue)
+;;(load-theme 'light-blue)
 
 ;; packages
 (require 'package)
@@ -246,9 +246,56 @@ Restart works only on graphic display."
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
-
-
 ;; PACKAGES
+(use-package ef-themes
+  :init
+  ;; Make customisations that affect Emacs faces BEFORE loading a theme
+  ;; (any change needs a theme re-load to take effect).
+
+  ;; If you like two specific themes and want to switch between them, you
+  ;; can specify them in `ef-themes-to-toggle' and then invoke the command
+  ;; `ef-themes-toggle'.  All the themes are included in the variable
+  ;; `ef-themes-collection'.
+  (setq ef-themes-to-toggle '(ef-summer ef-winter))
+
+  (setq ef-themes-headings ; read the manual's entry or the doc string
+        '((0 . (variable-pitch light 1.9))
+          (1 . (variable-pitch light 1.8))
+          (2 . (variable-pitch regular 1.7))
+          (3 . (variable-pitch regular 1.6))
+          (4 . (variable-pitch regular 1.5))
+          (5 . (variable-pitch 1.4)) ; absence of weight means `bold'
+          (6 . (variable-pitch 1.3))
+          (7 . (variable-pitch 1.2))
+          (t . (variable-pitch 1.1))))
+
+  ;; They are nil by default...
+  (setq ef-themes-mixed-fonts t
+        ef-themes-variable-pitch-ui t)
+
+  ;; Read the doc string or manual for this one.  The symbols can be
+  ;; combined in any order.
+  (setq ef-themes-region '(intense no-extend neutral))
+
+  ;; Disable all other themes to avoid awkward blending:
+  (mapc #'disable-theme custom-enabled-themes)
+
+  ;; Load the theme of choice:
+  (load-theme 'ef-summer :no-confirm)
+  ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
+  ;;(ef-themes-select 'ef-summer)
+
+  ;; The themes we provide are recorded in the `ef-themes-dark-themes',
+  ;; `ef-themes-light-themes'.
+
+  ;; We also provide these commands, but do not assign them to any key:
+  ;;
+  ;; - `ef-themes-toggle'
+  ;; - `ef-themes-select'
+  ;; - `ef-themes-load-random'
+  ;; - `ef-themes-preview-colors'
+  ;; - `ef-themes-preview-colors-current'
+  )
 
 (use-package pass
   :ensure t)
@@ -576,7 +623,7 @@ Restart works only on graphic display."
         message-kill-buffer-on-exit t
         notmuch-draft-folder "fastmail/Drafts"
         notmuch-fcc-dirs "fastmail/Sent +sent -unread -inbox"
-        notmuch-search-oldest-first t
+        notmuch-search-oldest-first nil
         mail-specify-envelope-from t
         message-signature "\n\n-- \nMatthew"
         mm-text-html-renderer 'lynx
