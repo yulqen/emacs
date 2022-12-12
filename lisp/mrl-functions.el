@@ -45,5 +45,14 @@ of lines to run through."
       (insert-char ?\s))
     (next-line)
     (setq lines (- lines 1))))
+
+;; that timestamp function
+(defun mrl/timestamp ()
+  (interactive)
+  (let ((m  (nth 1 (decode-time) ))
+        (h (nth 2 (decode-time))))
+    (insert (concat (number-to-string h) ":" (number-to-string m) ": "))))
+
+
 (provide 'mrl-functions)
 ;;; mrl_functions ends here
