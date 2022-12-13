@@ -604,7 +604,8 @@ Restart works only on graphic display."
 
 ;; eglot language server protocol client
 (use-package eglot
-  :ensure t)
+  :ensure t
+  :hook (python-mode . eglot-ensure))
 
 ;; emacs-async - for helm
 (use-package async
