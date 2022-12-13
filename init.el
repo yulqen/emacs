@@ -634,7 +634,10 @@ Restart works only on graphic display."
       (interactive)
       (if (member "deleted" (notmuch-search-get-tags))
           (notmuch-search-tag (list "-deleted"))
-        (notmuch-search-tag (list "+deleted")))))
+        (progn
+          (notmuch-search-tag (list "-unread"))
+          (notmuch-search-tag (list "-new"))
+          (notmuch-search-tag (list "+deleted"))))))
   (setq send-mail-function 'sendmail-send-it
         notmuch-search-result-format '(("date" . "%12s ")
                                        ("count" . "%7s ")
