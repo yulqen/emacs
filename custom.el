@@ -22,9 +22,7 @@
  '(safe-local-variable-values
    '((mrl/in-mod-denote . t)
      (denote-templates
-      (modjournal . "* MOD Journal
-
-"))
+      (modjournal . "* MOD Journal"))
      (denote-known-keywords "defnucsyr" "metanote" "meeting" "cyber" "baes" "rrdl" "opberths" "swow")
      (org-hide-leading-stars \.t)
      (org-hide-macro-markers \.t)
