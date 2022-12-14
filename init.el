@@ -356,9 +356,13 @@ Restart works only on graphic display."
                   (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
       (if today-journal
           (find-file (concat journal-dir "/" today-journal))
-        (denote
+        (if mrl/in-mod-denote ; this variable is from the .dir-locals.el file in the silo directory; we want to use a specific template
+            (denote
          (format-time-string "%A %e %B %Y")
-         '("journal") nil journal-dir))))
+         '("journal") nil journal-dir nil 'modjournal)
+          (denote
+           (format-time-string "%A %e %B %Y")
+           '("journal") nil journal-dir)))))
   
   :bind (("C-c n n" . denote-create-note)
          ("C-c n d" . mrl/denote-journal)
