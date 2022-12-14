@@ -656,7 +656,7 @@ Restart works only on graphic display."
         notmuch-fcc-dirs "fastmail/Sent +sent -unread -inbox"
         notmuch-search-oldest-first nil
         mail-specify-envelope-from t
-        message-signature "\n\n-- \nMatthew"
+        message-signature "\n-- \nMatthew"
         mm-text-html-renderer 'lynx
         message-sendmail-envelope-from 'header
         mail-envelope-from 'header
