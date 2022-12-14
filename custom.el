@@ -20,7 +20,12 @@
  '(package-selected-packages
    '(consult-notes ef-themes flycheck-clj-kondo pass vertico denote orderless consult-lsp undo-tree embark-consult embark marginalia markdown-mode eglot helm popup async notmuch ivy calfw-org calfw unicode-fonts deft cider org-roam org yasnippet-snippets which-key vterm use-package rainbow-delimiters pdf-tools paredit magit ledger-mode gruvbox-theme flycheck expand-region evil elpy elfeed-score diminish counsel cmake-mode browse-kill-ring beacon auto-package-update amx ace-window ace-jump-mode))
  '(safe-local-variable-values
-   '((denote-known-keywords "defnucsyr" "metanote" "meeting" "cyber" "baes" "rrdl" "opberths" "swow")
+   '((mrl/in-mod-denote . t)
+     (denote-templates
+      (modjournal . "* MOD Journal
+
+"))
+     (denote-known-keywords "defnucsyr" "metanote" "meeting" "cyber" "baes" "rrdl" "opberths" "swow")
      (org-hide-leading-stars \.t)
      (org-hide-macro-markers \.t)
      (denote-infer-keywords)
