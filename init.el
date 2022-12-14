@@ -661,6 +661,10 @@ Restart works only on graphic display."
                                         :count-query "tag:inbox and tag:unread"
                                         :sort-order newest-first
                                         :key "i")
+                                 (:name "Todo"
+                                        :query "tag:todo"
+                                        :sort-order newest-first
+                                        :key "t")
                                  (:name "Unread"
                                         :query "tag:unread"
                                         :sort-order newest-first
@@ -1298,7 +1302,7 @@ If failed try to complete the common part with `company-complete-common'"
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down)))))
-         ((org-agenda-category-filter-preset '("+home" "+habits" "+refile"))))
+         ((org-agenda-category-filter-preset '("+home" "+habits" "+refile" "+Birthday"))))
         ("i" tags "idea")
         ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
 
