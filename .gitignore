@@ -36,3 +36,4 @@ org-clock-save.el
 /tramp
 bookmarkscustom.el
 bookmarks
+custom.el
