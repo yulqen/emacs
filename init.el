@@ -779,8 +779,8 @@ If failed try to complete the common part with `company-complete-common'"
   (add-hook 'deft-open-file-hook 'mrl/kill-deft))
 
 ;; Ace Jump
-(use-package ace-jump-mode
-  :bind ("C-M-SPC" . ace-jump-mode))
+;; (use-package ace-jump-mode
+;;   :bind ("C-M-SPC" . ace-jump-mode))
 
 ;; Lisp programming
 (use-package paredit
@@ -1090,12 +1090,12 @@ If failed try to complete the common part with `company-complete-common'"
 ;; (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 ;; Ace Window
-(use-package ace-window
- :bind (("C-x o" . ace-window)
-        ("M-2" . ace-window))
- :init
- (setq aw-background t
-       aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)))
+;; (use-package ace-window
+;;  :bind (("C-x o" . ace-window)
+;;         ("M-2" . ace-window))
+;;  :init
+;;  (setq aw-background t
+;;        aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)))
 
 ;; expand-region
 (use-package expand-region
