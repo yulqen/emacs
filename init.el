@@ -349,7 +349,7 @@ Restart works only on graphic display."
 
   (defun mrl/denote-journal ()
     "Create an entry tagged 'journal' with the date as its title."
-    (defvar mrl/in-mod-denote)
+    (defvar mrl/in-mod-denote nil)
     (interactive)
     (let* ((journal-dir (concat (denote-directory) "journals"))
            (today-journal
