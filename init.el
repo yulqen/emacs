@@ -308,7 +308,7 @@ Restart works only on graphic display."
   :config
   (setq consult-notes-sources
         '(("Denote"  ?d  "~/Documents/denote/")
-          ("Mod-Denote"  ?m  "~/Documents/mod-denote/")
+          ("Modenote"  ?m  "~/Documents/mod-denote/")
           ("Notes archive"  ?n  "~/Notes/Archive"))) ;; Set notes dir(s), see below
   ;; Set org-roam integration OR denote integration
     (when (locate-library "denote")
