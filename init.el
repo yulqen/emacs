@@ -323,7 +323,7 @@ Restart works only on graphic display."
   (add-hook 'dired-mode-hook #'denote-dired-mode)
   :config
   (setq denote-directory (expand-file-name "~/Documents/denote/"))
-  (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work"))
+  (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work" "technote"))
   (setq denote-file-type nil)
   (setq denote-prompts '(title keywords))
   (setq denote-date-prompt-use-org-read-date t)
