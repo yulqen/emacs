@@ -247,6 +247,10 @@ Restart works only on graphic display."
 (setq coding-system-for-write 'utf-8)
 
 ;; PACKAGES
+
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
 (use-package ef-themes
   :init
   ;; Make customisations that affect Emacs faces BEFORE loading a theme
@@ -264,7 +268,7 @@ Restart works only on graphic display."
           (2 . (variable-pitch regular 1.7))
           (3 . (variable-pitch regular 1.6))
           (4 . (variable-pitch regular 1.5))
-          (5 . (variable-pitch 1.4)) ; absence of weight means `bold'
+          (5 . (variable-pitch 1.4))  ; absence of weight means `bold'
           (6 . (variable-pitch 1.3))
           (7 . (variable-pitch 1.2))
           (t . (variable-pitch 1.1))))
