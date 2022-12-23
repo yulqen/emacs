@@ -11,6 +11,9 @@
              (format "%.2f" time))))
 (add-hook 'emacs-startup-hook #'mrl/emacs-load-time t)
 
+;; settle with the warnings
+(setq warning-minimum-level :emergency)
+
 ;; cursor colour
 (set-cursor-color "magenta")
 
@@ -694,6 +697,8 @@ Restart works only on graphic display."
                                         :query "tag:deleted"
                                         :sort-order newest-first
                                         :key "d"))))
+
+(use-package calfw)
 
 ;; calfw
 (use-package calfw-org
