@@ -57,6 +57,7 @@
 (global-set-key (kbd "C-c R") (lambda () (interactive) (revert-buffer t t)))
 
 ;; make sure you require this - otherwise it will not work...
+(add-to-list 'load-path "~/.emacs.d/elpa/org-9.6/org-protocol.el")
 (require 'org-protocol)
 
 ;; start-stop emacs
