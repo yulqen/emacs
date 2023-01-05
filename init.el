@@ -4,6 +4,10 @@
 ;;; basic config
 ;;; Code:
 
+;; https://nixos.org/manual/nixos/stable/index.html#module-services-emacs-enabling
+;; tells me to do this - when running emacs as a systemd service in NixOS.
+(server-start)
+
 (defvar mrl/startup-time (current-time))
 (defun mrl/emacs-load-time ()
   (let ((time (float-time (time-subtract (current-time) mrl/startup-time))))
