@@ -704,19 +704,19 @@ Restart works only on graphic display."
                                         :sort-order newest-first
                                         :key "d"))))
 
-(use-package calfw)
+;; (use-package calfw)
 
-;; calfw
-(use-package calfw-org
-  :ensure t
-  :config
-  (setq cfw:org-agenda-schedule-args '(:timestamp))
-  (defun mrl/calf-org-calendar ()
-    (interactive)
-    (cfw:open-calendar-buffer
-     :contents-sources
-     (list
-      (cfw:org-create-source "Orange")))))
+;; ;; calfw
+;; (use-package calfw-org
+;;   :ensure t
+;;   :config
+;;   (setq cfw:org-agenda-schedule-args '(:timestamp))
+;;   (defun mrl/calf-org-calendar ()
+;;     (interactive)
+;;     (cfw:open-calendar-buffer
+;;      :contents-sources
+;;      (list
+;;       (cfw:org-create-source "Orange")))))
 
 ;; Yasnippet
 (use-package yasnippet
