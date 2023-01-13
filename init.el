@@ -98,7 +98,7 @@ Restart works only on graphic display."
     (mrl/stop-emacs-1)))
 
 ;; notmuch is apparently already installed with notmuch from arch
-(require 'notmuch)
+;;(require 'notmuch)
 
 ;; load my crap
 (add-to-list 'load-path "~/.emacs.d/lisp")
@@ -257,10 +257,15 @@ Restart works only on graphic display."
 
 ;; PACKAGES
 
+(use-package reformatter
+  :ensure t)
+
 (use-package nix-mode
+  :ensure t
   :mode "\\.nix\\'")
 
 (use-package ef-themes
+  :ensure t
   :init
   ;; Make customisations that affect Emacs faces BEFORE loading a theme
   ;; (any change needs a theme re-load to take effect).
@@ -406,6 +411,7 @@ Restart works only on graphic display."
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
+  :ensure t
   :init
   (savehist-mode))
 
@@ -720,6 +726,7 @@ Restart works only on graphic display."
 
 ;; Yasnippet
 (use-package yasnippet
+  :ensure t
   :diminish yas-minor-mode
   :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
   :bind
@@ -742,6 +749,7 @@ Restart works only on graphic display."
 
 ;; this config works better with yasnippet
 (use-package company
+  :ensure t
   :diminish company-mode
   :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode ledger-mode) . company-mode)
   :bind
@@ -799,6 +807,7 @@ If failed try to complete the common part with `company-complete-common'"
 
 ;; Lisp programming
 (use-package paredit
+  :ensure t
   :init
   (add-hook 'clojure-mode-hook #'enable-paredit-mode)
   (add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
@@ -815,6 +824,7 @@ If failed try to complete the common part with `company-complete-common'"
   :diminish nil)
 
 (use-package rainbow-delimiters
+  :ensure t
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
@@ -832,6 +842,7 @@ If failed try to complete the common part with `company-complete-common'"
   (which-key-mode))
 
 (use-package elfeed
+  :ensure t
   :config
   (setq elfeed-feeds
         '(("https://planet.clojure.in/atom.xml")
@@ -907,6 +918,7 @@ If failed try to complete the common part with `company-complete-common'"
 
 ;; Basic magit
 (use-package magit
+  :ensure t
   :bind ("C-x g" . magit-status))
 
 ;; cider
@@ -992,6 +1004,7 @@ If failed try to complete the common part with `company-complete-common'"
 
 ;; beacon mode
 (use-package beacon
+  :ensure t
   :config
   (setq beacon-color "DeepSkyBlue")
   (beacon-mode 1))
@@ -1005,7 +1018,8 @@ If failed try to complete the common part with `company-complete-common'"
 (setq flycheck-global-modes '(not org-mode))
 
 ;; install pdf-tools
-(use-package pdf-tools)
+(use-package pdf-tools
+  :ensure t)
 (pdf-tools-install)
 
 ;; dired
@@ -1219,6 +1233,7 @@ If failed try to complete the common part with `company-complete-common'"
 (setq calendar-location-name "Berwick-upon-Tweed")
 
 (use-package org
+  :ensure t
   :init
   (add-to-list 'org-modules 'org-habit)
   :bind (("C-c l" . 'org-store-link)
