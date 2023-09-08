@@ -11,8 +11,11 @@
              (format "%.2f" time))))
 (add-hook 'emacs-startup-hook #'mrl/emacs-load-time t)
 
-;; cursor colour
-(set-cursor-color "magenta")
+;; Do I need this for bash commands to work properly?
+;; see https://stackoverflow.com/questions/12224909/is-there-a-way-to-get-my-emacs-to-recognize-my-bash-aliases-and-custom-functions
+;; (setq shell-file-name "bash")
+;; (setq shell-command-switch "-i")
+
 
 ;; timestamps
 ;; from: https://gist.github.com/takehiko/306021460b21f5d1520c32293cd831e0
@@ -31,7 +34,7 @@
      (format-time-string "%z")))))
 
 ;; theme
-(load-theme 'light-blue)
+;;(load-theme 'light-blue)
 
 ;; packages
 (require 'package)
@@ -207,10 +210,10 @@ Restart works only on graphic display."
 ;;     (add-to-list 'default-frame-alist '(font . "Hack-10")))))
 
 ;; theme
-;; (use-package gruber-darker-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'gruber-darker t))
+(use-package gruber-darker-theme
+  :ensure t
+  :config
+  (load-theme 'gruber-darker t))
 
 (setq display-line-numbers-type `relative)
 (setq undo-limit 8000000) ; raise limit to 80Mb
@@ -247,55 +250,55 @@ Restart works only on graphic display."
 (setq coding-system-for-write 'utf-8)
 
 ;; PACKAGES
-(use-package ef-themes
-  :init
-  ;; Make customisations that affect Emacs faces BEFORE loading a theme
-  ;; (any change needs a theme re-load to take effect).
+;; (use-package ef-themes
+;;   :init
+;;   ;; Make customisations that affect Emacs faces BEFORE loading a theme
+;;   ;; (any change needs a theme re-load to take effect).
 
-  ;; If you like two specific themes and want to switch between them, you
-  ;; can specify them in `ef-themes-to-toggle' and then invoke the command
-  ;; `ef-themes-toggle'.  All the themes are included in the variable
-  ;; `ef-themes-collection'.
-  (setq ef-themes-to-toggle '(ef-summer ef-winter))
+;;   ;; If you like two specific themes and want to switch between them, you
+;;   ;; can specify them in `ef-themes-to-toggle' and then invoke the command
+;;   ;; `ef-themes-toggle'.  All the themes are included in the variable
+;;   ;; `ef-themes-collection'.
+;;   (setq ef-themes-to-toggle '(ef-summer ef-winter))
 
-  (setq ef-themes-headings ; read the manual's entry or the doc string
-        '((0 . (variable-pitch light 1.9))
-          (1 . (variable-pitch light 1.8))
-          (2 . (variable-pitch regular 1.7))
-          (3 . (variable-pitch regular 1.6))
-          (4 . (variable-pitch regular 1.5))
-          (5 . (variable-pitch 1.4)) ; absence of weight means `bold'
-          (6 . (variable-pitch 1.3))
-          (7 . (variable-pitch 1.2))
-          (t . (variable-pitch 1.1))))
+;;   (setq ef-themes-headings ; read the manual's entry or the doc string
+;;         '((0 . (variable-pitch light 1.9))
+;;           (1 . (variable-pitch light 1.1))
+;;           (2 . (variable-pitch regular 1.0))
+;;           (3 . (variable-pitch regular 1.0))
+;;           (4 . (variable-pitch regular 1.0))
+;;           (5 . (variable-pitch 1.0)) ; absence of weight means `bold'
+;;           (6 . (variable-pitch 1.0))
+;;           (7 . (variable-pitch 1.0))
+;;           (t . (variable-pitch 1.0))))
 
-  ;; They are nil by default...
-  (setq ef-themes-mixed-fonts t
-        ef-themes-variable-pitch-ui t)
+;;   ;; They are nil by default...
+;;   (setq ef-themes-mixed-fonts nil
+;;         ef-themes-variable-pitch-ui nil)
 
-  ;; Read the doc string or manual for this one.  The symbols can be
-  ;; combined in any order.
-  (setq ef-themes-region '(intense no-extend neutral))
+;;   ;; Read the doc string or manual for this one.  The symbols can be
+;;   ;; combined in any order.
+;;   (setq ef-themes-region '(intense no-extend neutral))
 
-  ;; Disable all other themes to avoid awkward blending:
-  (mapc #'disable-theme custom-enabled-themes)
+;;   ;; Disable all other themes to avoid awkward blending:
+;;   (mapc #'disable-theme custom-enabled-themes)
 
-  ;; Load the theme of choice:
-  ;;(load-theme 'ef-spring :no-confirm)
-  ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
-  ;;(ef-themes-select 'ef-summer)
+;;   ;; Load the theme of choice:
+;;   ;;(load-theme 'ef-deuteranopia-dark :no-confirm)
+;;   ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
+;;   ;;(ef-themes-select 'ef-summer)
 
-  ;; The themes we provide are recorded in the `ef-themes-dark-themes',
-  ;; `ef-themes-light-themes'.
+;;   ;; The themes we provide are recorded in the `ef-themes-dark-themes',
+;;   ;; `ef-themes-light-themes'.
 
-  ;; We also provide these commands, but do not assign them to any key:
-  ;;
-  ;; - `ef-themes-toggle'
-  ;; - `ef-themes-select'
-  ;; - `ef-themes-load-random'
-  ;; - `ef-themes-preview-colors'
-  ;; - `ef-themes-preview-colors-current'
-  )
+;;   ;; We also provide these commands, but do not assign them to any key:
+;;   ;;
+;;   ;; - `ef-themes-toggle'
+;;   ;; - `ef-themes-select'
+;;   ;; - `ef-themes-load-random'
+;;   ;; - `ef-themes-preview-colors'
+;;   ;; - `ef-themes-preview-colors-current'
+;;   )
 
 (use-package consult-notes
   :ensure t
@@ -309,7 +312,7 @@ Restart works only on graphic display."
   (setq consult-notes-sources
         '(("Denote"  ?d  "~/Documents/denote/")
           ("Modenote"  ?m  "~/Documents/mod-denote/")
-          ("Notes archive"  ?n  "~/Notes/Archive"))) ;; Set notes dir(s), see below
+          ("Notes archive"  ?n  "~/Documents/Notes/Archive"))) ;; Set notes dir(s), see below
   ;; Set org-roam integration OR denote integration
     (when (locate-library "denote")
   (consult-notes-denote-mode)))
@@ -378,18 +381,17 @@ Restart works only on graphic display."
   :init
   (vertico-mode)
 
-  ;; Different scroll margin
-  ;; (setq vertico-scroll-margin 0)
+  ;;Different scroll margin
+  (setq vertico-scroll-margin 0)
 
-  ;; Show more candidates
-  ;; (setq vertico-count 20)
+  ;;Show more candidates
+  (setq vertico-count 20)
 
-  ;; Grow and shrink the Vertico minibuffer
-  ;; (setq vertico-resize t)
+  ;;Grow and shrink the Vertico minibuffer
+  (setq vertico-resize t)
 
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  ;; (setq vertico-cycle t)
-  )
+  ;;Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  (setq vertico-cycle t))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
@@ -692,16 +694,16 @@ Restart works only on graphic display."
                                         :key "d"))))
 
 ;; calfw
-(use-package calfw-org
-  :ensure t
-  :config
-  (setq cfw:org-agenda-schedule-args '(:timestamp))
-  (defun mrl/calf-org-calendar ()
-    (interactive)
-    (cfw:open-calendar-buffer
-     :contents-sources
-     (list
-      (cfw:org-create-source "Orange")))))
+;; (use-package calfw-org
+;;   :ensure t
+;;   :config
+;;   (setq cfw:org-agenda-schedule-args '(:timestamp))
+;;   (defun mrl/calf-org-calendar ()
+;;     (interactive)
+;;     (cfw:open-calendar-buffer
+;;      :contents-sources
+;;      (list
+;;       (cfw:org-create-source "Orange")))))
 
 ;; Yasnippet
 (use-package yasnippet
@@ -771,7 +773,7 @@ If failed try to complete the common part with `company-complete-common'"
   :config
   (defun mrl/kill-deft ()
       (kill-buffer "*Deft*"))
-  (setq deft-directory "~/Notes/Archive"
+  (setq deft-directory "~/Documents/Notes/Archive"
         deft-extensions '("org" "md" "txt")
         deft-recursive t
         deft-file-limit 40
@@ -1228,7 +1230,7 @@ If failed try to complete the common part with `company-complete-common'"
             (lambda (&rest args)
               (org-narrow-to-subtree)))
   (setq org-src-tab-acts-natively t)
-  (setq org-directory "~/org/")
+  (setq org-directory "~/Documents/org/")
   (setq org-highest-priority ?A)
   (setq org-default-priority ?C)
   (setq org-lowest-priority ?E)
@@ -1247,26 +1249,27 @@ If failed try to complete the common part with `company-complete-common'"
   (setq org-enforce-todo-dependencies t)
   (setq org-log-done 'time)
   (setq org-log-done-with-time 'note)
-  (setq diary-file "~/org/diary")
+  (setq diary-file "~/Documents/org/diary")
   (setq org-reverse-note-order t)
   (setq +org-habit-min-width 45)
   (setq org-habit-show-habits t)
   (setq org-habit-show-habits-only-for-today nil)
   (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %25TIMESTAMP_IA")
-  (setq org-archive-location "~/org/archive.org::* From %s")
+  (setq org-archive-location "~/Documents/org/archive.org::* From %s")
   (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                    (org-agenda-files :maxlevel . 9))))
 
 (setq org-agenda-span 'day)
 (setq org-agenda-start-day "today")
-(setq org-agenda-files (quote ("~/org/home.org"
-                               "~/org/refile.org"
-                               "~/org/mod.org"
-                               "~/org/habits.org")))
+(setq org-agenda-files (quote ("~/Documents/org/home.org"
+                               "~/Documents/org/refile.org"
+                               "~/Documents/org/mod.org"
+                               "~/Documents/org/calendar/cal.org"
+                               "~/Documents/org/habits.org")))
 (setq org-agenda-window-setup 'other-window)
 (setq org-agenda-start-with-log-mode t)
-(setq org-agenda-include-diary nil)
-(setq org-agenda-diary-file "~/org/calendar/cal.org")
+(setq org-agenda-include-diary t)
+(setq org-agenda-diary-file "~/Documents/org/calendar/cal.org")
 (setq org-agenda-show-future-repeats t)
 (setq org-agenda-skip-deadline-if-done t)
 (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
@@ -1312,60 +1315,60 @@ If failed try to complete the common part with `company-complete-common'"
         ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
 
 (setq org-capture-templates
-      (quote (("i" "Inbox" entry (file+headline "~/org/refile.org" "Inbox")
+      (quote (("i" "Inbox" entry (file+headline "~/Documents/org/refile.org" "Inbox")
                "* %?\nCaptured: %U\n")
               ("h" "Home Tasks & Notes")
               ;; ("w" "Protocol Capture" entry (file+headline "~/org/refile.org" "Web Capture")
               ;;  "* %^{Title or Comment}\nDescription: %:description\nSource: %:link\n%:initial\nCaptured: %U\n")
-              ("x" "Protocol Capture" entry (file+headline "~/org/refile.org" "Web Capture")
+              ("x" "Protocol Capture" entry (file+headline "~/Documents/org/refile.org" "Web Capture")
                "* TODO Review %:description\nSource: %:link\n%:initial\nCaptured: %U\n" :immediate-finish t)
-              ("w" "Protocol Capture" entry (file+headline "~/org/refile.org" "Web Capture")
+              ("w" "Protocol Capture" entry (file+headline "~/Documents/org/refile.org" "Web Capture")
                "* %:description\nSource: %:link\n%:initial\nCaptured: %U\n")
-              ("ht" "Home TODO" entry (file+headline "~/org/home.org" "Tasks")
+              ("ht" "Home TODO" entry (file+headline "~/Documents/org/home.org" "Tasks")
                "** TODO %?\nEntered on %U\n"
                :prepend t)
-              ("hn" "Home NEXT" entry (file+headline "~/org/home.org" "Tasks")
+              ("hn" "Home NEXT" entry (file+headline "~/Documents/org/home.org" "Tasks")
                "** NEXT %?\nEntered on %U\n"
                :prepend t)
-              ("hS" "Home Someday" entry (file+headline "~/org/home.org" "Someday")
+              ("hS" "Home Someday" entry (file+headline "~/Documents/org/home.org" "Someday")
                "** SOMEDAY %?\nEntered on %U\n")
-              ("hi" "Home Idea" entry (file+headline "~/org/home.org" "Notes")
+              ("hi" "Home Idea" entry (file+headline "~/Documents/org/home.org" "Notes")
                "** %? :idea:\nEntered on %U\n")
-              ("hs" "Home Calendar - Single" entry (file+headline "~/org/home.org" "Calendar")
+              ("hs" "Home Calendar - Single" entry (file+headline "~/Documents/org/home.org" "Calendar")
                "* %?\n%^T")
-              ("hb" "Home Calendar - Block" entry (file+headline "~/org/home.org" "Calendar")
+              ("hb" "Home Calendar - Block" entry (file+headline "~/Documents/org/home.org" "Calendar")
                "* %?\n%^t--%^t")
               ("w" "Work Tasks & Notes")
-              ("wt" "Work TODO" entry (file+headline "~/org/mod.org" "Tasks")
+              ("wt" "Work TODO" entry (file+headline "~/Documents/org/mod.org" "Tasks")
                "** TODO %?\nEntered on %U\n"
                :prepend t)
-              ("wn" "Work NEXT" entry (file+headline "~/org/mod.org" "Tasks")
+              ("wn" "Work NEXT" entry (file+headline "~/Documents/org/mod.org" "Tasks")
                "** NEXT %?\nEntered on %U\n"
                :prepend t)
-              ("wS" "Work Someday" entry (file+headline "~/org/mod.org" "Someday")
+              ("wS" "Work Someday" entry (file+headline "~/Documents/org/mod.org" "Someday")
                "** SOMEDAY %?\nEntered on %U\n")
-              ("wN" "Note" entry (file+headline "~/org/mod.org" "Notes")
+              ("wN" "Note" entry (file+headline "~/Documents/org/mod.org" "Notes")
                "* %?\nEntered on %U\n")
-              ("wc" "Note from Clipboard" entry (file+headline "~/org/mod.org" "Notes")
+              ("wc" "Note from Clipboard" entry (file+headline "~/Documents/org/mod.org" "Notes")
                "* %?\n\t\n%c")
-              ("wr" "Note from Region" entry (file+headline "~/org/mod.org" "Notes")
+              ("wr" "Note from Region" entry (file+headline "~/Documents/org/mod.org" "Notes")
                "* %?\n\t\n%i")
-              ("wj" "Journal" entry (file+olp+datetree "~/org/mod.org" "Journal")
+              ("wj" "Journal" entry (file+olp+datetree "~/Documents/org/mod.org" "Journal")
                "* %?\nEntered on %U\n")
-              ("wd" "Retrospective Tasks" entry (file+headline "~/org/mod.org" "Tasks")
+              ("wd" "Retrospective Tasks" entry (file+headline "~/Documents/org/mod.org" "Tasks")
                "* DONE %?\nCLOSED: %U")
-              ("ws" "Work Calendar - Single" entry (file+headline "~/org/mod.org" "Calendar")
+              ("ws" "Work Calendar - Single" entry (file+headline "~/Documents/org/mod.org" "Calendar")
                "* %?\n%^T")
-              ("wb" "Work Calendar - Block" entry (file+headline "~/org/mod.org" "Calendar")
+              ("wb" "Work Calendar - Block" entry (file+headline "~/Documents/org/mod.org" "Calendar")
                "* %?\n%^t--%^t")
-              ("wp" "Work Calendar - Trip" entry (file+headline "~/org/mod.org" "Work Trips")
+              ("wp" "Work Calendar - Trip" entry (file+headline "~/Documents/org/mod.org" "Work Trips")
                "* %?\n%^t--%^t")
-              ("wm" "Work Calendar - Meeting" entry (file+headline "~/org/mod.org" "Meetings")
+              ("wm" "Work Calendar - Meeting" entry (file+headline "~/Documents/org/mod.org" "Meetings")
                "* %?\n:PROPERTIES:\n:CATEGORY: Meeting\n:END:\n%^T")
               ("e" "Emacs Tip")
-              ("et" "Emacs Tip" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
+              ("et" "Emacs Tip" entry (file+headline "~/Documents/org/emacs-tips.org" "Emacs Tips")
                "* %?\n\t%a")
-              ("er" "Emacs Tip from Region" entry (file+headline "~/org/emacs-tips.org" "Emacs Tips")
+              ("er" "Emacs Tip from Region" entry (file+headline "~/Documents/org/emacs-tips.org" "Emacs Tips")
                "* %?\n\t%i"))))
 
 (setq org-tag-alist '(
