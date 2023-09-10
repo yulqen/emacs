@@ -215,6 +215,9 @@ Restart works only on graphic display."
   :config
   (load-theme 'gruber-darker t))
 
+(use-package vterm
+  :ensure t)
+
 (setq display-line-numbers-type `relative)
 (setq undo-limit 8000000) ; raise limit to 80Mb
 (setq truncate-string-ellipsis "…") ; better than using dots
@@ -300,80 +303,80 @@ Restart works only on graphic display."
 ;;   ;; - `ef-themes-preview-colors-current'
 ;;   )
 
-(use-package consult-notes
-  :ensure t
-  :bind (("C-c d" . consult-notes))
-  :commands (consult-notes
-             consult-notes-search-in-all-notes
-             ;; if using org-roam 
-             consult-notes-org-roam-find-node
-             consult-notes-org-roam-find-node-relation)
-  :config
-  (setq consult-notes-sources
-        '(("Denote"  ?d  "~/Documents/denote/")
-          ("Modenote"  ?m  "~/Documents/mod-denote/")
-          ("Notes archive"  ?n  "~/Documents/Notes/Archive"))) ;; Set notes dir(s), see below
-  ;; Set org-roam integration OR denote integration
-    (when (locate-library "denote")
-  (consult-notes-denote-mode)))
+;; (use-package consult-notes
+;;   :ensure t
+;;   :bind (("C-c d" . consult-notes))
+;;   :commands (consult-notes
+;;              consult-notes-search-in-all-notes
+;;              ;; if using org-roam 
+;;              consult-notes-org-roam-find-node
+;;              consult-notes-org-roam-find-node-relation)
+;;   :config
+;;   (setq consult-notes-sources
+;;         '(("Denote"  ?d  "~/Documents/denote/")
+;;           ("Modenote"  ?m  "~/Documents/mod-denote/")
+;;           ("Notes archive"  ?n  "~/Documents/Notes/Archive"))) ;; Set notes dir(s), see below
+;;   ;; Set org-roam integration OR denote integration
+;;     (when (locate-library "org-roam")
+;;   (consult-notes-denote-mode)))
 
 (use-package pass
   :ensure t)
 
-(use-package denote
-  :ensure t
-  :init
-  (add-hook 'dired-mode-hook #'denote-dired-mode)
-  :config
-  (setq denote-directory (expand-file-name "~/Documents/denote/"))
-  (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work" "technote"))
-  (setq denote-file-type nil)
-  (setq denote-prompts '(title keywords))
-  (setq denote-date-prompt-use-org-read-date t)
+;; (use-package denote
+;;   :ensure t
+;;   :init
+;;   (add-hook 'dired-mode-hook #'denote-dired-mode)
+;;   :config
+;;   (setq denote-directory (expand-file-name "~/Documents/denote/"))
+;;   (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work" "technote"))
+;;   (setq denote-file-type nil)
+;;   (setq denote-prompts '(title keywords))
+;;   (setq denote-date-prompt-use-org-read-date t)
 
-  (defun mrl/denote-find-file ()
-      "Find file in the current `denote-directory'."
-      (interactive)
-      (require 'consult)
-      (require 'denote)
-      (consult-find (denote-directory)))
+;;   (defun mrl/denote-find-file ()
+;;       "Find file in the current `denote-directory'."
+;;       (interactive)
+;;       (require 'consult)
+;;       (require 'denote)
+;;       (consult-find (denote-directory)))
 
-  (defun mrl/is-todays-journal? (f)
-    "If f is today's journal in denote, f is returned"
-    (let* ((month-regexp (car (calendar-current-date)))
-           (day-regexp (nth 1 (calendar-current-date)))
-           (year-regexp (nth 2 (calendar-current-date)))
-           (journal-files (directory-files (denote-directory) nil "_journal"))
-           (day-match? (string-match-p (concat "^......" (format "%02d" day-regexp)) f))
-           (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
-           (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
-      (when (and day-match? year-match? month-match?)
-        f)))
+;;   (defun mrl/is-todays-journal? (f)
+;;     "If f is today's journal in denote, f is returned"
+;;     (let* ((month-regexp (car (calendar-current-date)))
+;;            (day-regexp (nth 1 (calendar-current-date)))
+;;            (year-regexp (nth 2 (calendar-current-date)))
+;;            (journal-files (directory-files (denote-directory) nil "_journal"))
+;;            (day-match? (string-match-p (concat "^......" (format "%02d" day-regexp)) f))
+;;            (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
+;;            (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
+;;       (when (and day-match? year-match? month-match?)
+;;         f)))
 
-  (defun mrl/denote-journal ()
-    "Create an entry tagged 'journal' with the date as its title."
-    (defvar mrl/in-mod-denote nil)
-    (interactive)
-    (let* ((journal-dir (concat (denote-directory) "journals"))
-           (today-journal
-            (car (-non-nil
-                  (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
-      (if today-journal
-          (find-file (concat journal-dir "/" today-journal))
-        (if mrl/in-mod-denote ; this variable is from the .dir-locals.el file in the silo directory; we want to use a specific template
-            (denote
-         (format-time-string "%A %e %B %Y")
-         '("journal") nil journal-dir nil 'modjournal)
-          (denote
-           (format-time-string "%A %e %B %Y")
-           '("journal") nil journal-dir)))))
+;;   (defun mrl/denote-journal ()
+;;     "Create an entry tagged 'journal' with the date as its title."
+;;     (defvar mrl/in-mod-denote nil)
+;;     (interactive)
+;;     (let* ((journal-dir (concat (denote-directory) "journals"))
+;;            (today-journal
+;;             (car (-non-nil
+;;                   (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
+;;       (if today-journal
+;;           (find-file (concat journal-dir "/" today-journal))
+;;         (if mrl/in-mod-denote ; this variable is from the .dir-locals.el file in the silo directory; we want to use a specific template
+;;             (denote
+;;          (format-time-string "%A %e %B %Y")
+;;          '("journal") nil journal-dir nil 'modjournal)
+;;           (denote
+;;            (format-time-string "%A %e %B %Y")
+;;            '("journal") nil journal-dir)))))
   
-  :bind (("C-c n n" . denote-create-note)
-         ("C-c n d" . mrl/denote-journal)
-         ("C-c n t" . denote-type)
-         ("C-c n f" . mrl/denote-find-file)
-         ("C-c n l" . denote-link))
-  )
+;;   :bind (("C-c n n" . denote-create-note)
+;;          ("C-c n d" . mrl/denote-journal)
+;;          ("C-c n t" . denote-type)
+;;          ("C-c n f" . mrl/denote-find-file)
+;;          ("C-c n l" . denote-link))
+;;   )
 
 ;; Enable vertico
 (use-package vertico
@@ -1138,59 +1141,83 @@ If failed try to complete the common part with `company-complete-common'"
   (setq recentf-max-saved-items 25)
   (recentf-mode t))
 
-;; (use-package org-roam
-;;   :ensure t
-;;   :custom
-;;   (org-roam-dailies-directory "daily/")
-;;   (org-roam-directory "~/org-roam")
-;;   (org-roam-capture-ref-templates
-;;    '(("d" "default" plain
-;;       "%?"
-;;       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;       :unnarrowed t)))
-;;   (org-roam-capture-templates
-;;    '(("d" "default" plain
-;;       "%?"
-;;       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;       :unnarrowed t)
-;;      ("e" "encrypted" plain
-;;       "%?"
-;;       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
-;;       :unnarrowed t)))
-;;   (org-roam-dailies-capture-templates
-;;    '(("d" "default" entry "* %<%T>: %?"
-;;       :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
-;;       :unnarrowed t)))
-;;   :bind (("C-c n l" . org-roam-buffer-toggle)
-;;          ("C-c n f" . org-roam-node-find)
-;;          ("C-c n i" . org-roam-node-insert)
-;;          ("C-c n n" . org-roam-dailies-capture-today)
-;;          ("C-c n t" . org-roam-dailies-goto-today)
-;;          :map org-roam-mode-map
-;;          ("y" . org-roam-dailies-goto-previous-note)
-;;          ("t" . org-roam-dailies-goto-next-note)
-;;          ("d" . org-roam-dailies-goto-date)
-;;          ("D" . org-roam-dailies-capture-date))
-;;   :bind-keymap ("C-c n D" . org-roam-mode-map)
-;;   :config
-;;   (defun mrl/search-roam ()
-;;     "Run consult-ripgrep on the org roam directory"
-;;     (interactive)
-;;     (consult-ripgrep org-roam-directory nil))
-;;   (require 'org-roam-protocol)
-;;   (org-roam-db-autosync-mode)
-;;   ;; Bind this to C-c n I
-;;   (defun org-roam-node-insert-immediate (arg &rest args)
-;;     (interactive "P")
-;;     (let ((args (cons arg args))
-;;           (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-;;                                                     '(:immediate-finish t)))))
-;;       (apply #'org-roam-node-insert args)))
-;;   :bind (("C-c n I" . org-roam-node-insert-immediate)))
+(use-package org-rich-yank
+  :ensure t
+  :demand t
+  :bind (:map org-mode-map
+              ("C-M-y" . org-rich-yank)))
+
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-dailies-directory "daily/")
+  (org-roam-directory "~/Documents/org-roam")
+  (org-roam-capture-ref-templates
+   '(("d" "default" plain
+      "%?"
+      :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)))
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "%?"
+      :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("w" "mod" plain
+      "%?"
+      :target (file+head "mod/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("b" "mod+baes" plain
+      "%?"
+      :target (file+head "mod/baes/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("r" "mod+rrdl" plain
+      "%?"
+      :target (file+head "mod/rrdl/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)     
+     ("e" "encrypted" plain
+      "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
+      :unnarrowed t)))
+  (org-roam-dailies-capture-templates
+   '(("d" "home" entry "* %<%T>: %?"
+      :target (file+head "home/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
+      :unnarrowed t)
+     ("m" "mod" entry "* %<%T>: %?"
+      :target (file+head "mod/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
+      :unnarrowed t)))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n n" . org-roam-dailies-capture-today)
+         ("C-c n t" . org-roam-dailies-goto-today)
+         :map org-roam-mode-map
+         ("y" . org-roam-dailies-goto-previous-note)
+         ("t" . org-roam-dailies-goto-next-note)
+         ("d" . org-roam-dailies-goto-date)
+         ("D" . org-roam-dailies-capture-date))
+  :bind-keymap ("C-c n D" . org-roam-mode-map)
+  :config
+  (defun mrl/search-roam ()
+    "Run consult-ripgrep on the org roam directory"
+    (interactive)
+    (consult-ripgrep org-roam-directory nil))
+  (require 'org-roam-protocol)
+  (org-roam-db-autosync-mode)
+  ;; Bind this to C-c n I
+  (defun org-roam-node-insert-immediate (arg &rest args)
+    (interactive "P")
+    (let (([[id:06d0a643-662b-4440-9e1a-9b9dcf6e2dcb][test_node]]args (cons arg args))
+          (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                    '(:immediate-finish t)))))
+      (apply #'org-roam-node-insert args)))
+  :bind (("C-c n I" . org-roam-node-insert-immediate)))
+
+(use-package org-web-tools
+  :ensure t)
 
 (use-package unicode-fonts
- :ensure t
- :config
+  :ensure t
+  :config
   (unicode-fonts-setup))
 
 ;; some core bindings
