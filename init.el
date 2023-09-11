@@ -93,10 +93,10 @@ Restart works only on graphic display."
     (mrl/stop-emacs-1)))
 
 ;; notmuch is apparently already installed with notmuch from arch
-(require 'notmuch)
+;;(require 'notmuch)
 
 ;; load my crap
-(add-to-list 'load-path "~/.emacs.d/lisp")
+(add-to-list 'load-path "~/.config/emacs/lisp")
 (require 'mrl-functions)
 
 (require 'org-notmuch)
@@ -110,7 +110,7 @@ Restart works only on graphic display."
 
 (require 'org)
 (add-to-list 'org-modules 'org-habit)
-;; (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
+;; (org-babel-load-file (expand-file-name "~/.config/emacs/myinit.org"))
 
 ;; Garbage collection
 (setq gc-cons-percentage 0.6)
@@ -626,75 +626,75 @@ Restart works only on graphic display."
 ;;   :ensure t)
 
 ;; notmuch
-(use-package notmuch
-  :defer t
-  :config
-  (define-key notmuch-show-mode-map "S"
-    (lambda ()
-      "mark message as spam"
-      (interactive)
-      (notmuch-show-tag (list "+spam" "-inbox"))))
-  (define-key notmuch-search-mode-map "S"
-    (lambda ()
-      "mark message as spam"
-      (interactive)
-      (notmuch-search-tag (list "+spam" "-inbox"))))
-  (define-key notmuch-search-mode-map "d"
-    (lambda ()
-      "toggle deleted tag for message"
-      (interactive)
-      (if (member "deleted" (notmuch-search-get-tags))
-          (notmuch-search-tag (list "-deleted"))
-        (progn
-          (notmuch-search-tag (list "-unread"))
-          (notmuch-search-tag (list "-new"))
-          (notmuch-search-tag (list "+deleted"))))))
-  (setq send-mail-function 'sendmail-send-it
-        notmuch-search-result-format '(("date" . "%12s ")
-                                       ("count" . "%7s ")
-                                       ("authors" . "%-20s ")
-                                       ("subject" . "%-80s ")
-                                       ("tags" . "(%s) "))
-        sendmail-program "/usr/bin/msmtp"
-        notmuch-archive-tags '("-inbox" "+archived" "-new")
-        message-kill-buffer-on-exit t
-        notmuch-draft-folder "fastmail/Drafts"
-        notmuch-fcc-dirs "fastmail/Sent +sent -unread -inbox"
-        notmuch-search-oldest-first nil
-        mail-specify-envelope-from t
-        message-signature "\n-- \nMatthew"
-        mm-text-html-renderer 'lynx
-        message-sendmail-envelope-from 'header
-        mail-envelope-from 'header
-        notmuch-saved-searches '((:name "Inbox"
-                                        :query "tag:inbox"
-                                        :count-query "tag:inbox and tag:unread"
-                                        :sort-order newest-first
-                                        :key "i")
-                                 (:name "Todo"
-                                        :query "tag:todo"
-                                        :sort-order newest-first
-                                        :key "t")
-                                 (:name "Unread"
-                                        :query "tag:unread"
-                                        :sort-order newest-first
-                                        :key "u")
-                                 (:name "Sent"
-                                        :query "tag:sent"
-                                        :sort-order newest-first
-                                        :key "s")
-                                 (:name "All Mail"
-                                        :query "*"
-                                        :sort-order newest-first
-                                        :key "a")
-                                 (:name "School"
-                                        :query "tag:school"
-                                        :sort-order newest-first
-                                        :key "S")                                 
-                                 (:name "Deleted"
-                                        :query "tag:deleted"
-                                        :sort-order newest-first
-                                        :key "d"))))
+; (use-package notmuch
+;   :defer t
+;   :config
+;   (define-key notmuch-show-mode-map "S"
+;     (lambda ()
+;       "mark message as spam"
+;       (interactive)
+;       (notmuch-show-tag (list "+spam" "-inbox"))))
+;   (define-key notmuch-search-mode-map "S"
+;     (lambda ()
+;       "mark message as spam"
+;       (interactive)
+;       (notmuch-search-tag (list "+spam" "-inbox"))))
+;   (define-key notmuch-search-mode-map "d"
+;     (lambda ()
+;       "toggle deleted tag for message"
+;       (interactive)
+;       (if (member "deleted" (notmuch-search-get-tags))
+;           (notmuch-search-tag (list "-deleted"))
+;         (progn
+;           (notmuch-search-tag (list "-unread"))
+;           (notmuch-search-tag (list "-new"))
+;           (notmuch-search-tag (list "+deleted"))))))
+;   (setq send-mail-function 'sendmail-send-it
+;         notmuch-search-result-format '(("date" . "%12s ")
+;                                        ("count" . "%7s ")
+;                                        ("authors" . "%-20s ")
+;                                        ("subject" . "%-80s ")
+;                                        ("tags" . "(%s) "))
+;         sendmail-program "/usr/bin/msmtp"
+;         notmuch-archive-tags '("-inbox" "+archived" "-new")
+;         message-kill-buffer-on-exit t
+;         notmuch-draft-folder "fastmail/Drafts"
+;         notmuch-fcc-dirs "fastmail/Sent +sent -unread -inbox"
+;         notmuch-search-oldest-first nil
+;         mail-specify-envelope-from t
+;         message-signature "\n-- \nMatthew"
+;         mm-text-html-renderer 'lynx
+;         message-sendmail-envelope-from 'header
+;         mail-envelope-from 'header
+;         notmuch-saved-searches '((:name "Inbox"
+;                                         :query "tag:inbox"
+;                                         :count-query "tag:inbox and tag:unread"
+;                                         :sort-order newest-first
+;                                         :key "i")
+;                                  (:name "Todo"
+;                                         :query "tag:todo"
+;                                         :sort-order newest-first
+;                                         :key "t")
+;                                  (:name "Unread"
+;                                         :query "tag:unread"
+;                                         :sort-order newest-first
+;                                         :key "u")
+;                                  (:name "Sent"
+;                                         :query "tag:sent"
+;                                         :sort-order newest-first
+;                                         :key "s")
+;                                  (:name "All Mail"
+;                                         :query "*"
+;                                         :sort-order newest-first
+;                                         :key "a")
+;                                  (:name "School"
+;                                         :query "tag:school"
+;                                         :sort-order newest-first
+;                                         :key "S")                                 
+;                                  (:name "Deleted"
+;                                         :query "tag:deleted"
+;                                         :sort-order newest-first
+;                                         :key "d"))))
 
 ;; calfw
 ;; (use-package calfw-org
@@ -1136,7 +1136,7 @@ If failed try to complete the common part with `company-complete-common'"
                "COMMIT_EDITMSG\\'"))
   (setq recentf-auto-cleanup 'never
         recentf-max-saved-items 50
-        recentf-save-file (concat user-emacs-directory ".recentf"))
+        recentf-save-file (concat user-config-directory ".recentf"))
   (setq recentf-max-menu-items 25)
   (setq recentf-max-saved-items 25)
   (recentf-mode t))
