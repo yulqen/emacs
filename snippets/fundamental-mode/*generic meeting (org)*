@@ -1,0 +1,14 @@
+# key: gm
+# name: generic meeting (org)
+# --
+
+#+title: $1
+#+date: `(format-time-string "%Y-%m-%d")`
+
+* Agenda
+
+* Attendees
+
+* Meeting Notes
+
++ $0

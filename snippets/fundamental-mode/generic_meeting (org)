@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: generic meeting (org)
+# key: gm
+# --
++#TITLE: $1
++#DATE: `(format-time-string "%Y-%m-%d")`
+
+* Agenda
+
+* Attendees
+
+* Meeting Notes
+
++ $0
