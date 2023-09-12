@@ -108,6 +108,9 @@ Restart works only on graphic display."
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
 
+;; set bookmarks file
+(setq bookmark-default-file (concat user-emacs-directory "bookmarks"))
+
 (require 'org)
 (add-to-list 'org-modules 'org-habit)
 ;; (org-babel-load-file (expand-file-name "~/.config/emacs/myinit.org"))
