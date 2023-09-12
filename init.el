@@ -212,6 +212,31 @@ Restart works only on graphic display."
 ;;   (when (member "Hack" (font-family-list))
 ;;     (add-to-list 'default-frame-alist '(font . "Hack-10")))))
 
+;; distraction free writing
+;; from https://lucidmanager.org/productivity/ricing-org-mode/
+
+
+;; Distraction-free screen
+(use-package olivetti
+  :init
+  (setq olivetti-body-width 0.5)
+  :config
+  (defun distraction-free ()
+    "Distraction-free writing environment"
+    (interactive)
+    (if (equal olivetti-mode nil)
+        (progn
+          (window-configuration-to-register 1)
+          (delete-other-windows)
+          (text-scale-increase 2)
+          (olivetti-mode t))
+      (progn
+        (jump-to-register 1)
+        (olivetti-mode 0)
+        (text-scale-decrease 2))))
+  :bind
+  (("<f9>" . distraction-free)))
+
 ;; theme
 (use-package gruber-darker-theme
   :ensure t
