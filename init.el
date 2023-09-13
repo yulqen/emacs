@@ -16,6 +16,13 @@
 ;; (setq shell-file-name "bash")
 ;; (setq shell-command-switch "-i")
 
+;; define function to shutdown emacs server instance
+;; or from outside emacs, do emacsclient -e '(kill-emacs)'
+(defun server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs))
 
 ;; timestamps
 ;; from: https://gist.github.com/takehiko/306021460b21f5d1520c32293cd831e0
@@ -99,6 +106,9 @@ Restart works only on graphic display."
 (add-to-list 'load-path "~/.config/emacs/lisp")
 (require 'mrl-functions)
 
+;; dictionary
+(global-set-key (kbd "M-#") #'dictionary-lookup-definition)
+
 (require 'org-notmuch)
 (org-link-set-parameters "notmuch"
 			                   :follow 'org-notmuch-open
@@ -137,8 +147,11 @@ Restart works only on graphic display."
 
 (add-hook 'org-mode-hook 'visual-line-mode)
 
+
 ;; turn off flycheck-mode
 (add-hook 'org-mode-hook (lambda () flycheck-mode -1))
+;; but turn on spelling
+(add-hook 'org-mode-hook 'flyspell-mode)
 
 ;; ID basics
 (setq user-full-name "Matthew Lemon"
@@ -1431,6 +1444,7 @@ If failed try to complete the common part with `company-complete-common'"
 (setq org-tag-alist '(
                      ("brainstorm" . ?b)
                      ("idea" . ?d)
+                     ("current" . ?C)
                      ("work" . ?w)
                      ("baes" . ?B)
                      ("rrdl" . ?r)
