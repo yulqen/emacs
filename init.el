@@ -1,4 +1,4 @@
-;;; init.el --- emacs configuration. -*- lexical-binding: t -*-
+.el --- emacs configuration. -*- lexical-binding: t -*-
 ;;; package --- MR Lemon emacs config
 ;;; Commentary:
 ;;; basic config
@@ -41,7 +41,9 @@
      (format-time-string "%z")))))
 
 ;; theme
-;;(load-theme 'light-blue)
+(load-theme 'deeper-blue t)
+;; (set-background-color "black")
+;; (set-foreground-color "white")
 
 ;; packages
 (require 'package)
@@ -251,10 +253,10 @@ Restart works only on graphic display."
   (("<f9>" . distraction-free)))
 
 ;; theme
-(use-package gruber-darker-theme
-  :ensure t
-  :config
-  (load-theme 'gruber-darker t))
+;; (use-package gruber-darker-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'gruber-darker t))
 
 (use-package vterm
   :ensure t)
@@ -563,14 +565,14 @@ Restart works only on graphic display."
   ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
   ;; For some commands and buffer sources it is useful to configure the
   ;; :preview-key on a per-command basis using the `consult-customize' macro.
-  (consult-customize
-   consult-theme :preview-key '(:debounce 0.2 any)
-   consult-ripgrep consult-git-grep consult-grep
-   consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
+  ;; (consult-customize
+  ;;  consult-theme :preview-key '(:debounce 0.2 any)
+  ;;  consult-ripgrep consult-git-grep consult-grep
+  ;;  consult-bookmark consult-recent-file consult-xref
+  ;;  consult--source-bookmark consult--source-file-register
+  ;;  consult--source-recent-file consult--source-project-recent-file
    ;; :preview-key (kbd "M-.")
-   :preview-key '(:debounce 0.4 any))
+   :preview-key '(:debounce 0.4 any)
 
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
