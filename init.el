@@ -1236,6 +1236,9 @@ If failed try to complete the common part with `company-complete-common'"
          ("D" . org-roam-dailies-capture-date))
   :bind-keymap ("C-c n D" . org-roam-mode-map)
   :config
+  ;; this should allow us to type spaces in ido buffer when creating new nodes
+  ;; from https://org-roam.discourse.group/t/org-roam-node-find-space-not-allowed-in-node-title/1847/6
+  (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
   (defun mrl/search-roam ()
     "Run consult-ripgrep on the org roam directory"
     (interactive)
@@ -1371,6 +1374,8 @@ If failed try to complete the common part with `company-complete-common'"
                      ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
           (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
+                                         (org-agenda-sorting-strategy '(alpha-up))))
+          (tags "idea" ((org-agenda-overriding-header "Ideas")
                                          (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
