@@ -363,8 +363,8 @@ Restart works only on graphic display."
 ;;     (when (locate-library "org-roam")
 ;;   (consult-notes-denote-mode)))
 
-;; (use-package pass
-;;   :ensure t)
+(use-package pass
+  :ensure t)
 
 ;; (use-package denote
 ;;   :ensure t
@@ -422,22 +422,22 @@ Restart works only on graphic display."
 ;;   )
 
 ;; Enable vertico
-;; (use-package vertico
-;;   :ensure t
-;;   :init
-;;   (vertico-mode)
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode)
 
-;;   ;;Different scroll margin
-;;   (setq vertico-scroll-margin 0)
+  ;;Different scroll margin
+  (setq vertico-scroll-margin 0)
 
-;;   ;;Show more candidates
-;;   (setq vertico-count 20)
+  ;;Show more candidates
+  (setq vertico-count 20)
 
-;;   ;;Grow and shrink the Vertico minibuffer
-;;   (setq vertico-resize t)
+  ;;Grow and shrink the Vertico minibuffer
+  (setq vertico-resize t)
 
-;;   ;;Optionally enable cycling for `vertico-next' and `vertico-previous'.
-;;   (setq vertico-cycle t))
+  ;;Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  (setq vertico-cycle t))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
@@ -472,11 +472,11 @@ Restart works only on graphic display."
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
 
-;; (use-package orderless
-;;   :ensure t
-;;   :custom
-;;   (completion-styles '(orderless basic))
-;;   (completion-category-overrides '((file (styles basic partial-completion)))))
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 
 
 ; Example configuration for Consult - from https://github.com/minad/consult
@@ -489,9 +489,9 @@ Restart works only on graphic display."
          ("C-c k" . consult-kmacro)
          ;; C-x bindings (ctl-x-map)
          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ;; ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ;; ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ;; ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
          ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
          ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
          ;; Custom M-# bindings for fast register access
@@ -596,8 +596,8 @@ Restart works only on graphic display."
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   )
 
-;; (use-package consult-lsp
-;;   :ensure t)
+(use-package consult-lsp
+  :ensure t)
 
 (use-package expand-region
   :ensure t
@@ -609,38 +609,38 @@ Restart works only on graphic display."
   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d./.cache"))) ; from https://github.com/syl20bnr/spacemacs/issues/15426
   (global-undo-tree-mode))
 
-;; (use-package marginalia
-;;   :ensure t
-;;   :custom
-;;   (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-;;   :init
-;;   (marginalia-mode))
+(use-package marginalia
+  :ensure t
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
 
-;; (use-package embark
-;;   :ensure t
-;;   :bind
-;;   (("C-." . embark-act)         ;; pick some comfortable binding
-;;    ("C-;" . embark-dwim)        ;; good alternative: M-.
-;;    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
-;;   :init
+  :init
 
-;;   ;; Optionally replace the key help with a completing-read interface
-;;   (setq prefix-help-command #'embark-prefix-help-command)
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
 
-;;   :config
+  :config
 
-;;   ;; Hide the mode line of the Embark live/completions buffers
-;;   (add-to-list 'display-buffer-alist
-;;                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-;;                  nil
-;;                  (window-parameters (mode-line-format . none)))))
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
 
-;; ;; Consult users will also want the embark-consult package.
-;; (use-package embark-consult
-;;   :ensure t ; only need to install it, embark loads it after consult if found
-;;   :hook
-;;   (embark-collect-mode . consult-preview-at-point-mode))
+;; Consult users will also want the embark-consult package.
+(use-package embark-consult
+  :ensure t ; only need to install it, embark loads it after consult if found
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 
 
 ;; markdown
@@ -659,6 +659,10 @@ Restart works only on graphic display."
 (use-package eglot
   :ensure t
   :hook (python-mode . eglot-ensure))
+
+;; emacs-async - for helm
+(use-package async
+  :ensure t)
 
 ;; popup - for helm
 ;; (use-package popup
@@ -810,38 +814,38 @@ If failed try to complete the common part with `company-complete-common'"
               (company-complete-common))))
       (company-complete-common))))
 
-;; (use-package deft
-;;   :ensure t
-;;   :config
-;;   (defun mrl/kill-deft ()
-;;       (kill-buffer "*Deft*"))
-;;   (setq deft-directory "~/Documents/Notes/Archive"
-;;         deft-extensions '("org" "md" "txt")
-;;         deft-recursive t
-;;         deft-file-limit 40
-;;         deft-use-filename-as-title t)
-;;   (add-hook 'deft-open-file-hook 'mrl/kill-deft))
+(use-package deft
+  :ensure t
+  :config
+  (defun mrl/kill-deft ()
+      (kill-buffer "*Deft*"))
+  (setq deft-directory "~/Documents/Notes/Archive"
+        deft-extensions '("org" "md" "txt")
+        deft-recursive t
+        deft-file-limit 40
+        deft-use-filename-as-title t)
+  (add-hook 'deft-open-file-hook 'mrl/kill-deft))
 
 ;; Ace Jump
 ;; (use-package ace-jump-mode
 ;;   :bind ("C-M-SPC" . ace-jump-mode))
 
-;; lisp programming
-;; (use-package paredit
-;;   :init
-;;   (add-hook 'clojure-mode-hook #'enable-paredit-mode)
-;;   (add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
-;;   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
-;;   (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-;;   (add-hook 'ielm-mode-hook #'enable-paredit-mode)
-;;   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
-;;   (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-;;   (add-hook 'scheme-mode-hook #'enable-paredit-mode)
-;;   :config
-;;   (show-paren-mode t)
-;;   :bind (("M-[" . paredit-wrap-square)
-;;          ("M-{" . paredit-wrap-curly))
-;;   :diminish nil)
+;; Lisp programming
+(use-package paredit
+  :init
+  (add-hook 'clojure-mode-hook #'enable-paredit-mode)
+  (add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook #'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook #'enable-paredit-mode)
+  :config
+  (show-paren-mode t)
+  :bind (("M-[" . paredit-wrap-square)
+         ("M-{" . paredit-wrap-curly))
+  :diminish nil)
 
 (use-package rainbow-delimiters
   :config
@@ -953,14 +957,14 @@ If failed try to complete the common part with `company-complete-common'"
   :ensure t)
 
 ;; Interactively Do Things (ido)
-(use-package ido
-  :config
-  (ido-mode t)
-  (setq ido-enable-flex-matching t)
-  (setq ido-create-new-buffer 'always)
-  (setq ido-everywhere t)  ; nil because incompatible with Helm
-  (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
-  (setq ido-enable-flex-matching t))
+;; (use-package ido
+;;   :config
+;;   (ido-mode t)
+;;   (setq ido-enable-flex-matching t)
+;;   (setq ido-create-new-buffer 'always)
+;;   (setq ido-everywhere t)  ; nil because incompatible with Helm
+;;   (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
+;;   (setq ido-enable-flex-matching t))
 
 ;; ;; helm
 ;; (require 'helm-config)
@@ -1103,22 +1107,22 @@ If failed try to complete the common part with `company-complete-common'"
 
 ;; Winner mode - undo and redo changes in window config
 ;; with C-c left and C-c right
-;; (use-package winner
-;;   :ensure nil
-;;   :custom
-;;   (winner-boring-buffers
-;;    '("*Completions*"
-;;      "*Compile-Log*"
-;;      "*inferior-lisp*"
-;;      "*Fuzzy Completions*"
-;;      "*Apropos*"
-;;      "*Help*"
-;;      "*cvs*"
-;;      "*Buffer List*"
-;;      "*Ibuffer*"
-;;      "*esh command on file*"))
-;;   :config
-;;   (winner-mode 1))
+(use-package winner
+  :ensure nil
+  :custom
+  (winner-boring-buffers
+   '("*Completions*"
+     "*Compile-Log*"
+     "*inferior-lisp*"
+     "*Fuzzy Completions*"
+     "*Apropos*"
+     "*Help*"
+     "*cvs*"
+     "*Buffer List*"
+     "*Ibuffer*"
+     "*esh command on file*"))
+  :config
+  (winner-mode 1))
 
 ;; ;; elpy for python
 ;; (use-package elpy
