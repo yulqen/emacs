@@ -1324,7 +1324,7 @@ If failed try to complete the common part with `company-complete-common'"
   (setq org-log-done-with-time 'note)
   (setq diary-file "~/Documents/org/diary")
   (setq org-reverse-note-order t)
-  (setq +org-habit-min-width 45)
+  (setq +org-habit-min-width 55)
   (setq org-habit-show-habits t)
   (setq org-habit-show-habits-only-for-today nil)
   (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %25TIMESTAMP_IA")
