@@ -153,7 +153,7 @@ Restart works only on graphic display."
 ;; turn off flycheck-mode
 (add-hook 'org-mode-hook (lambda () flycheck-mode -1))
 ;; but turn on spelling
-(add-hook 'org-mode-hook 'flyspell-mode)
+;;(add-hook 'org-mode-hook 'flyspell-mode)
 
 ;; ID basics
 (setq user-full-name "Matthew Lemon"
@@ -1338,7 +1338,8 @@ If failed try to complete the common part with `company-complete-common'"
                                "~/Documents/org/refile.org"
                                "~/Documents/org/mod.org"
                                "~/Documents/org/calendar/cal.org"
-                               "~/Documents/org/habits.org")))
+                               "~/Documents/org/habits.org"
+                               "~/Documents/org/Plans/quarterly_plan_sept23.org")))
 (setq org-agenda-window-setup 'other-window)
 (setq org-agenda-start-with-log-mode t)
 (setq org-agenda-include-diary t)
@@ -1370,6 +1371,7 @@ If failed try to complete the common part with `company-complete-common'"
         ("h" "Home"
          (
           (agenda)
+          (tags-todo "CATEGORY=\"Q4_Plan\"" ((org-agenda-overriding-header "Q4 Plan")))
           (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")
                                                                         (org-agenda-sorting-strategy '(priority-down alpha-up))))
           (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "Home WAITING")
@@ -1385,8 +1387,9 @@ If failed try to complete the common part with `company-complete-common'"
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down)))))
-         ((org-agenda-category-filter-preset '("+home" "+habits" "+refile" "+Birthday"))))
+         ((org-agenda-category-filter-preset '("+home" "+habits" "+refile" "+Q4_Plan" "+Birthday"))))
         ("i" tags "idea")
+        ("q" tags-todo "CATEGORY=\"Q4_Plan\"" ((org-agenda-overriding-header "Q4 Plan")))
         ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
 
 (setq org-capture-templates
