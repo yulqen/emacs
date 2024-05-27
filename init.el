@@ -665,7 +665,37 @@ Restart works only on graphic display."
 ;; eglot language server protocol client
 (use-package eglot
   :ensure t
+  :config
+  (add-to-list 'eglot-server-programs '(python-mode . ("pyright")))
+  (setq-default eglot-workspace-configuration
+                '((:pylsp . (:configurationSources ["flake8"] :plugins (:pycodestyle (:enabled nil) :mccabe (:enabled nil) :flake8 (:enabled t))))))
   :hook (python-mode . eglot-ensure))
+
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
+
+;; Enable LSP support by default in programming buffers
+(add-hook 'prog-mode-hook #'eglot-ensure)
+
+;; Enabled inline static analysis
+(add-hook 'prog-mode-hook #'flymake-mode)
+
+;;; Indication of local VCS changes
+(unless (package-installed-p 'diff-hl)
+  (package-install 'diff-hl))
+
+;; Enable `diff-hl' support by default in programming buffers
+(add-hook 'prog-mode-hook #'diff-hl-mode)
+
+;;; Pop-up completion
+(unless (package-installed-p 'corfu)
+  (package-install 'corfu))
+
+;; Enable autocompletion by default in programming buffers
+(add-hook 'prog-mode-hook #'corfu-mode)
 
 ;; emacs-async - for helm
 (use-package async
