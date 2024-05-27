@@ -41,7 +41,9 @@
      (format-time-string "%z")))))
 
 ;; theme
-(load-theme 'deeper-blue t)
+;;(load-theme 'deeper-blue t)
+(load-theme 'gruber-darker t)
+
 ;; (set-background-color "black")
 ;; (set-foreground-color "white")
 
@@ -220,12 +222,17 @@ Restart works only on graphic display."
 
 ;; font
 ;; (cond
-;;  ((string-equal (system-name) "archdesk")
-;;   (when (member "Hack" (font-family-list))
-;;     (add-to-list 'default-frame-alist '(font . "Hack-14"))))
-;;  ((string-equal (system-name) "pop_os")
-;;   (when (member "Hack" (font-family-list))
-;;     (add-to-list 'default-frame-alist '(font . "Hack-10")))))
+ ;; ((string-equal (system-name) "schumann")
+ ;;  (when (member "Iosevka Nerd Font" (font-family-list))
+ ;;    (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font"))))
+ ;; ((string-equal (system-name) "pop_os")
+ ;;  (when (member "Hack" (font-family-list))
+ ;;    (add-to-list 'default-frame-alist '(font . "Hack-10"))))
+
+(set-face-attribute 'default nil
+		    :family "Iosevka Nerd Font"
+		    :height  140)
+
 
 ;; distraction free writing
 ;; from https://lucidmanager.org/productivity/ricing-org-mode/
