@@ -403,6 +403,37 @@ Restart works only on graphic display."
       (when (and day-match? year-match? month-match?)
         f)))
 
+  (defvar my-denote-silo-directories
+  `("/home/lemon/Documents/mod-denote"
+    ;; You don't actually need to include the `denote-directory' here
+    ;; if you use the regular commands in their global context.  I am
+    ;; including it for completeness.
+    ,denote-directory)
+  "List of file paths pointing to my Denote silos.
+  This is a list of strings.")
+
+(defvar my-denote-commands-for-silos
+  '(denote
+    denote-date
+    denote-subdirectory
+    denote-template
+    denote-type)
+  "List of Denote commands to call after selecting a silo.
+  This is a list of symbols that specify the note-creating
+  interactive functions that Denote provides.")
+
+(defun my-denote-pick-silo-then-command (silo command)
+  "Select SILO and run Denote COMMAND in it.
+  SILO is a file path from `my-denote-silo-directories', while
+  COMMAND is one among `my-denote-commands-for-silos'."
+  (interactive
+   (list (completing-read "Select a silo: " my-denote-silo-directories nil t)
+         (intern (completing-read
+                  "Run command in silo: "
+                  my-denote-commands-for-silos nil t))))
+  (let ((denote-directory silo))
+    (call-interactively command)))
+
   (defun mrl/denote-journal ()
     "Create an entry tagged 'journal' with the date as its title."
     (defvar mrl/in-mod-denote nil)
@@ -415,8 +446,8 @@ Restart works only on graphic display."
           (find-file (concat journal-dir "/" today-journal))
         (if mrl/in-mod-denote ; this variable is from the .dir-locals.el file in the silo directory; we want to use a specific template
             (denote
-         (format-time-string "%A %e %B %Y")
-         '("journal") nil journal-dir nil 'modjournal)
+             (format-time-string "%A %e %B %Y")
+             '("journal") nil journal-dir nil 'modjournal)
           (denote
            (format-time-string "%A %e %B %Y")
            '("journal") nil journal-dir)))))
