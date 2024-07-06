@@ -42,7 +42,7 @@
 
 ;; theme
 ;;(load-theme 'deeper-blue t)
-(load-theme 'gruber-darker t)
+;; (load-theme 'gruber-darker t)
 
 ;; (set-background-color "black")
 ;; (set-foreground-color "white")
