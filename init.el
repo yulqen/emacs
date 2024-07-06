@@ -275,10 +275,10 @@ Restart works only on graphic display."
   (("<f9>" . distraction-free)))
 
 ;; theme
-;; (use-package gruber-darker-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'gruber-darker t))
+(use-package gruber-darker-theme
+  :ensure t
+  :config
+  (load-theme 'gruber-darker t))
 
 (use-package vterm
   :ensure t)
@@ -475,22 +475,22 @@ Restart works only on graphic display."
   )
 
 ;; Enable vertico
-(use-package vertico
-  :ensure t
-  :init
-  (vertico-mode)
+;; (use-package vertico
+;;   :ensure t
+;;   :init
+;;   (vertico-mode)
 
-  ;;Different scroll margin
-  (setq vertico-scroll-margin 0)
+;;   ;;Different scroll margin
+;;   (setq vertico-scroll-margin 0)
 
-  ;;Show more candidates
-  (setq vertico-count 20)
+;;   ;;Show more candidates
+;;   (setq vertico-count 20)
 
-  ;;Grow and shrink the Vertico minibuffer
-  (setq vertico-resize t)
+;;   ;;Grow and shrink the Vertico minibuffer
+;;   (setq vertico-resize t)
 
-  ;;Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  (setq vertico-cycle t))
+;;   ;;Optionally enable cycling for `vertico-next' and `vertico-previous'.
+;;   (setq vertico-cycle t))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
@@ -662,12 +662,12 @@ Restart works only on graphic display."
   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d./.cache"))) ; from https://github.com/syl20bnr/spacemacs/issues/15426
   (global-undo-tree-mode))
 
-(use-package marginalia
-  :ensure t
-  :custom
-  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-  :init
-  (marginalia-mode))
+;; (use-package marginalia
+;;   :ensure t
+;;   :custom
+;;   (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+;;   :init
+;;   (marginalia-mode))
 
 (use-package embark
   :ensure t
