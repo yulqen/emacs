@@ -233,6 +233,21 @@ Restart works only on graphic display."
 		    :family "Iosevka Nerd Font"
 		    :height  140)
 
+;; org-caldav
+(use-package org-caldav
+  :config
+  (setq org-caldav-url "http://radicale.banded-neon.ts.net/radicale/lemon")
+  (setq org-icalendar-timezone "Europe/London")
+  ;; (setq org-caldav-calendar-id "7c38e0c7-4a42-9863-c9e0-6025a32c4a65")
+  ;; (setq org-caldav-inbox "~/Documents/org/radbox.org")
+  ;; (setq org-caldav-files '("~/Documents/org/radcal.org"))
+  (setq org-caldav-calendars
+        '((:calendar-id "7c38e0c7-4a42-9863-c9e0-6025a32c4a65" :files ("~/Documents/org/radcal.org")
+                        :inbox "~/Documents/org/radbox.org")
+          (:calendar-id "bb48f855-f7bc-183f-f79d-275327d426d5"
+                        :files ("~/Documents/org/radcal_alt.org")
+                        :inbox "~/Documents/org/radbox_alt.org")) )
+)
 ;; Dockerfile syntax highlighting
 (use-package dockerfile-mode)
 
@@ -1404,6 +1419,10 @@ If failed try to complete the common part with `company-complete-common'"
 (setq org-agenda-start-day "today")
 (setq org-agenda-files (quote ("~/Documents/org/home.org"
                                "~/Documents/org/refile.org"
+                               "~/Documents/org/radbox.org"
+                               "~/Documents/org/radcal.org"
+                               "~/Documents/org/radbox_alt.org"
+                               "~/Documents/org/radcal_alt.org"
                                "~/Documents/org/mod.org"
                                "~/Documents/org/calendar/cal.org"
                                "~/Documents/org/habits.org")))
@@ -1483,6 +1502,10 @@ If failed try to complete the common part with `company-complete-common'"
                "* %?\n%^T")
               ("hb" "Home Calendar - Block" entry (file+headline "~/Documents/org/home.org" "Calendar")
                "* %?\n%^t--%^t")
+              ("hr" "Radicale" entry (file+headline "~/Documents/org/radcal.org" "Events")
+               "* %?\n%^T")
+              ("hR" "Radicale Alt" entry (file+headline "~/Documents/org/radcal_alt.org" "Events")
+               "* %?\n%^T")
               ("w" "Work Tasks & Notes")
               ("wt" "Work TODO" entry (file+headline "~/Documents/org/mod.org" "Tasks")
                "** TODO %?\nEntered on %U\n"
