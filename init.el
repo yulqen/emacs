@@ -224,16 +224,39 @@ Restart works only on graphic display."
 (setq visible-bell t)
 
 ;; font
-;; (cond
- ;; ((string-equal (system-name) "schumann")
- ;;  (when (member "Iosevka Nerd Font" (font-family-list))
- ;;    (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font"))))
- ;; ((string-equal (system-name) "pop_os")
- ;;  (when (member "Hack" (font-family-list))
- ;;    (add-to-list 'default-frame-alist '(font . "Hack-10"))))
 
-(add-to-list 'default-frame-alist
-             '(font  . "Iosevka Nerd Font-14"))
+;; (cond
+;; ((string-equal (system-name) "schumann")
+;;  (when (member "Iosevka Nerd Font" (font-family-list))
+;;    (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font"))))
+;; ((string-equal (system-name) "pop_os")
+;;  (when (member "Hack" (font-family-list))
+;;    (add-to-list 'default-frame-alist '(font . "Hack-10"))))
+
+;; (add-to-list 'default-frame-alist
+;;              '(font  . "Iosevka Nerd Font-14"))
+
+(set-frame-font "Iosevka Nerd Font-14")
+(defun my-set-default-font ()
+  (set-frame-font "Iosevka Nerd Font-14" nil t))
+
+;; Add the function to the `after-init-hook` so it's run after initialization
+(add-hook 'after-init-hook 'my-set-default-font)
+
+;; Add the function to the `after-load-theme-hook` so it's run after loading a theme
+(add-hook 'after-load-theme-hook 'my-set-default-font)
+
+(defun my-apply-font ()
+  "Apply my preferred font settings."
+  (set-frame-font "Iosevka Nerd Font-14" nil t))
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (with-selected-frame frame
+              (my-apply-font))))
+
+;; Apply the font settings to the current frame
+(my-apply-font)
 
 ;; (set-face-attribute 'default nil
 ;; 		    :family "Iosevka Nerd Font"
