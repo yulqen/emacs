@@ -64,6 +64,9 @@
 (setq use-package-always-ensure t)
 (require 'use-package)
 
+;; Don't save the clipboard as this tends to hang
+(setq x-select-enable-clipboard-manager nil)
+
 ;; easy revert buffer, which I never use
 (global-set-key (kbd "C-c R") (lambda () (interactive) (revert-buffer t t)))
 
@@ -247,7 +250,7 @@ Restart works only on graphic display."
           (:calendar-id "bb48f855-f7bc-183f-f79d-275327d426d5"
                         :files ("~/Documents/org/radcal_alt.org")
                         :inbox "~/Documents/org/radbox_alt.org")) )
-)
+  )
 ;; Dockerfile syntax highlighting
 (use-package dockerfile-mode)
 
@@ -1457,7 +1460,6 @@ If failed try to complete the common part with `company-complete-common'"
         ("h" "Home"
          (
           (agenda)
-          (tags-todo "CATEGORY=\"Q4_Plan\"" ((org-agenda-overriding-header "Q4 Plan")))
           (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")
                                                                         (org-agenda-sorting-strategy '(priority-down alpha-up))))
           (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "Home WAITING")
@@ -1473,9 +1475,8 @@ If failed try to complete the common part with `company-complete-common'"
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down)))))
-         ((org-agenda-category-filter-preset '("+home" "+habits" "+refile" "+Q4_Plan" "+Birthday"))))
+         ((org-agenda-category-filter-preset '("+home" "+habits" "+refile" "+Birthday"))))
         ("i" tags "idea")
-        ("q" tags-todo "CATEGORY=\"Q4_Plan\"" ((org-agenda-overriding-header "Q4 Plan")))
         ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
 
 (setq org-capture-templates
