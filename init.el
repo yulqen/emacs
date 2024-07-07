@@ -475,22 +475,22 @@ Restart works only on graphic display."
   )
 
 ;; Enable vertico
-;; (use-package vertico
-;;   :ensure t
-;;   :init
-;;   (vertico-mode)
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode)
 
-;;   ;;Different scroll margin
-;;   (setq vertico-scroll-margin 0)
+  ;;Different scroll margin
+  (setq vertico-scroll-margin 0)
 
-;;   ;;Show more candidates
-;;   (setq vertico-count 20)
+  ;;Show more candidates
+  (setq vertico-count 20)
 
-;;   ;;Grow and shrink the Vertico minibuffer
-;;   (setq vertico-resize t)
+  ;;Grow and shrink the Vertico minibuffer
+  (setq vertico-resize t)
 
-;;   ;;Optionally enable cycling for `vertico-next' and `vertico-previous'.
-;;   (setq vertico-cycle t))
+  ;;Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  (setq vertico-cycle t))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
@@ -656,18 +656,18 @@ Restart works only on graphic display."
   :ensure t
   :bind ("C-=" . er/expand-region))
 
-(use-package undo-tree
-  :ensure t
-  :init
-  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d./.cache"))) ; from https://github.com/syl20bnr/spacemacs/issues/15426
-  (global-undo-tree-mode))
-
-;; (use-package marginalia
+;; (use-package undo-tree
 ;;   :ensure t
-;;   :custom
-;;   (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
 ;;   :init
-;;   (marginalia-mode))
+;;   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d./.cache"))) ; from https://github.com/syl20bnr/spacemacs/issues/15426
+;;   (global-undo-tree-mode))
+
+(use-package marginalia
+  :ensure t
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
 
 (use-package embark
   :ensure t
