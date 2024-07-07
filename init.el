@@ -232,9 +232,12 @@ Restart works only on graphic display."
  ;;  (when (member "Hack" (font-family-list))
  ;;    (add-to-list 'default-frame-alist '(font . "Hack-10"))))
 
-(set-face-attribute 'default nil
-		    :family "Iosevka Nerd Font"
-		    :height  140)
+(add-to-list 'default-frame-alist
+             '(font  . "Iosevka Nerd Font-14"))
+
+;; (set-face-attribute 'default nil
+;; 		    :family "Iosevka Nerd Font"
+;; 		    :height  140)
 
 ;; org-caldav
 (use-package org-caldav
