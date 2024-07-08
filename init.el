@@ -1481,7 +1481,7 @@ If failed try to complete the common part with `company-complete-common'"
                                       (org-agenda-sorting-strategy '(deadline-up scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
                                       (org-agenda-sorting-strategy '(deadline-up)))))
-         ((org-agenda-category-filter-preset '("+MOD" "+Proj/Task" "+Meeting" "+WorkTrip" "+refile"))))
+         ((org-agenda-category-filter-preset '("+MOD" "+Proj/Task" "+radcal" "+radcal_alt" "+Meeting" "+WorkTrip" "+refile"))))
 
         ("h" "Home"
          (
