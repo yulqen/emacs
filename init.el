@@ -40,8 +40,8 @@
     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
      (format-time-string "%z")))))
 
-;; theme
-;;(load-theme 'deeper-blue t)
+;; themen
+(load-theme 'ef-elea-dark t)
 ;; (load-theme 'gruber-darker t)
 
 ;; (set-background-color "black")
@@ -150,7 +150,7 @@ Restart works only on graphic display."
 (setq hightlight-nonselected-windows nil)
 (setq fast-but-imprecise-scrolling t)
 (setq inhibit-compacting-font-caches t)
-(menu-bar-mode 1)
+(menu-bar-mode 0)
 
 (add-hook 'org-mode-hook 'visual-line-mode)
 
