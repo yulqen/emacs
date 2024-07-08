@@ -755,6 +755,10 @@ Restart works only on graphic display."
 ;; Enable LSP support by default in programming buffers
 (add-hook 'prog-mode-hook #'eglot-ensure)
 
+;; Change lsp prefix because at the moment it is "s-l"
+;; https://emacs.stackexchange.com/questions/55199/what-are-these-prefix-commands-that-start-with-s-l
+(setq lsp-keymap-prefix "C-x @ s-l")
+
 ;; Enabled inline static analysis
 (add-hook 'prog-mode-hook #'flymake-mode)
 
