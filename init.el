@@ -1533,6 +1533,13 @@ If failed try to complete the common part with `company-complete-common'"
                "* %?\n%^T")
               ("hR" "Radicale Alt" entry (file+headline "~/Documents/org/radcal_alt.org" "Events")
                "* %?\n%^T")
+              ("hD" "Denote Home (org)" plain
+               (file denote-last-path)
+               #'denote-org-capture
+               :no-save t
+               :immediate-finish nil
+               :kill-buffer t
+               :jump-to-captured t)
               ("w" "Work Tasks & Notes")
               ("wt" "Work TODO" entry (file+headline "~/Documents/org/mod.org" "Tasks")
                "** TODO %?\nEntered on %U\n"
