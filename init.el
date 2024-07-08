@@ -1624,3 +1624,30 @@ If failed try to complete the common part with `company-complete-common'"
               ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
               ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))))
+
+(defface org-agenda-radcal-highlight-face `((t :foreground "SpringGreen3"))
+    "Face used to highlight radcal entries in agenda view.
+https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-org-mode-agenda-depending-on-keyword-tag")
+
+(defface org-agenda-radcal-alt-highlight-face `((t :foreground "dark magenta"))
+  "Face used to highlight radcal entries in agenda view.
+https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-org-mode-agenda-depending-on-keyword-tag")
+
+(defun org-agenda-highlight-radcal-entries ()
+  "Highlight calendar items in agenda."
+  (let ((inhibit-read-only t))
+    (save-excursion
+      (goto-char (point-min))
+      (while (not (eobp))
+        (let ((line-begin (line-beginning-position))
+              (line-end (line-end-position)))
+          (save-excursion
+            (goto-char line-begin)
+            (when (re-search-forward "radcal_alt" line-end t)
+              (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-alt-highlight-face))
+            (when (re-search-forward "radcal" line-end t)
+              (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-highlight-face))))
+        (forward-line 1)))))
+
+(add-hook 'org-agenda-finalize-hook #'org-agenda-highlight-radcal-entries)
+  ;; (add-hook 'org-agenda-finalize-hook #'org-agenda-highlight-cal-entry)
