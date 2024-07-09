@@ -40,9 +40,6 @@
     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
      (format-time-string "%z")))))
 
-;; themen
-(load-theme 'ef-elea-dark t)
-;; (load-theme 'gruber-darker t)
 
 ;; (set-background-color "black")
 ;; (set-foreground-color "white")
@@ -262,6 +259,22 @@ Restart works only on graphic display."
 ;; 		    :family "Iosevka Nerd Font"
 ;; 		    :height  140)
 
+;; themes by prot
+(use-package ef-themes
+  :ensure t)
+
+(use-package modus-themes
+  :ensure t)
+
+;; tsoding's theme
+(use-package gruber-darker-theme
+  :ensure t)
+
+;; themen
+(load-theme 'ef-elea-dark t)
+;; (load-theme 'gruber-darker t)
+
+
 ;; org-caldav
 (use-package org-caldav
   :config
@@ -303,11 +316,7 @@ Restart works only on graphic display."
   :bind
   (("<f9>" . distraction-free)))
 
-;; theme
-(use-package gruber-darker-theme
-  :ensure t
-  :config
-  (load-theme 'gruber-darker t))
+
 
 (use-package vterm
   :ensure t)
@@ -1661,4 +1670,3 @@ https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-o
         (forward-line 1)))))
 
 (add-hook 'org-agenda-finalize-hook #'org-agenda-highlight-radcal-entries)
-  ;; (add-hook 'org-agenda-finalize-hook #'org-agenda-highlight-cal-entry)
