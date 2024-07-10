@@ -1162,7 +1162,7 @@ If failed try to complete the common part with `company-complete-common'"
 ;; beacon mode
 (use-package beacon
   :config
-  (setq beacon-color "DeepSkyBlue")
+  (setq beacon-color "magenta")
   (beacon-mode 1))
 
 ;; flycheck syntax highlighting
