@@ -953,8 +953,8 @@ If failed try to complete the common part with `company-complete-common'"
   (add-hook 'deft-open-file-hook 'mrl/kill-deft))
 
 ;; Ace Jump
-;; (use-package ace-jump-mode
-;;   :bind ("C-M-SPC" . ace-jump-mode))
+(use-package ace-jump-mode
+  :bind ("C-M-SPC" . ace-jump-mode))
 
 ;; Lisp programming
 (use-package paredit
