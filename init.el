@@ -260,8 +260,8 @@ Restart works only on graphic display."
 ;; 		    :height  140)
 
 ;; themes by prot
-(use-package ef-themes
-  :ensure t)
+;; (use-package ef-themes
+;;   :ensure t)
 
 (use-package modus-themes
   :ensure t)
@@ -271,7 +271,7 @@ Restart works only on graphic display."
   :ensure t)
 
 ;; themen
-(load-theme 'ef-elea-dark t)
+;; (load-theme 'ef-elea-dark t)
 ;; (load-theme 'gruber-darker t)
 
 
@@ -356,55 +356,55 @@ Restart works only on graphic display."
 (setq coding-system-for-write 'utf-8)
 
 ;; PACKAGES
-;; (use-package ef-themes
-;;   :init
-;;   ;; Make customisations that affect Emacs faces BEFORE loading a theme
-;;   ;; (any change needs a theme re-load to take effect).
+(use-package ef-themes
+  :init
+  ;; Make customisations that affect Emacs faces BEFORE loading a theme
+  ;; (any change needs a theme re-load to take effect).
 
-;;   ;; If you like two specific themes and want to switch between them, you
-;;   ;; can specify them in `ef-themes-to-toggle' and then invoke the command
-;;   ;; `ef-themes-toggle'.  All the themes are included in the variable
-;;   ;; `ef-themes-collection'.
-;;   (setq ef-themes-to-toggle '(ef-summer ef-winter))
+  ;; If you like two specific themes and want to switch between them, you
+  ;; can specify them in `ef-themes-to-toggle' and then invoke the command
+  ;; `ef-themes-toggle'.  All the themes are included in the variable
+  ;; `ef-themes-collection'.
+  (setq ef-themes-to-toggle '(ef-summer ef-winter))
 
-;;   (setq ef-themes-headings ; read the manual's entry or the doc string
-;;         '((0 . (variable-pitch light 1.9))
-;;           (1 . (variable-pitch light 1.1))
-;;           (2 . (variable-pitch regular 1.0))
-;;           (3 . (variable-pitch regular 1.0))
-;;           (4 . (variable-pitch regular 1.0))
-;;           (5 . (variable-pitch 1.0)) ; absence of weight means `bold'
-;;           (6 . (variable-pitch 1.0))
-;;           (7 . (variable-pitch 1.0))
-;;           (t . (variable-pitch 1.0))))
+  (setq ef-themes-headings ; read the manual's entry or the doc string
+        '((0 . (variable-pitch light 1.9))
+          (1 . (variable-pitch light 1.1))
+          (2 . (variable-pitch regular 1.0))
+          (3 . (variable-pitch regular 1.0))
+          (4 . (variable-pitch regular 1.0))
+          (5 . (variable-pitch 1.0)) ; absence of weight means `bold'
+          (6 . (variable-pitch 1.0))
+          (7 . (variable-pitch 1.0))
+          (t . (variable-pitch 1.0))))
 
-;;   ;; They are nil by default...
-;;   (setq ef-themes-mixed-fonts nil
-;;         ef-themes-variable-pitch-ui nil)
+  ;; They are nil by default...
+  (setq ef-themes-mixed-fonts nil
+        ef-themes-variable-pitch-ui nil)
 
-;;   ;; Read the doc string or manual for this one.  The symbols can be
-;;   ;; combined in any order.
-;;   (setq ef-themes-region '(intense no-extend neutral))
+  ;; Read the doc string or manual for this one.  The symbols can be
+  ;; combined in any order.
+  (setq ef-themes-region '(intense no-extend neutral))
 
-;;   ;; Disable all other themes to avoid awkward blending:
-;;   (mapc #'disable-theme custom-enabled-themes)
+  ;; Disable all other themes to avoid awkward blending:
+  (mapc #'disable-theme custom-enabled-themes)
 
-;;   ;; Load the theme of choice:
-;;   ;;(load-theme 'ef-deuteranopia-dark :no-confirm)
-;;   ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
-;;   ;;(ef-themes-select 'ef-summer)
+  ;; Load the theme of choice:
+  (load-theme 'ef-deuteranopia-dark :no-confirm)
+  ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
+  ;;(ef-themes-select 'ef-deuteranopia-dark)
 
-;;   ;; The themes we provide are recorded in the `ef-themes-dark-themes',
-;;   ;; `ef-themes-light-themes'.
+  ;; The themes we provide are recorded in the `ef-themes-dark-themes',
+  ;; `ef-themes-light-themes'.
 
-;;   ;; We also provide these commands, but do not assign them to any key:
-;;   ;;
-;;   ;; - `ef-themes-toggle'
-;;   ;; - `ef-themes-select'
-;;   ;; - `ef-themes-load-random'
-;;   ;; - `ef-themes-preview-colors'
-;;   ;; - `ef-themes-preview-colors-current'
-;;   )
+  ;; We also provide these commands, but do not assign them to any key:
+  ;;
+  ;; - `ef-themes-toggle'
+  ;; - `ef-themes-select'
+  ;; - `ef-themes-load-random'
+  ;; - `ef-themes-preview-colors'
+  ;; - `ef-themes-preview-colors-current'
+  )
 
 (use-package consult-notes
   :ensure t
