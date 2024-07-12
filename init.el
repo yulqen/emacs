@@ -1488,11 +1488,12 @@ If failed try to complete the common part with `company-complete-common'"
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
                      ((org-agenda-overriding-header "MOD NEXT UNSCHEDULED")
                       (org-agenda-sorting-strategy '(deadline-up priority-down))))
-          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")))
+          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
+                                         (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
-                                      (org-agenda-sorting-strategy '(deadline-up scheduled-down priority-down))))
+                                      (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
-                                      (org-agenda-sorting-strategy '(deadline-up)))))
+                                      (org-agenda-sorting-strategy '(alpha-up)))))
          ((org-agenda-category-filter-preset '("+MOD" "+Proj/Task" "+radcal" "+radcal_alt" "+Meeting" "+WorkTrip" "+refile"))))
 
         ("h" "Home"
