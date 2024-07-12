@@ -274,6 +274,20 @@ Restart works only on graphic display."
 ;; (load-theme 'ef-elea-dark t)
 ;; (load-theme 'gruber-darker t)
 
+;; Install and configure projectile
+(use-package projectile
+  :ensure t
+  :init
+  (projectile-mode +1)
+  (setq projectile-project-search-path '("~/code"))
+  ;; Optionally set projectile keymap prefix
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+;; use this for .envrc files in project directories
+(use-package direnv
+  :ensure t
+  :config
+  (direnv-mode))
 
 ;; org-caldav
 (use-package org-caldav
