@@ -385,6 +385,20 @@ Restart works only on graphic display."
 ;; (load-theme 'ef-elea-dark t)
 ;; (load-theme 'gruber-darker t)
 
+;; Install and configure projectile
+(use-package projectile
+  :ensure t
+  :init
+  (projectile-mode +1)
+  (setq projectile-project-search-path '("~/code"))
+  ;; Optionally set projectile keymap prefix
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+;; use this for .envrc files in project directories
+(use-package direnv
+  :ensure t
+  :config
+  (direnv-mode))
 
 ;; org-caldav
 (use-package org-caldav
@@ -1597,11 +1611,12 @@ If failed try to complete the common part with `company-complete-common'"
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
                      ((org-agenda-overriding-header "MOD NEXT UNSCHEDULED")
                       (org-agenda-sorting-strategy '(deadline-up priority-down))))
-          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")))
+          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
+                                         (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
-                                      (org-agenda-sorting-strategy '(deadline-up scheduled-down priority-down))))
+                                      (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
-                                      (org-agenda-sorting-strategy '(deadline-up)))))
+                                      (org-agenda-sorting-strategy '(alpha-up)))))
          ((org-agenda-category-filter-preset '("+MOD" "+Proj/Task" "+radcal" "+radcal_alt" "+Meeting" "+WorkTrip" "+refile"))))
 
         ("h" "Home"
