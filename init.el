@@ -40,6 +40,8 @@
     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
      (format-time-string "%z")))))
 
+;; uncomment this
+(server-start)
 
 ;; (set-background-color "black")
 ;; (set-foreground-color "white")
@@ -49,17 +51,11 @@
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
 			                   ("elpa" . "https://elpa.gnu.org/packages/")))
-(package-initialize)
 
-(unless package-archive-contents
-  (package-refresh-contents))
-
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-(eval-when-compile
-  (require 'use-package))
-(setq use-package-always-ensure t)
-(require 'use-package)
+;; set custom file
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(load custom-file 'noerror)
+(add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
 
 ;; Don't save the clipboard as this tends to hang
 (setq x-select-enable-clipboard-manager nil)
@@ -69,6 +65,123 @@
 
 ;; make sure you require this - otherwise it will not work...
 (require 'org-protocol)
+
+;; encoding
+(prefer-coding-system       'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
+(setq column-number-mode t
+      mode-line-in-non-selected-windows t)
+
+(setq history-length 25)
+(savehist-mode 1)
+
+(defun mrl/display-ansi-colors ()
+  "Render colors in a buffer that contains ASCII color escape codes."
+  (interactive)
+  (require 'ansi-color)
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+
+(add-hook 'compilation-filter-hook #'mrl/display-ansi-colors)
+(add-hook 'eshell-preoutput-filter-functions  #'ansi-color-apply)
+
+(defun mrl/modify-margins ()
+  "Add some space around each window."
+  (interactive)
+  (modify-all-frames-parameters
+   '((right-divider-width . 20)
+     (internal-border-width . 20)))
+  (dolist (face '(window-divider
+                  window-divider-first-pixel
+                  window-divider-last-pixel))
+    (face-spec-reset-face face)
+    (set-face-foreground face (face-attribute 'default :background)))
+  (set-face-background 'fringe (face-attribute 'default :background)))
+
+(mrl/modify-margins)
+(add-hook 'ef-themes-post-load-hook 'mrl/modify-margins)
+
+(setq find-file-visit-truename t)
+(setq vc-follow-symlinks t)
+
+(setq-default indent-tabs-mode nil)
+
+(add-hook 'prog-mode-hook #'hl-line-mode)
+(add-hook 'text-mode-hook #'hl-line-mode)
+(add-hook 'org-mode-hook #'hl-line-mode)
+(add-hook 'prog-mode-hook #'flymake-mode)
+(add-hook 'prog-mode-hook #'flyspell-prog-mode)
+(add-hook 'prog-mode-hook (electric-pair-mode t))
+(add-hook 'prog-mode-hook (show-paren-mode t))
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(setq kill-buffer-query-functions
+  (remq 'process-kill-buffer-query-function
+        kill-buffer-query-functions))
+
+(setq-default truncate-lines t)
+(add-hook 'eshell-mode-hook (lambda () (setq-local truncate-lines nil)))
+(add-hook 'shell-mode-hook (lambda () (setq-local truncate-lines nil)))
+
+(defun mrl/display-relative-lines ()
+  (setq display-line-numbers 'relative))
+
+(add-hook 'prog-mode-hook #'mrl/display-relative-lines)
+(add-hook 'yaml-mode-hook #'mrl/display-relative-lines)
+
+(unless (display-graphic-p)
+(add-hook 'text-mode-hook #'mrl/display-relative-lines))
+
+(delete-selection-mode t)
+
+(setq compilation-scroll-output 'first-error)
+
+(advice-add 'risky-local-variable-p :override #'ignore)
+
+(setq use-short-answers t)
+
+(setq confirm-kill-emacs 'yes-or-no-p)
+
+(if (version< emacs-version "29.0")
+    (pixel-scroll-mode)
+  (pixel-scroll-precision-mode 1)
+  (setq pixel-scroll-precision-large-scroll-height 35.0))
+
+(use-package grep
+  :config
+  (when (executable-find "rg")
+    (setq grep-program "rg")
+    (grep-apply-setting
+     'grep-find-command
+     '("rg -n -H --color always --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27))))
+
+(put 'narrow-to-region 'disabled nil)
+
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
+(setq-default mark-ring-max 32)
+(setq global-mark-ring-max 32)
+
+(setq set-mark-command-repeat-pop t)
+
+(global-set-key (kbd "C-M-<backspace>") 'backward-kill-sexp)
+(global-set-key (kbd "C-M-h") 'backward-kill-sexp)
+
+(global-set-key (kbd "C-z") #'zap-up-to-char)
+
+(global-set-key [remap dabbrev-expand] 'hippie-expand)
+
+(global-set-key [remap list-buffers] 'ibuffer)
+
+(setq completion-styles '(flex basic partial-completion emacs22))
+
+(setq css-indent-offset 2)
 
 ;; start-stop emacs
 (defun mrl/stop-emacs-1 ()
@@ -118,9 +231,7 @@ Restart works only on graphic display."
 			                   :follow 'org-notmuch-open
 			                   :store 'org-notmuch-store-link)
 
-;; set custom file
-(setq custom-file (concat user-emacs-directory "custom.el"))
-(load custom-file 'noerror)
+
 
 ;; set bookmarks file
 (setq bookmark-default-file (concat user-emacs-directory "bookmarks"))
@@ -185,7 +296,7 @@ Restart works only on graphic display."
 (put 'narrow-to-region 'disabled nil)
 
 ;; we don't want the old buffer list!
-;;; (global-unset-key (kbd "C-x C-b")) 
+;;; (global-unset-key (kbd "C-x C-b"))
 
 ;; Put backups in /tmp where they belong
 (setq backup-directory-alist
@@ -200,7 +311,7 @@ Restart works only on graphic display."
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; auto revert files
-(global-auto-revert-mode t)
+(global-auto-revert-mode)
 
 ;; BACKUPS/LOCKFILES --------
 ;; Don't generate backups or lockfiles.
@@ -411,7 +522,7 @@ Restart works only on graphic display."
   :bind (("C-c d" . consult-notes))
   :commands (consult-notes
              consult-notes-search-in-all-notes
-             ;; if using org-roam 
+             ;; if using org-roam
              consult-notes-org-roam-find-node
              consult-notes-org-roam-find-node-relation)
   :config
@@ -504,7 +615,7 @@ Restart works only on graphic display."
           (denote
            (format-time-string "%A %e %B %Y")
            '("journal") nil journal-dir)))))
-  
+
   :bind (("C-c n n" . denote-create-note)
          ("C-c n d" . mrl/denote-journal)
          ("C-c n t" . denote-type)
@@ -769,8 +880,6 @@ Restart works only on graphic display."
 ;; https://emacs.stackexchange.com/questions/55199/what-are-these-prefix-commands-that-start-with-s-l
 (setq lsp-keymap-prefix "C-x @ s-l")
 
-;; Enabled inline static analysis
-(add-hook 'prog-mode-hook #'flymake-mode)
 
 ;;; Indication of local VCS changes
 (unless (package-installed-p 'diff-hl)
@@ -859,7 +968,7 @@ Restart works only on graphic display."
                                  (:name "School"
                                         :query "tag:school"
                                         :sort-order newest-first
-                                        :key "S")                                 
+                                        :key "S")
                                  (:name "Deleted"
                                         :query "tag:deleted"
                                         :sort-order newest-first
@@ -1038,7 +1147,7 @@ If failed try to complete the common part with `company-complete-common'"
           ("https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA") "Luke Smith)"
           ("https://www.youtube.com/feeds/videos.xml?channel_id=UCittVh8imKanO_5KohzDbpg") "Paul Joseph Watson)"
           ("https://www.youtube.com/feeds/videos.xml?channel_id=UChWbNrHQHvKK6paclLp7WYw") "Ben Hoff)"
-          ("https://www.youtube.com/feeds/videos.xml?channel_id=UC5A6gpksxKgudZxrTOpz0XA") "fstori" 
+          ("https://www.youtube.com/feeds/videos.xml?channel_id=UC5A6gpksxKgudZxrTOpz0XA") "fstori"
           ("https://www.reddit.com/r/stallmanwasright.rss")
           ("http://feeds2.feedburner.com/Command-line-fu")
           ("https://www.debian.org/News/news")
@@ -1065,7 +1174,7 @@ If failed try to complete the common part with `company-complete-common'"
           ("https://nitter.net/slashdot/rss")
           ("https://www.romanzolotarev.com/rss.xml")
           ("https://www.romanzolotarev.com/n/rss.xml"))))
-        
+
 ;; get scoring in elfeed
 (use-package elfeed-score
   :ensure t
@@ -1342,7 +1451,7 @@ If failed try to complete the common part with `company-complete-common'"
 ;;      ("r" "mod+rrdl" plain
 ;;       "%?"
 ;;       :target (file+head "mod/rrdl/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;       :unnarrowed t)     
+;;       :unnarrowed t)
 ;;      ("e" "encrypted" plain
 ;;       "%?"
 ;;       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
