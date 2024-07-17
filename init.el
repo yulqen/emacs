@@ -640,21 +640,13 @@ Restart works only on graphic display."
 ;; Enable vertico
 (use-package vertico
   :ensure t
+  :custom
+  ;; (vertico-scroll-margin 0) ;; Different scroll margin
+  (vertico-count 20) ;; Show more candidates
+  ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+  (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
   :init
-  (vertico-mode)
-
-  ;;Different scroll margin
-  (setq vertico-scroll-margin 0)
-
-  ;;Show more candidates - we don't need many
-  (setq vertico-count 10)
-
-  ;;Grow and shrink the Vertico minibuffer - set to nil because it
-  ;; jumping up and down is nippy
-  (setq vertico-resize nil)
-
-  ;;Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  (setq vertico-cycle t))
+  (vertico-mode))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
@@ -663,7 +655,13 @@ Restart works only on graphic display."
 
 ;; A few more useful configurations...
 (use-package emacs
-  :ensure t
+  :custom
+  ;; Support opening new minibuffers from inside existing minibuffers.
+  (enable-recursive-minibuffers t)
+  ;; Emacs 28 and newer: Hide commands in M-x which do not work in the current
+  ;; mode.  Vertico commands are hidden in normal buffers. This setting is
+  ;; useful beyond Vertico.
+  (read-extended-command-predicate #'command-completion-default-include-p)
   :init
   ;; Add prompt indicator to `completing-read-multiple'.
   ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
@@ -679,21 +677,18 @@ Restart works only on graphic display."
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
-
-  ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t))
-
+;; Optionally use the `orderless' completion style.
 (use-package orderless
-  :ensure t
   :custom
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
   (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion)))))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
+
 
 
 ; Example configuration for Consult - from https://github.com/minad/consult
