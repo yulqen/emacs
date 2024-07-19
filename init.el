@@ -43,14 +43,12 @@
 ;; uncomment this
 (server-start)
 
-;; (set-background-color "black")
-;; (set-foreground-color "white")
-
 ;; packages
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
 			                   ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
 
 ;; set custom file
 (setq custom-file (concat user-emacs-directory "custom.el"))
@@ -385,15 +383,6 @@ Restart works only on graphic display."
 ;; (load-theme 'ef-elea-dark t)
 ;; (load-theme 'gruber-darker t)
 
-;; Install and configure projectile
-(use-package projectile
-  :ensure t
-  :init
-  (projectile-mode +1)
-  (setq projectile-project-search-path '("~/code"))
-  ;; Optionally set projectile keymap prefix
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-
 ;; use this for .envrc files in project directories
 (use-package direnv
   :ensure t
@@ -417,31 +406,6 @@ Restart works only on graphic display."
   )
 ;; Dockerfile syntax highlighting
 (use-package dockerfile-mode)
-
-;; distraction free writing
-;; from https://lucidmanager.org/productivity/ricing-org-mode/
-;; Distraction-free screen
-(use-package olivetti
-  :init
-  (setq olivetti-body-width 0.5)
-  :config
-  (defun distraction-free ()
-    "Distraction-free writing environment"
-    (interactive)
-    (if (equal olivetti-mode nil)
-        (progn
-          (window-configuration-to-register 1)
-          (delete-other-windows)
-          (text-scale-increase 2)
-          (olivetti-mode t))
-      (progn
-        (jump-to-register 1)
-        (olivetti-mode 0)
-        (text-scale-decrease 2))))
-  :bind
-  (("<f9>" . distraction-free)))
-
-
 
 (use-package vterm
   :ensure t)
@@ -547,9 +511,6 @@ Restart works only on graphic display."
   ;; Set org-roam integration OR denote integration
     (when (locate-library "denote")
   (consult-notes-denote-mode)))
-
-(use-package pass
-  :ensure t)
 
 (use-package denote
   :ensure t
@@ -828,32 +789,6 @@ Restart works only on graphic display."
   :init
   (marginalia-mode))
 
-(use-package embark
-  :ensure t
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
-  :init
-
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-
-  :config
-
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
-
-;; Consult users will also want the embark-consult package.
-(use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-
 
 ;; markdown
 (use-package markdown-mode
@@ -903,97 +838,6 @@ Restart works only on graphic display."
 
 ;; Enable autocompletion by default in programming buffers
 (add-hook 'prog-mode-hook #'corfu-mode)
-
-;; emacs-async - for helm
-(use-package async
-  :ensure t)
-
-;; popup - for helm
-;; (use-package popup
-;;   :ensure t)
-
-;; notmuch
-(use-package notmuch
-  :defer t
-  :config
-  (define-key notmuch-show-mode-map "S"
-    (lambda ()
-      "mark message as spam"
-      (interactive)
-      (notmuch-show-tag (list "+spam" "-inbox"))))
-  (define-key notmuch-search-mode-map "S"
-    (lambda ()
-      "mark message as spam"
-      (interactive)
-      (notmuch-search-tag (list "+spam" "-inbox"))))
-  (define-key notmuch-search-mode-map "d"
-    (lambda ()
-      "toggle deleted tag for message"
-      (interactive)
-      (if (member "deleted" (notmuch-search-get-tags))
-          (notmuch-search-tag (list "-deleted"))
-        (progn
-          (notmuch-search-tag (list "-unread"))
-          (notmuch-search-tag (list "-new"))
-          (notmuch-search-tag (list "+deleted"))))))
-  (setq send-mail-function 'sendmail-send-it
-        notmuch-search-result-format '(("date" . "%12s ")
-                                       ("count" . "%7s ")
-                                       ("authors" . "%-20s ")
-                                       ("subject" . "%-80s ")
-                                       ("tags" . "(%s) "))
-        sendmail-program "/usr/bin/msmtp"
-        notmuch-archive-tags '("-inbox" "+archived" "-new")
-        message-kill-buffer-on-exit t
-        notmuch-draft-folder "purelymail/Drafts"
-        notmuch-fcc-dirs "purelymail/Sent +sent -unread -inbox"
-        notmuch-search-oldest-first nil
-        mail-specify-envelope-from t
-        message-signature "\n-- \nMatthew"
-        mm-text-html-renderer 'lynx
-        message-sendmail-envelope-from 'header
-        mail-envelope-from 'header
-        notmuch-saved-searches '((:name "Inbox"
-                                        :query "tag:inbox"
-                                        :count-query "tag:inbox and tag:unread"
-                                        :sort-order newest-first
-                                        :key "i")
-                                 (:name "Todo"
-                                        :query "tag:todo"
-                                        :sort-order newest-first
-                                        :key "t")
-                                 (:name "Unread"
-                                        :query "tag:unread"
-                                        :sort-order newest-first
-                                        :key "u")
-                                 (:name "Sent"
-                                        :query "tag:sent"
-                                        :sort-order newest-first
-                                        :key "s")
-                                 (:name "All Mail"
-                                        :query "*"
-                                        :sort-order newest-first
-                                        :key "a")
-                                 (:name "School"
-                                        :query "tag:school"
-                                        :sort-order newest-first
-                                        :key "S")
-                                 (:name "Deleted"
-                                        :query "tag:deleted"
-                                        :sort-order newest-first
-                                        :key "d"))))
-
-;; calfw
-;; (use-package calfw-org
-;;   :ensure t
-;;   :config
-;;   (setq cfw:org-agenda-schedule-args '(:timestamp))
-;;   (defun mrl/calf-org-calendar ()
-;;     (interactive)
-;;     (cfw:open-calendar-buffer
-;;      :contents-sources
-;;      (list
-;;       (cfw:org-create-source "Orange")))))
 
 ;; Yasnippet
 (use-package yasnippet
@@ -1058,18 +902,6 @@ If failed try to complete the common part with `company-complete-common'"
               (company-complete-common))))
       (company-complete-common))))
 
-(use-package deft
-  :ensure t
-  :config
-  (defun mrl/kill-deft ()
-      (kill-buffer "*Deft*"))
-  (setq deft-directory "~/Documents/Notes/Archive"
-        deft-extensions '("org" "md" "txt")
-        deft-recursive t
-        deft-file-limit 40
-        deft-use-filename-as-title t)
-  (add-hook 'deft-open-file-hook 'mrl/kill-deft))
-
 ;; Ace Jump
 (use-package ace-jump-mode
   :bind ("C-M-SPC" . ace-jump-mode))
@@ -1095,102 +927,10 @@ If failed try to complete the common part with `company-complete-common'"
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-;; ;; EVIL
-;;  (use-package evil
-;;   :init
-;;   :config
-;;   (setq evil-respect-visual-line-mode t)
-;;   (setq evil-default-state 'emacs)
-;;   (evil-mode 0))
-
 ;; which-key
 (use-package which-key
   :config
   (which-key-mode))
-
-(use-package elfeed
-  :config
-  (setq elfeed-feeds
-        '(("https://hnrss.org/newcomments?q=openbsd")
-          ("https://hnrss.org/newest?q=openbsd")
-          ("https://planet.clojure.in/atom.xml")
-          ("https://hnrss.org/newest?q=plaintext")
-          ("https://hnrss.org/newest?q=taskwarrior")
-          ("https://hnrss.org/newest?q=Roam")
-          ("https://hnrss.org/newest")
-          ("https://herbertlui.net/feed/")
-          ("https://cheapskatesguide.org/cheapskates-guide-rss-feed.xml")
-          ("https://reallifemag.com/rss")
-          ("https://yulqen.org/blog/index.xml")
-          ("https://yulqen.org/stream/index.xml")
-          ("https://perso.pw/openbsd-current.xml")
-          ("https://dataswamp.org/~solene/rss.xml")
-          ("https://baty.net/feed/")
-          ("https://bsdly.blogspot.com/feeds/posts/default")
-          ("https://sivers.org/en.atom")
-          ("http://feeds.bbci.co.uk/news/rss.xml")
-          ("http://feeds.bbci.co.uk/sport/rugby-union/rss.xml?edition=uk")
-          ("https://krebsonsecurity.com/feed/")
-          ("https://www.computerweekly.com/rss/IT-security.xml")
-          ("https://undeadly.org/errata/errata.rss")
-          ("https://eli.thegreenplace.net/feeds/all.atom.xml")
-          ("https://m-chrzan.xyz/rss.xml")
-          ("https://plaintextproject.online/feed.xml")
-          ("http://ebb.org/bkuhn/blog/rss.xml")
-          ("https://usesthis.com/feed.atom")
-          ("http://www.linuxjournal.com/node/feed")
-          ("http://www.linuxinsider.com/perl/syndication/rssfull.pl")
-          ("http://feeds.feedburner.com/mylinuxrig")
-          ("https://landchad.net/rss.xml")
-          ("https://lukesmith.xyz/rss.xml")
-          ("https://yewtu.be/feed/channel/UCs6KfncB4OV6Vug4o_bzijg")
-          ("https://idle.nprescott.com/")
-          ("https://eradman.com/")
-          ("https://hunden.linuxkompis.se/feed.xml")
-          ("https://greghendershott.com/")
-          ("https://www.romanzolotarev.com/rss.xml")
-          ("https://feeds.feedburner.com/StudyHacks")
-          ("https://www.theregister.com/Design/page/feeds.html")
-          ("https://stevenpressfield.com/feed")
-          ("https://www.youtube.com/feeds/videos.xml?channel_id=UCrqM0Ym_NbK1fqeQG2VIohg") "Tsoding)"
-          ("https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA") "Luke Smith)"
-          ("https://www.youtube.com/feeds/videos.xml?channel_id=UCittVh8imKanO_5KohzDbpg") "Paul Joseph Watson)"
-          ("https://www.youtube.com/feeds/videos.xml?channel_id=UChWbNrHQHvKK6paclLp7WYw") "Ben Hoff)"
-          ("https://www.youtube.com/feeds/videos.xml?channel_id=UC5A6gpksxKgudZxrTOpz0XA") "fstori"
-          ("https://www.reddit.com/r/stallmanwasright.rss")
-          ("http://feeds2.feedburner.com/Command-line-fu")
-          ("https://www.debian.org/News/news")
-          ("https://opensource.org/news.xml")
-          ("https://www.fsf.org/static/fsforg/rss/news.xml")
-          ("https://jordanorelli.com/rss")
-          ("https://www.c0ffee.net/rss/")
-          ("http://tonsky.me/blog/atom.xml")
-          ("https://akkshaya.blog/feed")
-          ("https://miguelmota.com/index.xml")
-          ("https://web3isgoinggreat.com/feed.xml")
-          ("https://feeds.feedburner.com/arstechnica/open-source")
-          ("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml")
-          ("https://nitter.net/openbsdnow/rss")
-          ("https://nitter.net/openbsd/rss")
-          ("https://nitter.net/webzinepuffy/rss")
-          ("https://nitter.net/bsdnow/rss")
-          ("https://nitter.net/jcs/rss")
-          ("https://nitter.net/openbsdjournal/rss")
-          ("https://nitter.net/pitrh/rss")
-          ("https://nitter.net/sizeofvoid/rss")
-          ("https://nitter.net/canadianbryan/rss")
-          ("https://nitter.net/wesley974/rss")
-          ("https://nitter.net/slashdot/rss")
-          ("https://www.romanzolotarev.com/rss.xml")
-          ("https://www.romanzolotarev.com/n/rss.xml"))))
-
-;; get scoring in elfeed
-(use-package elfeed-score
-  :ensure t
-  :config
-  (progn
-    (elfeed-score-enable)
-    (define-key elfeed-search-mode-map "=" elfeed-score-map)))
 
 ;; Basic magit
 (use-package magit
@@ -1209,18 +949,6 @@ If failed try to complete the common part with `company-complete-common'"
 ;;   (setq ido-everywhere t)  ; nil because incompatible with Helm
 ;;   (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
 ;;   (setq ido-enable-flex-matching t))
-
-;; ;; helm
-;; (require 'helm-config)
-;; (global-set-key (kbd "M-x") #'helm-M-x)
-;; (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
-;; (global-set-key (kbd "C-x C-f") #'helm-find-files)
-;; ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-;; ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-;; ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-;; (global-set-key (kbd "C-c h") 'helm-command-prefix)
-;; (global-unset-key (kbd "C-x c"))
-;; (helm-mode 1)
 
 ;; ledger mode
 (use-package ledger-mode
@@ -1330,43 +1058,8 @@ If failed try to complete the common part with `company-complete-common'"
 (put 'dired-find-alternate-file 'disabled nil)
 (setq dired-recursive-copies 'always)
 
-;; auto-package-update
-(use-package auto-package-update
-  :if (not (daemonp))
-  :custom
-  (auto-package-update-interval 7) ;; in days
-  (auto-package-update-prompt-before-update t)
-  (auto-package-update-delete-old-versions t)
-  (auto-package-update-hide-results t)
-  :config
-  (auto-package-update-maybe))
-
 ;; remove certain minor modes from the mode line
 (use-package diminish)
-
-;; Windmove - use Shift and arrow keys to move in windows
-;; this fucks around with org mode - we want to shift timestamps and stuff
-;;(when (fboundp 'windmove-default-keybindings)
-;; (windmove-default-keybindings))
-
-;; Winner mode - undo and redo changes in window config
-;; with C-c left and C-c right
-(use-package winner
-  :ensure nil
-  :custom
-  (winner-boring-buffers
-   '("*Completions*"
-     "*Compile-Log*"
-     "*inferior-lisp*"
-     "*Fuzzy Completions*"
-     "*Apropos*"
-     "*Help*"
-     "*cvs*"
-     "*Buffer List*"
-     "*Ibuffer*"
-     "*esh command on file*"))
-  :config
-  (winner-mode 1))
 
 ;; ;; elpy for python
 ;; (use-package elpy
@@ -1433,74 +1126,6 @@ If failed try to complete the common part with `company-complete-common'"
   :demand t
   :bind (:map org-mode-map
               ("C-M-y" . org-rich-yank)))
-
-;; (use-package org-roam
-;;   :ensure t
-;;   :custom
-;;   (org-roam-dailies-directory "daily/")
-;;   (org-roam-directory "~/Documents/org-roam")
-;;   (org-roam-capture-ref-templates
-;;    '(("d" "default" plain
-;;       "%?"
-;;       :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;       :unnarrowed t)))
-;;   (org-roam-capture-templates
-;;    '(("d" "default" plain
-;;       "%?"
-;;       :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;       :unnarrowed t)
-;;      ("w" "mod" plain
-;;       "%?"
-;;       :target (file+head "mod/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;       :unnarrowed t)
-;;      ("b" "mod+baes" plain
-;;       "%?"
-;;       :target (file+head "mod/baes/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;       :unnarrowed t)
-;;      ("r" "mod+rrdl" plain
-;;       "%?"
-;;       :target (file+head "mod/rrdl/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;       :unnarrowed t)
-;;      ("e" "encrypted" plain
-;;       "%?"
-;;       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
-;;       :unnarrowed t)))
-;;   (org-roam-dailies-capture-templates
-;;    '(("d" "home" entry "* %<%T>: %?"
-;;       :target (file+head "home/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
-;;       :unnarrowed t)
-;;      ("m" "mod" entry "* %<%T>: %?"
-;;       :target (file+head "mod/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
-;;       :unnarrowed t)))
-;;   :bind (("C-c n l" . org-roam-buffer-toggle)
-;;          ("C-c n f" . org-roam-node-find)
-;;          ("C-c n i" . org-roam-node-insert)
-;;          ("C-c n n" . org-roam-dailies-capture-today)
-;;          ("C-c n t" . org-roam-dailies-goto-today)
-;;          :map org-roam-mode-map
-;;          ("y" . org-roam-dailies-goto-previous-note)
-;;          ("t" . org-roam-dailies-goto-next-note)
-;;          ("d" . org-roam-dailies-goto-date)
-;;          ("D" . org-roam-dailies-capture-date))
-;;   :bind-keymap ("C-c n D" . org-roam-mode-map)
-;;   :config
-;;   ;; this should allow us to type spaces in ido buffer when creating new nodes
-;;   ;; from https://org-roam.discourse.group/t/org-roam-node-find-space-not-allowed-in-node-title/1847/6
-;;   (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
-;;   (defun mrl/search-roam ()
-;;     "Run consult-ripgrep on the org roam directory"
-;;     (interactive)
-;;     (consult-ripgrep org-roam-directory nil))
-;;   (require 'org-roam-protocol)
-;;   (org-roam-db-autosync-mode)
-;;   ;; Bind this to C-c n I
-;;   (defun org-roam-node-insert-immediate (arg &rest args)
-;;     (interactive "P")
-;;     (let (([[id:06d0a643-662b-4440-9e1a-9b9dcf6e2dcb][test_node]]args (cons arg args))
-;;           (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-;;                                                     '(:immediate-finish t)))))
-;;       (apply #'org-roam-node-insert args)))
-;;   :bind (("C-c n I" . org-roam-node-insert-immediate)))
 
 (use-package org-web-tools
   :ensure t)
