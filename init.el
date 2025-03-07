@@ -21,6 +21,56 @@
 			                   ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
+;; recentf
+(use-package recentf
+  :hook (after-init . recentf-mode)
+  :bind (("C-x C-r" . recentf-open-files))
+  :custom
+  (recentf-auto-cleanup "05:00am")
+  (recentf-exclude '((expand-file-name package-user-dir)
+               ".cache"
+               ".cask"
+               ".elfeed"
+               "bookmarks"
+               "cache"
+               "ido.*"
+               "persp-confs"
+               "recentf"
+               "undo-tree-hist"
+               "url"
+               "COMMIT_EDITMSG\\'"))
+  (setq recentf-auto-cleanup 'never
+        recentf-max-saved-items 50
+        recentf-save-file (concat user-config-directory ".recentf"))
+  (setq recentf-max-menu-items 25)
+  (setq recentf-max-saved-items 25)
+  (recentf-mode t))
+
+;; projectile
+(projectile-mode +1)
+;; Recommended keymap prefix on Windows/Linux
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+;; ensure that pyright is installed for Python programming
+(unless (package-installed-p 'pyvenv)
+  (package-refresh-contents)
+  (package-install 'pyvenv))
+(add-hook 'python-mode-hook
+          (lambda ()
+            (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
+              (when (file-directory-p venv-dir)
+                (pyvenv-activate venv-dir)))))
+
+;; yasnippet
+(require 'yasnippet)
+(yas-global-mode 1)
+(add-hook 'prog-mode-hook #'yas-minor-mode)
+(define-key yas-minor-mode-map (kbd "<tab>") nil)
+(define-key yas-minor-mode-map (kbd "TAB") nil)
+
+;; elpy
+(elpy-enable)
+
 ;; font
 (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font-14" ))
 (set-face-attribute 'default t :font "Iosevka Nerd Font-14")
@@ -93,6 +143,15 @@
  '((emacs-lisp . t)
    (python . t)
    (clojure . t)))
+
+;; company mode
+(add-hook 'after-init-hook 'global-company-mode)
+
+;; direnv
+(direnv-mode)
+
+;; elgot
+(add-hook 'python-mode-hook 'eglot-ensure)
 
 ;; MISC optimizations
 (setq idle-update-delay 1.0)
@@ -426,10 +485,10 @@
                "* %?\n:PROPERTIES:\n:CATEGORY: Meeting\n:END:\n%^T")
               ("wC" "Work Colleague - Block" entry (file+headline "~/Documents/org/mod.org" "Colleagues Calendar")
                "* %?\n%^t--%^t")
-              ("e" "Emacs Tip")
-              ("et" "Emacs Tip" entry (file+headline "~/Documents/org/emacs-tips.org" "Emacs Tips")
+              ("e" "Tech Tip")
+              ("et" "Emacs Tip" entry (file+headline "~/Documents/org/tech-tips.org" "Emacs Tips")
                "* %?\n\t%a")
-              ("er" "Emacs Tip from Region" entry (file+headline "~/Documents/org/emacs-tips.org" "Emacs Tips")
+              ("er" "Emacs Tip from Region" entry (file+headline "~/Documents/org/tech-tips.org" "Emacs Tips")
                "* %?\n\t%i"))))
 
 (setq org-tag-alist '(
