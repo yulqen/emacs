@@ -7,7 +7,7 @@
 (defvar mrl/startup-time (current-time))
 (defun mrl/emacs-load-time ()
   (let ((time (float-time (time-subtract (current-time) mrl/startup-time))))
-    (message "Emacs config loaded in %s seconds"
+ "Emacs config loaded in %s seconds"
              (format "%.2f" time))))
 (add-hook 'emacs-startup-hook #'mrl/emacs-load-time t)
 
@@ -102,7 +102,7 @@
   (set-face-background 'fringe (face-attribute 'default :background)))
 
 (mrl/modify-margins)
-(add-hook 'ef-themes-post-load-hook 'mrl/modify-margins)
+;;(add-hook 'ef-themes-post-load-hook 'mrl/modify-margins)
 
 (setq find-file-visit-truename t)
 (setq vc-follow-symlinks t)
@@ -149,14 +149,6 @@
     (pixel-scroll-mode)
   (pixel-scroll-precision-mode 1)
   (setq pixel-scroll-precision-large-scroll-height 35.0))
-
-(use-package grep
-  :config
-  (when (executable-find "rg")
-    (setq grep-program "rg")
-    (grep-apply-setting
-     'grep-find-command
-     '("rg -n -H --color always --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27))))
 
 (put 'narrow-to-region 'disabled nil)
 
@@ -218,7 +210,7 @@ Restart works only on graphic display."
 (require 'notmuch)
 
 ;; load my crap
-(add-to-list 'load-path "~/.config/emacs/lisp")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 (require 'mrl-functions)
 
 ;; dictionary
@@ -350,7 +342,7 @@ Restart works only on graphic display."
 (add-hook 'after-init-hook 'my-set-default-font)
 
 ;; Add the function to the `after-load-theme-hook` so it's run after loading a theme
-(add-hook 'after-load-theme-hook 'my-set-default-font)
+;;(add-hook 'after-load-theme-hook 'my-set-default-font)
 
 (defun my-apply-font ()
   "Apply my preferred font settings."
@@ -372,8 +364,8 @@ Restart works only on graphic display."
 ;; (use-package ef-themes
 ;;   :ensure t)
 
-(use-package modus-themes
-  :ensure t)
+;;(use-package modus-themes
+;;  :ensure t)
 
 ;; tsoding's theme
 (use-package gruber-darker-theme
@@ -445,56 +437,6 @@ Restart works only on graphic display."
 (setq coding-system-for-write 'utf-8)
 
 ;; PACKAGES
-(use-package ef-themes
-  :init
-  ;; Make customisations that affect Emacs faces BEFORE loading a theme
-  ;; (any change needs a theme re-load to take effect).
-
-  ;; If you like two specific themes and want to switch between them, you
-  ;; can specify them in `ef-themes-to-toggle' and then invoke the command
-  ;; `ef-themes-toggle'.  All the themes are included in the variable
-  ;; `ef-themes-collection'.
-  (setq ef-themes-to-toggle '(ef-summer ef-winter))
-
-  (setq ef-themes-headings ; read the manual's entry or the doc string
-        '((0 . (variable-pitch light 1.9))
-          (1 . (variable-pitch light 1.1))
-          (2 . (variable-pitch regular 1.0))
-          (3 . (variable-pitch regular 1.0))
-          (4 . (variable-pitch regular 1.0))
-          (5 . (variable-pitch 1.0)) ; absence of weight means `bold'
-          (6 . (variable-pitch 1.0))
-          (7 . (variable-pitch 1.0))
-          (t . (variable-pitch 1.0))))
-
-  ;; They are nil by default...
-  (setq ef-themes-mixed-fonts nil
-        ef-themes-variable-pitch-ui nil)
-
-  ;; Read the doc string or manual for this one.  The symbols can be
-  ;; combined in any order.
-  (setq ef-themes-region '(intense no-extend neutral))
-
-  ;; Disable all other themes to avoid awkward blending:
-  (mapc #'disable-theme custom-enabled-themes)
-
-  ;; Load the theme of choice:
-  (load-theme 'ef-deuteranopia-dark :no-confirm)
-  ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
-  ;;(ef-themes-select 'ef-deuteranopia-dark)
-
-  ;; The themes we provide are recorded in the `ef-themes-dark-themes',
-  ;; `ef-themes-light-themes'.
-
-  ;; We also provide these commands, but do not assign them to any key:
-  ;;
-  ;; - `ef-themes-toggle'
-  ;; - `ef-themes-select'
-  ;; - `ef-themes-load-random'
-  ;; - `ef-themes-preview-colors'
-  ;; - `ef-themes-preview-colors-current'
-  )
-
 (use-package consult-notes
   :ensure t
   :bind (("C-c d" . consult-notes))
@@ -506,7 +448,7 @@ Restart works only on graphic display."
   :config
   (setq consult-notes-sources
         '(("Denote"  ?d  "~/Documents/denote/")
-          ("Modenote"  ?m  "~/Documents/mod-denote/")
+          ("Modenote"  ?m  "~/Documents/Notes/MOD/mod-denote/")
           ("Notes archive"  ?n  "~/Documents/Notes/Archive"))) ;; Set notes dir(s), see below
   ;; Set org-roam integration OR denote integration
     (when (locate-library "denote")
@@ -519,16 +461,17 @@ Restart works only on graphic display."
   :config
   (setq denote-directory (expand-file-name "~/Documents/denote/"))
   (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work" "technote"))
-  (setq denote-file-type 'text)
+  (setq denote-file-type 'org)
   (setq denote-prompts '(title keywords))
   (setq denote-date-prompt-use-org-read-date t)
+  (require 'denote-journal-extras)
 
   (defun mrl/denote-find-file ()
-      "Find file in the current `denote-directory'."
-      (interactive)
-      (require 'consult)
-      (require 'denote)
-      (consult-find (denote-directory)))
+    "Find file in the current `denote-directory'."
+    (interactive)
+    (require 'consult)
+    (require 'denote)
+    (consult-find (denote-directory)))
 
   (defun mrl/is-todays-journal? (f)
     "If f is today's journal in denote, f is returned"
@@ -543,7 +486,7 @@ Restart works only on graphic display."
         f)))
 
   (defvar my-denote-silo-directories
-  `("/home/lemon/Documents/mod-denote"
+  `("/home/lemon/Documents/Notes/MOD/mod-denote"
     ;; You don't actually need to include the `denote-directory' here
     ;; if you use the regular commands in their global context.  I am
     ;; including it for completeness.
@@ -641,14 +584,14 @@ Restart works only on graphic display."
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 
 ;; Optionally use the `orderless' completion style.
-(use-package orderless
-  :custom
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
-  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
-  (completion-styles '(orderless basic))
-  (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion)))))
+;; (use-package orderless
+;;   :custom
+;;   ;; Configure a custom style dispatcher (see the Consult wiki)
+;;   ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+;;   ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+;;   (completion-styles '(orderless basic))
+;;   (completion-category-defaults nil)
+;;   (completion-category-overrides '((file (styles partial-completion)))))
 
 
 
@@ -656,55 +599,55 @@ Restart works only on graphic display."
 (use-package consult
   :ensure t
   ;; Replace bindings. Lazily loaded due by `use-package'.
-  :bind (;; C-c bindings (mode-specific-map)
-         ("C-c h" . consult-history)
-         ("C-c m" . consult-mode-command)
-         ("C-c k" . consult-kmacro)
-         ;; C-x bindings (ctl-x-map)
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
-         ("C-M-#" . consult-register)
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-         ;; M-g bindings (goto-map)
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)             ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings (search-map)
-         ("M-s d" . consult-find)
-         ("M-s D" . consult-locate)
-         ("M-s g" . consult-grep)
-         ("M-s G" . consult-git-grep)
-         ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ("M-s m" . consult-multi-occur)
-         ("M-s k" . consult-keep-lines)
-         ("M-s u" . consult-focus-lines)
-         ;; Isearch integration
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
-         ;; Minibuffer history
-         :map minibuffer-local-map
-         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+  :bind ;; C-c bindings (mode-specific-map)
+  ("C-c h" . consult-history)
+  ("C-c m" . consult-mode-command)
+  ("C-c k" . consult-kmacro)
+  ;; C-x bindings (ctl-x-map)
+  ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+  ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+  ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+  ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+  ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+  ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+  ;; Custom M-# bindings for fast register access
+  ("M-#" . consult-register-load)
+  ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+  ("C-M-#" . consult-register)
+  ;; Other custom bindings
+  ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+  ;; M-g bindings (goto-map)
+  ("M-g e" . consult-compile-error)
+  ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+  ("M-g g" . consult-goto-line)             ;; orig. goto-line
+  ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+  ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+  ("M-g m" . consult-mark)
+  ("M-g k" . consult-global-mark)
+  ("M-g i" . consult-imenu)
+  ("M-g I" . consult-imenu-multi)
+  ;; M-s bindings (search-map)
+  ("M-s d" . consult-find)
+  ("M-s D" . consult-locate)
+  ("M-s g" . consult-grep)
+  ("M-s G" . consult-git-grep)
+  ("M-s r" . consult-ripgrep)
+  ("M-s l" . consult-line)
+  ("M-s L" . consult-line-multi)
+  ("M-s m" . consult-multi-occur)
+  ("M-s k" . consult-keep-lines)
+  ("M-s u" . consult-focus-lines)
+  ;; Isearch integration
+  ("M-s e" . consult-isearch-history)
+  ;;:map isearch-mode-map
+  ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+  ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+  ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+  ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+  ;; Minibuffer history
+  ;;:map minibuffer-local-map
+  ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+  ("M-r" . consult-history)                ;; orig. previous-matching-history-element
 
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
@@ -840,67 +783,69 @@ Restart works only on graphic display."
 (add-hook 'prog-mode-hook #'corfu-mode)
 
 ;; Yasnippet
-(use-package yasnippet
-  :diminish yas-minor-mode
-  :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
-  :bind
-  (:map yas-minor-mode-map ("C-c C-n" . yas-expand-from-trigger-key))
-  (:map yas-keymap
-        (("TAB" . smarter-yas-expand-next-field)
-         ([(tab)] . smarter-yas-expand-next-field)))
-  :config
-  (use-package yasnippet-snippets)
-  (yas-reload-all)
-  (defun smarter-yas-expand-next-field ()
-    "Try to `yas-expand' then `yas-next-field' at current cursor position."
-    (interactive)
-    (let ((old-point (point))
-          (old-tick (buffer-chars-modified-tick)))
-      (yas-expand)
-      (when (and (eq old-point (point))
-                 (eq old-tick (buffer-chars-modified-tick)))
-        (ignore-errors (yas-next-field))))))
+;; (use-package yasnippet
+;;   :diminish yas-minor-mode
+;;   :hook ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
+;;   :bind
+;;   (:map yas-minor-mode-map ("C-c C-n" . yas-expand-from-trigger-key))
+;;   (:map yas-keymap
+;;         (("TAB" . smarter-yas-expand-next-field)
+;;          ([(tab)] . smarter-yas-expand-next-field)))
+;;   :config
+;;   (use-package yasnippet-snippets)
+;;   (yas-reload-all)
+;;   (defun smarter-yas-expand-next-field ()
+;;     "Try to `yas-expand' then `yas-next-field' at current cursor position."
+;;     (interactive)
+;;     (let ((old-point (point))
+;;           (old-tick (buffer-chars-modified-tick)))
+;;       (yas-expand)
+;;       (when (and (eq old-point (point))
+;;                  (eq old-tick (buffer-chars-modified-tick)))
+;;         (ignore-errors (yas-next-field))))))
+
+(add-hook 'after-init-hook 'global-company-mode)
 
 ;; this config works better with yasnippet
-(use-package company
-  :diminish company-mode
-  :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode ledger-mode) . company-mode)
-  :bind
-  (:map company-active-map
-        ([tab] . smarter-yas-expand-next-field-complete)
-        ("TAB" . smarter-yas-expand-next-field-complete))
-  :custom
-  (company-tooltip-align-annotations t)
-  (company-begin-commands '(self-insert-command))
-  (company-require-match 'never)
-  ;; Don't use company in the following modes
-  (company-global-modes '(not shell-mode eaf-mode))
-  ;; Trigger completion immediately.
-  (company-idle-delay 0.1)
-  ;; Number the candidates (use M-1, M-2 etc to select completions).
-  (company-show-numbers t)
-  :config
-  ;; clangd variable not present which was a problem
-  ;;  (unless *clangd* (delete 'company-clang company-backends))
-  ;;  (global-company-mode 1)
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 3)
-  (defun smarter-yas-expand-next-field-complete ()
-    "Try to `yas-expand' and `yas-next-field' at current cursor position.
+;; (use-package company
+;;   :diminish company-mode
+;;   :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode ledger-mode) . company-mode)
+;;   :bind
+;;   (:map company-active-map
+;;         ([tab] . smarter-yas-expand-next-field-complete)
+;;         ("TAB" . smarter-yas-expand-next-field-complete))
+;;   :custom
+;;   (company-tooltip-align-annotations t)
+;;   (company-begin-commands '(self-insert-command))
+;;   (company-require-match 'never)
+;;   ;; Don't use company in the following modes
+;;   (company-global-modes '(not shell-mode eaf-mode))
+;;   ;; Trigger completion immediately.
+;;   (company-idle-delay 0.1)
+;;   ;; Number the candidates (use M-1, M-2 etc to select completions).
+;;   (company-show-numbers t)
+;;   :config
+;;   ;; clangd variable not present which was a problem
+;;   ;;  (unless *clangd* (delete 'company-clang company-backends))
+;;   ;;  (global-company-mode 1)
+;;   (setq company-idle-delay 0)
+;;   (setq company-minimum-prefix-length 3)
+;;   (defun smarter-yas-expand-next-field-complete ()
+;;     "Try to `yas-expand' and `yas-next-field' at current cursor position.
 
-If failed try to complete the common part with `company-complete-common'"
-    (interactive)
-    (if yas-minor-mode
-        (let ((old-point (point))
-              (old-tick (buffer-chars-modified-tick)))
-          (yas-expand)
-          (when (and (eq old-point (point))
-                     (eq old-tick (buffer-chars-modified-tick)))
-            (ignore-errors (yas-next-field))
-            (when (and (eq old-point (point))
-                       (eq old-tick (buffer-chars-modified-tick)))
-              (company-complete-common))))
-      (company-complete-common))))
+;; If failed try to complete the common part with `company-complete-common'"
+;;     (interactive)
+;;     (if yas-minor-mode
+;;         (let ((old-point (point))
+;;               (old-tick (buffer-chars-modified-tick)))
+;;           (yas-expand)
+;;           (when (and (eq old-point (point))
+;;                      (eq old-tick (buffer-chars-modified-tick)))
+;;             (ignore-errors (yas-next-field))
+;;             (when (and (eq old-point (point))
+;;                        (eq old-tick (buffer-chars-modified-tick)))
+;;               (company-complete-common))))
+;;       (company-complete-common))))
 
 ;; Ace Jump
 (use-package ace-jump-mode
@@ -923,9 +868,9 @@ If failed try to complete the common part with `company-complete-common'"
          ("M-{" . paredit-wrap-curly))
   :diminish nil)
 
-(use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+;; (use-package rainbow-delimiters
+;;   :config
+;;   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 ;; which-key
 (use-package which-key
@@ -937,8 +882,8 @@ If failed try to complete the common part with `company-complete-common'"
   :bind ("C-x g" . magit-status))
 
 ;; cider
-(use-package cider
-  :ensure t)
+;; (use-package cider
+;;   :ensure t)
 
 ;; Interactively Do Things (ido)
 ;; (use-package ido
@@ -1020,8 +965,8 @@ If failed try to complete the common part with `company-complete-common'"
 (setq flycheck-global-modes '(not org-mode))
 
 ;; install pdf-tools
-(use-package pdf-tools)
-(pdf-tools-install)
+;;(use-package pdf-tools)
+;;(pdf-tools-install)
 
 ;; dired
 (use-package dired
@@ -1059,7 +1004,7 @@ If failed try to complete the common part with `company-complete-common'"
 (setq dired-recursive-copies 'always)
 
 ;; remove certain minor modes from the mode line
-(use-package diminish)
+;;(use-package diminish)
 
 ;; ;; elpy for python
 ;; (use-package elpy
