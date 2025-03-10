@@ -21,6 +21,27 @@
 			                   ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
+;; elfeed
+(global-set-key (kbd "C-x w") 'elfeed)
+(setq elfeed-feeds
+      '(("https://joeyh.name/blog/index.rss" debian linux)
+        "https://lukesmith.xyz/rss.xml"
+        ("https://planet.debian.org/rss20.xml" debian)
+        ("https://drewdevault.com/blog/index.xml" personal linux)
+        ("https://landchad.net/rss.xml" linux)
+        ("https://lobste.rs/rss" firehose)
+        ("https://feeds.bbci.co.uk/news/rss.xml" news)
+        ("https://www.coryzue.com/feed.xml" django)
+        ("https://irreal.org/blog/?feed=rss2" emacs)
+        ("https://www.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/dg" weather)
+        ("https://baty.net/index.xml" personal productivity emacs)
+        ("https://dataswamp.org/~solene/rss.xml" BSD)
+        ("https://rubenerd.com/feed/" personal)
+        ("https://simonwillison.net/atom/everything/" python AI)
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCajqxDsE7PBMI_IkgMkQ39w" family)
+        ("https://jvns.ca/atom.xml" linux)
+        ("https://sive.rs/en.atom" discourse)))
+
 ;; recentf
 (use-package recentf
   :hook (after-init . recentf-mode)
