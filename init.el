@@ -14,6 +14,15 @@
     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
      (format-time-string "%z")))))
 
+;; diminish
+(use-package diminish :ensure t)
+
+(use-package abbrev
+  :diminish abbrev-mode
+  :config
+  (if (file-exists-p abbrev-file-name)
+      (quietly-read-abbrev-file)))
+
 ;; packages
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
