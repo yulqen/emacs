@@ -14,6 +14,19 @@
     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
      (format-time-string "%z")))))
 
+;; packages
+(require 'package)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+			                   ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+
+;; Use rc.el from rexim
+(load "~/.emacs.d/lisp/rc.el")
+
+;; ensure theme
+(rc/require-theme 'gruber-darker)
+
 ;; simpc mode (tsoding recommendation - https://youtu.be/81MdyDYqB-A?t=3487)
 ;; https://github.com/rexim/simpc-mode
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
@@ -22,14 +35,34 @@
 (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
 
 ;; Interactively Do Things (ido)
-(use-package ido
-  :config
-  (ido-mode t)
-  (setq ido-enable-flex-matching t)
-  (setq ido-create-new-buffer 'always)
-  (setq ido-everywhere t)
-  (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
-  (setq ido-enable-flex-matching t))
+(rc/require 'smex 'ido-completing-read+)
+(require 'ido-completing-read+)
+(ido-mode 1)
+(ido-everywhere 1)
+(ido-ubiquitous-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-create-new-buffer 'always)
+;;(setq ido-everywhere t)  ; nil because incompatible with Helm
+(setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
+(setq ido-enable-flex-matching t)
+
+;;; multiple cursors
+(rc/require 'multiple-cursors)
+
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->")         'mc/mark-next-like-this)
+(global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
+(global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this)
+
+;;; dired
+(require 'dired-x)
+(setq dired-omit-files
+      (concat dired-omit-files "\\|^\\..+$"))
+(setq-default dired-dwim-target t)
+(setq dired-listing-switches "-alh")
+(setq dired-mouse-drag-files t)
 
 ;; smex
 (global-set-key (kbd "M-x") 'smex)
@@ -37,23 +70,8 @@
 ;; This is your old M-x.
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
-;; diminish
-(use-package diminish :ensure t)
-
-(use-package abbrev
-  :diminish abbrev-mode
-  :config
-  (if (file-exists-p abbrev-file-name)
-      (quietly-read-abbrev-file)))
-
-;; packages
-(require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-			                   ("elpa" . "https://elpa.gnu.org/packages/")))
-(package-initialize)
-
 ;; elfeed
+(rc/require 'elfeed)
 (global-set-key (kbd "C-x w") 'elfeed)
 (setq elfeed-feeds
       '(("https://joeyh.name/blog/index.rss" debian linux)
@@ -75,39 +93,42 @@
         ("https://sive.rs/en.atom" discourse)))
 
 ;; recentf
-(use-package recentf
-  :hook (after-init . recentf-mode)
-  :bind (("C-x C-r" . recentf-open-files))
-  :custom
-  (recentf-auto-cleanup "05:00am")
-  (recentf-exclude '((expand-file-name package-user-dir)
-               ".cache"
-               ".cask"
-               ".elfeed"
-               "bookmarks"
-               "cache"
-               "ido.*"
-               "persp-confs"
-               "recentf"
-               "undo-tree-hist"
-               "url"
-               "COMMIT_EDITMSG\\'"))
-  (setq recentf-auto-cleanup 'never
-        recentf-max-saved-items 50
-        recentf-save-file (concat user-config-directory ".recentf"))
-  (setq recentf-max-menu-items 25)
-  (setq recentf-max-saved-items 25)
-  (recentf-mode t))
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(setq recentf-max-saved-items 25)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+
+
+;; (use-package recentf
+;;   :hook (after-init . recentf-mode)
+;;   :bind (("C-x C-r" . recentf-open-files))
+;;   :custom
+;;   (recentf-auto-cleanup "05:00am")
+;;   (recentf-exclude '((expand-file-name package-user-dir)
+;;                ".cache"
+;;                ".cask"
+;;                ".elfeed"
+;;                "bookmarks"
+;;                "cache"
+;;                "ido.*"
+;;                "persp-confs"
+;;                "recentf"
+;;                "undo-tree-hist"
+;;                "url"
+;;                "COMMIT_EDITMSG\\'"))
+  
+;;   (setq recentf-max-menu-items 25)
+;;   (setq recentf-max-saved-items 25)
+;;   (recentf-mode t))
 
 ;; projectile
+(rc/require 'projectile)
 (projectile-mode +1)
 ;; Recommended keymap prefix on Windows/Linux
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;; ensure that pyright is installed for Python programming
-(unless (package-installed-p 'pyvenv)
-  (package-refresh-contents)
-  (package-install 'pyvenv))
+(rc/require 'pyvenv)
 (add-hook 'python-mode-hook
           (lambda ()
             (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
@@ -115,6 +136,7 @@
                 (pyvenv-activate venv-dir)))))
 
 ;; yasnippet
+(rc/require 'yasnippet)
 (require 'yasnippet)
 (yas-global-mode 1)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
@@ -122,6 +144,7 @@
 (define-key yas-minor-mode-map (kbd "TAB") nil)
 
 ;; elpy
+(rc/require 'elpy)
 (elpy-enable)
 
 ;; font
@@ -199,9 +222,12 @@
    (clojure . t)))
 
 ;; company mode
+(rc/require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
+(setq company-global-modes '(not org-mode))
 
 ;; direnv
+(rc/require 'direnv)
 (direnv-mode)
 
 ;; elgot
@@ -270,10 +296,8 @@
 ;; Simply has to be done
 (setq visible-bell t)
 
-;; use this for .envrc files in project directories
-(require 'direnv)
-
 ;; org-caldav
+(rc/require 'org-caldav)
 (setq org-caldav-url "http://radicale.banded-neon.ts.net/radicale/lemon")
 (setq org-icalendar-timezone "Europe/London")
 (setq org-caldav-calendars
@@ -283,6 +307,7 @@
                       :files ("~/Documents/org/radcal_alt.org")
                       :inbox "~/Documents/org/radbox_alt.org")))
 ;; Dockerfile syntax highlighting
+(rc/require 'dockerfile-mode)
 (dockerfile-mode)
 
 (setq display-line-numbers-type `relative)
@@ -320,6 +345,7 @@
 (setq coding-system-for-write 'utf-8)
 
 ;; markdown-mode
+(rc/require 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist
@@ -342,20 +368,12 @@
 ;; Enable `diff-hl' support by default in programming buffers
 (add-hook 'prog-mode-hook #'diff-hl-mode)
 
-;;; Pop-up completion
-(unless (package-installed-p 'corfu)
-  (package-install 'corfu))
-
 ;; Enable autocompletion by default in programming buffers
+(rc/require 'corfu)
 (add-hook 'prog-mode-hook #'corfu-mode)
 
-(ido-mode t)
-(setq ido-enable-flex-matching t)
-(setq ido-create-new-buffer 'always)
-;;(setq ido-everywhere t)  ; nil because incompatible with Helm
-(setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
-(setq ido-enable-flex-matching t)
-
+;;
+(rc/require 'beacon)
 (beacon-mode 1)
 
 ;; turn off flycheck-mode for org
