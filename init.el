@@ -20,6 +20,17 @@
 (require 'simpc-mode)
 ;; Automatically enabling simpc-mode on files with extensions like .h, .c, .cpp, .hpp
 (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
+
+;; Interactively Do Things (ido)
+(use-package ido
+  :config
+  (ido-mode t)
+  (setq ido-enable-flex-matching t)
+  (setq ido-create-new-buffer 'always)
+  (setq ido-everywhere t)  ; nil because incompatible with Helm
+  (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
+  (setq ido-enable-flex-matching t))
+
 ;; diminish
 (use-package diminish :ensure t)
 
