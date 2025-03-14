@@ -14,6 +14,12 @@
     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
      (format-time-string "%z")))))
 
+;; simpc mode (tsoding recommendation - https://youtu.be/81MdyDYqB-A?t=3487)
+;; https://github.com/rexim/simpc-mode
+(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
+(require 'simpc-mode)
+;; Automatically enabling simpc-mode on files with extensions like .h, .c, .cpp, .hpp
+(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
 ;; diminish
 (use-package diminish :ensure t)
 
