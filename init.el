@@ -272,6 +272,13 @@
    (python . t)
    (clojure . t)))
 
+;; diminish
+(rc/require 'diminish)
+(diminish 'projectile-mode)
+(diminish 'completion-preview-mode)
+(diminish 'which-key-mode)
+(diminish 'beacon-mode)
+
 ;; company mode
 (rc/require 'company)
 (setq company-idle-delay 0)
