@@ -209,6 +209,7 @@
 
 ;; Don't save the clipboard as this tends to hang
 (setq x-select-enable-clipboard-manager nil)
+(setq select-enable-clipboard nil)
 ;;(setq select-enable-clipboard nil)
 
 ;; easy revert buffer, which I never use
