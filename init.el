@@ -62,6 +62,9 @@
 ;; ensure theme
 (rc/require-theme 'gruber-darker)
 
+;; magit
+(rc/require 'magit)
+
 ;; which-key
 (require 'which-key)
 (which-key-mode)
