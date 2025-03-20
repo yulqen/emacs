@@ -294,12 +294,12 @@
 (setq company-global-modes '(not org-mode))
 
 ;; Enable Completion Preview mode in code buffers
-(add-hook 'prog-mode-hook #'completion-preview-mode)
+;;(add-hook 'prog-mode-hook #'completion-preview-mode)
 ;; also in text buffers
-(add-hook 'text-mode-hook #'completion-preview-mode)
+;;(add-hook 'text-mode-hook #'completion-preview-mode)
 ;; and in \\[shell] and friends
-(with-eval-after-load 'comint
-  (add-hook 'comint-mode-hook #'completion-preview-mode))
+;; (with-eval-after-load 'comint
+;;   (add-hook 'comint-mode-hook #'completion-preview-mode))
 
 (with-eval-after-load 'completion-preview
   ;; Show the preview already after two symbol characters
