@@ -463,8 +463,8 @@
 (add-hook 'prog-mode-hook #'diff-hl-mode)
 
 ;; Enable autocompletion by default in programming buffers
-(rc/require 'corfu)
-(add-hook 'prog-mode-hook #'corfu-mode)
+;; (rc/require 'corfu)
+;; (add-hook 'prog-mode-hook #'corfu-mode)
 
 ;;
 (rc/require 'beacon)
