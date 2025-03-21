@@ -213,9 +213,8 @@
 (add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
 
 ;; Don't save the clipboard as this tends to hang
-(setq x-select-enable-clipboard-manager nil)
-(setq select-enable-clipboard nil)
-;;(setq select-enable-clipboard nil)
+;; (setq x-select-enable-clipboard-manager nil)
+;; (setq select-enable-clipboard nil)
 
 ;; easy revert buffer, which I never use
 (global-set-key (kbd "C-c R") (lambda () (interactive) (revert-buffer t t)))
