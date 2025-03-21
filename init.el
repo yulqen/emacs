@@ -65,6 +65,21 @@
 ;; magit
 (rc/require 'magit)
 
+;; cider
+(rc/require 'cider)
+
+;; paredit
+(rc/require 'paredit)
+(add-hook 'clojure-mode-hook #'enable-paredit-mode)
+(add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
+(add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook #'enable-paredit-mode)
+(show-paren-mode t)
+
 ;; which-key
 (require 'which-key)
 (which-key-mode)
