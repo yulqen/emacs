@@ -131,7 +131,6 @@
       '(("https://joeyh.name/blog/index.rss" debian linux)
         "https://lukesmith.xyz/rss.xml"
         ("https://planet.debian.org/rss20.xml" debian)
-        ("https://drewdevault.com/blog/index.xml" personal linux)
         ("https://thelibre.news/latest/rss" freesoftware)
         ("https://drewdevault.com/blog/index.xml" freesoftware linux)
         ("https://landchad.net/rss.xml" linux)
@@ -402,9 +401,13 @@
 (setq org-caldav-calendars
       '((:calendar-id "7c38e0c7-4a42-9863-c9e0-6025a32c4a65" :files ("~/Documents/org/radcal.org")
                       :inbox "~/Documents/org/radbox.org")
+        (:calendar-id "ae785050-e1f8-5d83-faa0-38eb10b6b53a"
+                      :files ("~/Documents/org/radcal_coding.org")
+                      :inbox "~/Documents/org/radcal_coding.org")
         (:calendar-id "bb48f855-f7bc-183f-f79d-275327d426d5"
                       :files ("~/Documents/org/radcal_alt.org")
                       :inbox "~/Documents/org/radbox_alt.org")))
+
 ;; Dockerfile syntax highlighting
 (rc/require 'dockerfile-mode)
 (dockerfile-mode)
@@ -558,6 +561,7 @@
                                "~/Documents/org/refile.org"
                                "~/Documents/org/radcal.org"
                                "~/Documents/org/radcal_alt.org"
+                               "~/Documents/org/radcal_coding.org"
                                "~/Documents/org/mod.org"
                                "~/Documents/org/calendar/cal.org"
                                "~/Documents/org/habits.org")))
@@ -588,7 +592,7 @@
                                       (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
                                       (org-agenda-sorting-strategy '(alpha-up)))))
-         ((org-agenda-category-filter-preset '("+MOD" "+Proj/Task" "+radcal" "+radcal_alt" "+Meeting" "+WorkTrip" "+refile"))))
+         ((org-agenda-category-filter-preset '("+MOD" "+Proj/Task" "+radcal" "+radcal_alt" "+radcal_coding" "+Meeting" "+WorkTrip" "+refile"))))
 
         ("h" "Home"
          (
@@ -608,7 +612,7 @@
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down)))))
-         ((org-agenda-category-filter-preset '("+home" "+habits" "+radcal" "+radcal_alt" "+refile" "+Birthday"))))
+         ((org-agenda-category-filter-preset '("+home" "+habits" "+radcal" "+radcal_alt" "+radcal_coding" "+refile" "+Birthday"))))
         ("i" tags "idea")
         ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
 
@@ -646,6 +650,8 @@
                "* %?\n%^T")
               ("hR" "Radicale Alt" entry (file+headline "~/Documents/org/radcal_alt.org" "Events")
                "* %?\n%^T")
+              ("hC" "Radicale Coding" entry (file+headline "~/Documents/org/radcal_coding.org" "Events")
+               "* %?\n%^T")         
               ("hD" "Denote Home (org)" plain
                (file denote-last-path)
                #'denote-org-capture
@@ -751,6 +757,10 @@
     "Face used to highlight radcal entries in agenda view.
 https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-org-mode-agenda-depending-on-keyword-tag")
 
+(defface org-agenda-radcal-coding-highlight-face `((t :foreground "DarkTurquoise"))
+    "Face used to highlight radcal entries in agenda view.
+https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-org-mode-agenda-depending-on-keyword-tag")
+
 (defface org-agenda-radcal-alt-highlight-face `((t :foreground "dark magenta"))
   "Face used to highlight radcal entries in agenda view.
 https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-org-mode-agenda-depending-on-keyword-tag")
@@ -767,6 +777,8 @@ https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-o
             (goto-char line-begin)
             (when (re-search-forward "radcal_alt" line-end t)
               (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-alt-highlight-face))
+            (when (re-search-forward "radcal_coding" line-end t)
+              (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-coding-highlight-face))
             (when (re-search-forward "radcal" line-end t)
               (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-highlight-face))))
         (forward-line 1)))))
