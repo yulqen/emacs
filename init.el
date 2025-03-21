@@ -132,6 +132,8 @@
         "https://lukesmith.xyz/rss.xml"
         ("https://planet.debian.org/rss20.xml" debian)
         ("https://drewdevault.com/blog/index.xml" personal linux)
+        ("https://thelibre.news/latest/rss" freesoftware)
+        ("https://drewdevault.com/blog/index.xml" freesoftware linux)
         ("https://landchad.net/rss.xml" linux)
         ("https://lobste.rs/rss" firehose)
         ("https://feeds.bbci.co.uk/news/rss.xml" news)
