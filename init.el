@@ -343,9 +343,6 @@
 (rc/require 'direnv)
 (direnv-mode)
 
-;; elgot
-(add-hook 'python-mode-hook 'eglot-ensure)
-
 ;; MISC optimizations
 (setq idle-update-delay 1.0)
 (setq-default bidi-display-reordering 'left-to-right
@@ -476,7 +473,7 @@
   (define-key markdown-mode-map (kbd "C-c C-e") #'markdown-do))
 
 ;; Enable LSP support by default in programming buffers
-(add-hook 'prog-mode-hook #'eglot-ensure)
+;;(add-hook 'prog-mode-hook #'eglot-ensure)
 
 ;;; Indication of local VCS changes
 (unless (package-installed-p 'diff-hl)
