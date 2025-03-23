@@ -67,6 +67,11 @@
 
 ;; cider
 (rc/require 'cider)
+(setq cider-jack-in-default 'clojure-cli)
+
+;; clojure
+(rc/require 'clojure-mode)
+(rc/require 'parseedn)
 
 ;; paredit
 (rc/require 'paredit)
