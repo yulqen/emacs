@@ -223,8 +223,10 @@
 (elpy-enable)
 
 ;; font
-(add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font-14" ))
-(set-face-attribute 'default t :font "Iosevka Nerd Font-14")
+;; (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font-14" ))
+;; (set-face-attribute 'default t :font "Iosevka Nerd Font-14")
+(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
+(set-face-attribute 'default t :font "DejaVu Sans Mono-12")
 
 ;; set custom file
 (setq custom-file (concat user-emacs-directory "custom.el"))
