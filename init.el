@@ -524,7 +524,7 @@
 ;; org-crypt stuff from https://orgmode.org/manual/Org-Crypt.html
 (require 'org-crypt)
 (org-crypt-use-before-save-magic)
-(setq org-tags-exclude-from-inheritance '("crypt"))
+(setq org-tags-exclude-from-inheritance '("crypt" "current"))
 
 (setq org-crypt-key nil)
 ;; GPG key to use for encryption.
