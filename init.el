@@ -89,6 +89,10 @@
 (require 'which-key)
 (which-key-mode)
 
+;; rainbow delimeters
+(rc/require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
 ;; simpc mode (tsoding recommendation - https://youtu.be/81MdyDYqB-A?t=3487)
 ;; https://github.com/rexim/simpc-mode
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
