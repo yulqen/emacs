@@ -62,6 +62,10 @@
 ;; ensure theme
 (rc/require-theme 'gruber-darker)
 
+;; flycheck-clj-kondo
+(require 'flycheck-clj-kondo)
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
 ;; magit
 (rc/require 'magit)
 
