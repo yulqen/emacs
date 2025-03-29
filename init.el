@@ -69,6 +69,82 @@
 ;; magit
 (rc/require 'magit)
 
+;; mu4e
+;; the exact path may differ --- check it
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+
+;; example configuration for mu4e
+(require 'mu4e)
+
+;; use mu4e for e-mail in emacs
+(setq mail-user-agent 'mu4e-user-agent)
+
+;; the next are relative to the root maildir
+;; (see `mu info`).
+;; instead of strings, they can be functions too, see
+;; their docstring or the chapter 'Dynamic folders'
+(setq mu4e-sent-folder   "/Sent"
+      mu4e-drafts-folder "/Drafts"
+      mu4e-refile-folder "/Archive"
+      mu4e-trash-folder  "/Trash")
+
+;; the maildirs you use frequently; access them with 'j' ('jump')
+(setq mu4e-maildir-shortcuts
+    '((:maildir "/Archive" :key ?a)
+      (:maildir "/inbox"   :key ?i)
+      (:maildir "/work"    :key ?w)
+      (:maildir "/sent"    :key ?s)))
+
+;; the headers to show in the headers list -- a pair of a field
+;; and its width, with `nil' meaning 'unlimited'
+;; (better only use that for the last field.
+;; These are the defaults:
+(setq mu4e-headers-fields
+    '( (:date          .  25)    ;; alternatively, use :human-date
+       (:flags         .   6)
+       (:from          .  22)
+       (:subject       .  nil))) ;; alternatively, use :thread-subject
+
+(add-to-list 'mu4e-bookmarks
+    ;; ':favorite t' i.e, use this one for the modeline
+   '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
+
+;; program to get mail; alternatives are 'fetchmail', 'getmail'
+;; isync or your own shellscript. called when 'U' is pressed in
+;; main view.
+
+;; If you get your mail without an explicit command,
+;; use "true" for the command (this is the default)
+(setq mu4e-get-mail-command "mbsync purelymailchannel")
+
+;; general emacs mail settings; used when composing e-mail
+;; the non-mu4e-* stuff is inherited from emacs/message-mode
+(setq mu4e-compose-reply-to-address "matt@matthewlemon.com"
+      user-mail-address "matt@matthewlemon.com"
+      user-full-name  "Matthew Lemon")
+(setq message-signature "M R Lemon\n")
+
+;; smtp mail setting
+(setq
+   message-send-mail-function 'smtpmail-send-it
+   smtpmail-default-smtp-server "smtp.purelymail.com"
+   smtpmail-smtp-user "mrlemon@purelymail.com"
+   smtpmail-stream-type 'ssl
+   smtpmail-smtp-service 465
+   smtpmail-smtp-server "smtp.purelymail.com")
+
+   ;; if you need offline mode, set these -- and create the queue dir
+   ;; with 'mu mkdir', i.e.. mu mkdir /home/user/Maildir/queue
+   ;; smtpmail-queue-mail  nil
+   ;; smtpmail-queue-dir  "/home/lemon/mail/queue/cur")
+
+;; don't keep message buffers around
+(setq message-kill-buffer-on-exit t)
+
+(require 'mu4e-transient)
+(global-set-key (kbd "C-c m") #'mu4e-transient-menu)
+
+
 ;; cider
 (rc/require 'cider)
 (setq cider-jack-in-default 'clojure-cli)
@@ -163,6 +239,7 @@
       '(("https://joeyh.name/blog/index.rss" debian linux)
         "https://lukesmith.xyz/rss.xml"
         ("https://planet.debian.org/rss20.xml" debian)
+        ("https://clojure.org/feed.xml" clojure)
         ("https://thelibre.news/latest/rss" freesoftware)
         ("https://drewdevault.com/blog/index.xml" freesoftware linux)
         ("https://landchad.net/rss.xml" linux)
