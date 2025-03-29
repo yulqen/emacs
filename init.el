@@ -73,6 +73,10 @@
 (rc/require 'clojure-mode)
 (rc/require 'parseedn)
 
+;; undo-tree
+(rc/require 'undo-tree)
+(global-undo-tree-mode)
+
 ;; paredit
 (rc/require 'paredit)
 (add-hook 'clojure-mode-hook #'enable-paredit-mode)
