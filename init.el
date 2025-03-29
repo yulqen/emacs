@@ -235,7 +235,7 @@
 (elpy-enable)
 
 ;; winmove - use <S-left> <S-right> to move windows
-(windmove-default-keybindings)
+;; (windmove-default-keybindings)
 
 ;; font
 ;; (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font-14" ))
