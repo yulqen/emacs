@@ -318,12 +318,12 @@
 ;; (windmove-default-keybindings)
 
 ;; font
-;; (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font-14" ))
-;; (set-face-attribute 'default t :font "Iosevka Nerd Font-14")
+(add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font-14" ))
+(set-face-attribute 'default t :font "Iosevka Nerd Font-14")
 ;; (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
 ;; (set-face-attribute 'default t :font "DejaVu Sans Mono-12")
-(add-to-list 'default-frame-alist '(font . "Liberation Mono-12"))
-(set-face-attribute 'default t :font "Liberation Mono-12")
+;; (add-to-list 'default-frame-alist '(font . "Liberation Mono-12"))
+;; (set-face-attribute 'default t :font "Liberation Mono-12")
 ;; (add-to-list 'default-frame-alist '(font . "Cascadia Mono-12"))
 ;; (set-face-attribute 'default t :font "Cascadia Mono-12")
 ;; (add-to-list 'default-frame-alist '(font . "Hack Nerd Font-10"))
