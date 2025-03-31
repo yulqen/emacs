@@ -62,6 +62,9 @@
 ;; ensure theme
 (rc/require-theme 'gruber-darker)
 
+(rc/require-theme 'borland-blue)
+(rc/require-theme 'autumn-light)
+
 ;; flycheck-clj-kondo
 (require 'flycheck-clj-kondo)
 (add-hook 'after-init-hook #'global-flycheck-mode)
