@@ -158,6 +158,8 @@
 
 ;; undo-tree
 (rc/require 'undo-tree)
+(setq undo-tree-show-minibuffer-help t)
+(setq undo-tree-minibuffer-help-dynamic t)
 (global-undo-tree-mode)
 
 ;; paredit
