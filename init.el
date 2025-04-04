@@ -168,6 +168,29 @@
 (setq undo-tree-minibuffer-help-dynamic t)
 ;; (global-undo-tree-mode)
 
+;; gptel llm (https://github.com/karthink/gptel)
+(rc/require 'gptel)
+(gptel-make-anthropic "Claude" :stream t :key gptel-api-key)
+(gptel-make-gemini "Gemini" :stream t :key gptel-api-key)
+(setq gptel-api-key 'gptel-api-key-from-auth-source)
+;; OpenRouter offers an OpenAI compatible API
+(gptel-make-openai "OpenRouter"               ;Any name you want
+  :host "openrouter.ai"
+  :endpoint "/api/v1/chat/completions"
+  :stream t
+  :key gptel-api-key                   ;can be a function that returns the key
+  :models '(openai/gpt-3.5-turbo
+            mistralai/mixtral-8x7b-instruct
+            meta-llama/codellama-34b-instruct
+            codellama/codellama-70b-instruct
+            google/palm-2-codechat-bison-32k
+            google/gemini-pro))
+(gptel-make-ollama "Ollama"             ;Any name of your choosing
+  :host "localhost:11434"               ;Where it's running
+  :stream t                             ;Stream responses
+  :models '(llama3.1:latest deepseek-r1:latest))
+
+
 ;; paredit
 (rc/require 'paredit)
 (add-hook 'clojure-mode-hook #'enable-paredit-mode)
