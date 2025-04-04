@@ -156,6 +156,7 @@
 ;; cider
 (rc/require 'cider)
 (setq cider-jack-in-default 'clojure-cli)
+(setq nrepl-use-ssh-fallback-for-remote-hosts t)
 
 ;; clojure
 (rc/require 'clojure-mode)
