@@ -171,6 +171,7 @@
 ;; gptel llm (https://github.com/karthink/gptel)
 (rc/require 'gptel)
 (setq gptel-include-reasoning nil)
+(setq gptel-default-mode 'org-mode)
 (gptel-make-anthropic "Claude" :stream t :key gptel-api-key)
 (gptel-make-gemini "Gemini" :stream t :key gptel-api-key)
 (setq gptel-api-key 'gptel-api-key-from-auth-source)
