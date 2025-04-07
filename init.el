@@ -337,8 +337,14 @@
               (when (file-directory-p venv-dir)
                 (pyvenv-activate venv-dir)))))
 
+;; django
+(rc/require 'django-mode)
+(rc/require 'django-snippets)
+
 ;; yasnippet
 (rc/require 'yasnippet)
+(rc/require 'yasnippet-snippets)
+(rc/require 'clojure-snippets)
 (require 'yasnippet)
 (yas-global-mode 1)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
