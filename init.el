@@ -274,6 +274,7 @@
 (setq elfeed-feeds
       '(("https://joeyh.name/blog/index.rss" debian linux)
         ("https://lukesmith.xyz/rss.xml" linux)
+        ("https://discoverbsd.com/feeds/posts/default" bsd)
         ("https://planet.debian.org/rss20.xml" debian)
         ("https://blog.cleancoder.com/atom.xml" programming)
         ("https://clojure.org/feed.xml" programming clojure)
