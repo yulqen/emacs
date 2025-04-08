@@ -337,6 +337,10 @@
               (when (file-directory-p venv-dir)
                 (pyvenv-activate venv-dir)))))
 
+;; fix characters in compile buffer
+(add-hook 'compilation-filter-hook
+          (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
+
 ;; django
 (rc/require 'django-mode)
 (rc/require 'django-snippets)
