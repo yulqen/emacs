@@ -8,6 +8,17 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+;; set custom file
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(load custom-file 'noerror)
+(add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
+
+;; recentf
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(setq recentf-max-saved-items 25)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+
 (require 'use-package)
 (setq use-package-always-ensure t)
 
