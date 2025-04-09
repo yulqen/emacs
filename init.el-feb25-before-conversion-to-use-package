@@ -1,16 +1,5 @@
-(require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                        ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-                        ("elpa" . "https://elpa.gnu.org/packages/")))
-(package-initialize)
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
-
+;; timestamps
+;; from: https://gist.github.com/takehiko/306021460b21f5d1520c32293cd831e0
 (defun mrl/insert-timestamp-default ()
   "Insert the current timestamp"
   (interactive)
@@ -25,265 +14,466 @@
     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
      (format-time-string "%z")))))
 
-(use-package gruber-darker-theme)
-(use-package borland-blue-theme)
-(use-package autumn-light-theme)
+;; packages
+(require 'package)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+			                   ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
 
-(use-package flycheck-clj-kondo
-  :hook (after-init . global-flycheck-mode))
+;; Use rc.el from rexim
+(load "~/.emacs.d/lisp/rc.el")
 
-(use-package magit)
+;; treesitter
+(setq treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (css "https://github.com/tree-sitter/tree-sitter-css")
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
-(use-package mu4e
-  :ensure nil
-  :load-path "/usr/local/share/emacs/site-lisp/mu4e"
-  :config
-  (setq mail-user-agent 'mu4e-user-agent)
-  (setq mu4e-sent-folder   "/Sent"
-        mu4e-drafts-folder "/Drafts"
-        mu4e-refile-folder "/Archive"
-        mu4e-trash-folder  "/Trash")
-  (setq mu4e-maildir-shortcuts
-        '((:maildir "/Archive" :key ?a)
-          (:maildir "/inbox"   :key ?i)
-          (:maildir "/work"    :key ?w)
-          (:maildir "/sent"    :key ?s)))
-  (setq mu4e-headers-fields
-        '((:date          .  25)
-          (:flags         .   6)
-          (:from          .  22)
-          (:subject       .  nil)))
-  (add-to-list 'mu4e-bookmarks
-               '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
-  (setq mu4e-get-mail-command "mbsync purelymailchannel")
-  (setq mu4e-compose-reply-to-address "matt@matthewlemon.com"
-        user-mail-address "matt@matthewlemon.com"
-        user-full-name  "Matthew Lemon")
-  (setq message-signature "M R Lemon\n")
-  (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-default-smtp-server "smtp.purelymail.com"
-        smtpmail-smtp-user "mrlemon@purelymail.com"
-        smtpmail-stream-type 'ssl
-        smtpmail-smtp-service 465
-        smtpmail-smtp-server "smtp.purelymail.com")
-  (setq message-kill-buffer-on-exit t))
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+(add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
+
+(defun rc/duplicate-line ()
+  "Duplicate current line"
+  (interactive)
+  (let ((column (- (point) (pos-bol)))
+        (line (let ((s (thing-at-point 'line t)))
+                (if s (string-remove-suffix "\n" s) ""))))
+    (move-end-of-line 1)
+    (newline)
+    (insert line)
+    (move-beginning-of-line 1)
+    (forward-char column)))
+
+(global-set-key (kbd "C-,") 'rc/duplicate-line)
+
+;; ensure theme
+(rc/require-theme 'gruber-darker)
+
+(rc/require-theme 'borland-blue)
+(rc/require-theme 'autumn-light)
+
+;; flycheck-clj-kondo
+(require 'flycheck-clj-kondo)
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; magit
+(rc/require 'magit)
+
+;; mu4e
+;; the exact path may differ --- check it
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+
+;; example configuration for mu4e
+(require 'mu4e)
+
+;; emmet mode
+(rc/require 'emmet-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'web-mode-hook 'emmet-mode) ;; try this to get emmet on web-mode
+
+;; use mu4e for e-mail in emacs
+(setq mail-user-agent 'mu4e-user-agent)
+
+;; the next are relative to the root maildir
+;; (see `mu info`).
+;; instead of strings, they can be functions too, see
+;; their docstring or the chapter 'Dynamic folders'
+(setq mu4e-sent-folder   "/Sent"
+      mu4e-drafts-folder "/Drafts"
+      mu4e-refile-folder "/Archive"
+      mu4e-trash-folder  "/Trash")
+
+;; the maildirs you use frequently; access them with 'j' ('jump')
+(setq mu4e-maildir-shortcuts
+    '((:maildir "/Archive" :key ?a)
+      (:maildir "/inbox"   :key ?i)
+      (:maildir "/work"    :key ?w)
+      (:maildir "/sent"    :key ?s)))
+
+;; the headers to show in the headers list -- a pair of a field
+;; and its width, with `nil' meaning 'unlimited'
+;; (better only use that for the last field.
+;; These are the defaults:
+(setq mu4e-headers-fields
+    '( (:date          .  25)    ;; alternatively, use :human-date
+       (:flags         .   6)
+       (:from          .  22)
+       (:subject       .  nil))) ;; alternatively, use :thread-subject
+
+(add-to-list 'mu4e-bookmarks
+    ;; ':favorite t' i.e, use this one for the modeline
+   '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
+
+;; program to get mail; alternatives are 'fetchmail', 'getmail'
+;; isync or your own shellscript. called when 'U' is pressed in
+;; main view.
+
+;; If you get your mail without an explicit command,
+;; use "true" for the command (this is the default)
+(setq mu4e-get-mail-command "mbsync purelymailchannel")
+
+;; general emacs mail settings; used when composing e-mail
+;; the non-mu4e-* stuff is inherited from emacs/message-mode
+(setq mu4e-compose-reply-to-address "matt@matthewlemon.com"
+      user-mail-address "matt@matthewlemon.com"
+      user-full-name  "Matthew Lemon")
+(setq message-signature "M R Lemon\n")
+
+;; smtp mail setting
+(setq
+   message-send-mail-function 'smtpmail-send-it
+   smtpmail-default-smtp-server "smtp.purelymail.com"
+   smtpmail-smtp-user "mrlemon@purelymail.com"
+   smtpmail-stream-type 'ssl
+   smtpmail-smtp-service 465
+   smtpmail-smtp-server "smtp.purelymail.com")
+
+   ;; if you need offline mode, set these -- and create the queue dir
+   ;; with 'mu mkdir', i.e.. mu mkdir /home/user/Maildir/queue
+   ;; smtpmail-queue-mail  nil
+   ;; smtpmail-queue-dir  "/home/lemon/mail/queue/cur")
+
+;; don't keep message buffers around
+(setq message-kill-buffer-on-exit t)
 
 (require 'mu4e-transient)
 (global-set-key (kbd "C-c m") #'mu4e-transient-menu)
 
-(use-package cider
-  :config
-  (setq cider-jack-in-default 'clojure-cli)
-  (setq nrepl-use-ssh-fallback-for-remote-hosts t))
 
-(use-package clojure-mode)
-(use-package parseedn)
+;; cider
+(rc/require 'cider)
+(setq cider-jack-in-default 'clojure-cli)
+(setq nrepl-use-ssh-fallback-for-remote-hosts t)
 
-(use-package undo-tree
-  :config
-  (setq undo-tree-show-minibuffer-help t)
-  (setq undo-tree-minibuffer-help-dynamic t))
+;; clojure
+(rc/require 'clojure-mode)
+(rc/require 'parseedn)
 
-(use-package gptel
-  :config
-  (setq gptel-include-reasoning nil)
-  (setq gptel-default-mode 'org-mode)
-  (gptel-make-anthropic "Claude" :stream t :key gptel-api-key)
-  (gptel-make-gemini "Gemini" :stream t :key gptel-api-key)
-  (setq gptel-api-key 'gptel-api-key-from-auth-source)
-  (gptel-make-openai "OpenRouter"
-    :host "openrouter.ai"
-    :endpoint "/api/v1/chat/completions"
-    :stream t
-    :key gptel-api-key
-    :models '(openai/gpt-3.5-turbo
-             mistralai/mixtral-8x7b-instruct
-             meta-llama/codellama-34b-instruct
-             codellama/codellama-70b-instruct
-             google/palm-2-codechat-bison-32k
-             google/gemini-pro))
-  (gptel-make-ollama "Ollama"
-    :host "localhost:11434"
-    :stream t
-    :models '(llama3.1:latest deepseek-r1:latest)))
+;; undo-tree
+(rc/require 'undo-tree)
+(setq undo-tree-show-minibuffer-help t)
+(setq undo-tree-minibuffer-help-dynamic t)
+;; (global-undo-tree-mode)
 
-(use-package paredit
-  :hook ((clojure-mode . enable-paredit-mode)
-         (cider-repl-mode . enable-paredit-mode)
-         (emacs-lisp-mode . enable-paredit-mode)
-         (eval-expression-minibuffer-setup . enable-paredit-mode)
-         (ielm-mode . enable-paredit-mode)
-         (lisp-mode . enable-paredit-mode)
-         (lisp-interaction-mode . enable-paredit-mode)
-         (scheme-mode . enable-paredit-mode))
-  :config
-  (show-paren-mode t))
+;; gptel llm (https://github.com/karthink/gptel)
+(rc/require 'gptel)
+(setq gptel-include-reasoning nil)
+(setq gptel-default-mode 'org-mode)
+(gptel-make-anthropic "Claude" :stream t :key gptel-api-key)
+(gptel-make-gemini "Gemini" :stream t :key gptel-api-key)
+(setq gptel-api-key 'gptel-api-key-from-auth-source)
+;; OpenRouter offers an OpenAI compatible API
+(gptel-make-openai "OpenRouter"               ;Any name you want
+  :host "openrouter.ai"
+  :endpoint "/api/v1/chat/completions"
+  :stream t
+  :key gptel-api-key                   ;can be a function that returns the key
+  :models '(openai/gpt-3.5-turbo
+            mistralai/mixtral-8x7b-instruct
+            meta-llama/codellama-34b-instruct
+            codellama/codellama-70b-instruct
+            google/palm-2-codechat-bison-32k
+            google/gemini-pro))
+(gptel-make-ollama "Ollama"             ;Any name of your choosing
+  :host "localhost:11434"               ;Where it's running
+  :stream t                             ;Stream responses
+  :models '(llama3.1:latest deepseek-r1:latest))
 
-(use-package forge
-  :after magit)
 
-(use-package which-key
-  :config
-  (which-key-mode))
+;; paredit
+(rc/require 'paredit)
+(add-hook 'clojure-mode-hook #'enable-paredit-mode)
+(add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
+(add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook #'enable-paredit-mode)
+(show-paren-mode t)
 
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+;; which-key
+(require 'which-key)
+(which-key-mode)
 
-(use-package simpc-mode
-  :ensure nil
-  :load-path "lisp/"
-  :mode ("\\.h\\(pp\\)?\\'" . simpc-mode)
-  :mode ("\\.c\\(pp\\)?\\'" . simpc-mode))
+;; rainbow delimeters
+(rc/require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
-(use-package smex
-  :bind (("M-x" . smex)
-         ("M-X" . smex-major-mode-commands)
-         ("C-c C-c M-x" . execute-extended-command)))
+;; simpc mode (tsoding recommendation - https://youtu.be/81MdyDYqB-A?t=3487)
+;; https://github.com/rexim/simpc-mode
+(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
+(require 'simpc-mode)
+;; Automatically enabling simpc-mode on files with extensions like .h, .c, .cpp, .hpp
+(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
 
-(use-package ido-completing-read+
-  :config
-  (ido-mode 1)
-  (ido-everywhere 1)
-  (ido-ubiquitous-mode 1)
-  (setq ido-enable-flex-matching t)
-  (setq ido-create-new-buffer 'always)
-  (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
-  (setq ido-enable-flex-matching t))
+;; Interactively Do Things (ido)
+(rc/require 'smex 'ido-completing-read+)
+(require 'ido-completing-read+)
+(ido-mode 1)
+(ido-everywhere 1)
+(ido-ubiquitous-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-create-new-buffer 'always)
+;;(setq ido-everywhere t)  ; nil because incompatible with Helm
+(setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
+(setq ido-enable-flex-matching t)
 
-(use-package multiple-cursors
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)
-         ("C-\"" . mc/skip-to-next-like-this)
-         ("C-:" . mc/skip-to-previous-like-this)))
+;;; multiple cursors
+(rc/require 'multiple-cursors)
 
-(use-package dired-x
-  :ensure nil
-  :config
-  (setq dired-omit-files
-        (concat dired-omit-files "\\|^\\..+$"))
-  (setq-default dired-dwim-target t)
-  (setq dired-listing-switches "-alh")
-  (setq dired-mouse-drag-files t))
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->")         'mc/mark-next-like-this)
+(global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
+(global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this)
 
-(use-package web-mode
-  :mode (("\\.phtml\\'" . web-mode)
-         ("\\.tpl\\.php\\'" . web-mode)
-         ("\\.[agj]sp\\'" . web-mode)
-         ("\\.as[cp]x\\'" . web-mode)
-         ("\\.erb\\'" . web-mode)
-         ("\\.mustache\\'" . web-mode)
-         ("\\.djhtml\\'" . web-mode)
-         ("\\.html?\\'" . web-mode))
-  :config
-  (setq web-mode-markup-indent-offset 2))
+;;; dired
+(require 'dired-x)
+(setq dired-omit-files
+      (concat dired-omit-files "\\|^\\..+$"))
+(setq-default dired-dwim-target t)
+(setq dired-listing-switches "-alh")
+(setq dired-mouse-drag-files t)
 
-(use-package elfeed
-  :bind ("C-x w" . elfeed)
-  :config
-  (setq elfeed-feeds
-        '(("https://joeyh.name/blog/index.rss" debian linux)
-          ("https://lukesmith.xyz/rss.xml" linux)
-          ("https://discoverbsd.com/feeds/posts/default" bsd)
-          ("https://planet.debian.org/rss20.xml" debian)
-          ("https://blog.cleancoder.com/atom.xml" programming)
-          ("https://clojure.org/feed.xml" programming clojure)
-          ("https://thelibre.news/latest/rss" freesoftware)
-          ("https://drewdevault.com/blog/index.xml" freesoftware linux)
-          ("https://landchad.net/rss.xml" linux)
-          ("https://lobste.rs/rss" firehose)
-          ("https://feeds.bbci.co.uk/news/rss.xml" news)
-          ("https://www.coryzue.com/feed.xml" django programming)
-          ("https://irreal.org/blog/?feed=rss2" emacs)
-          ("https://www.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/dg" weather)
-          ("https://baty.net/index.xml" personal productivity emacs)
-          ("https://dataswamp.org/~solene/rss.xml" BSD)
-          ("https://rubenerd.com/feed/" personal)
-          ("https://simonwillison.net/atom/everything/" python AI programming)
-          ("https://www.youtube.com/feeds/videos.xml?channel_id=UCajqxDsE7PBMI_IkgMkQ39w" family)
-          ("https://jvns.ca/atom.xml" linux)
-          ("https://sive.rs/en.atom" discourse))))
+;; smex
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
-(use-package projectile
-  :bind-keymap ("C-c p" . projectile-command-map)
-  :config
-  (projectile-mode +1))
+;;; web-mode
+(rc/require 'web-mode)
+(setq web-mode-markup-indent-offset 2)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
-(use-package pyvenv
-  :hook (python-mode . (lambda ()
-                        (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
-                          (when (file-directory-p venv-dir)
-                            (pyvenv-activate venv-dir))))))
+;; elfeed
+(rc/require 'elfeed)
+(global-set-key (kbd "C-x w") 'elfeed)
+(setq elfeed-feeds
+      '(("https://joeyh.name/blog/index.rss" debian linux)
+        ("https://lukesmith.xyz/rss.xml" linux)
+        ("https://discoverbsd.com/feeds/posts/default" bsd)
+        ("https://planet.debian.org/rss20.xml" debian)
+        ("https://blog.cleancoder.com/atom.xml" programming)
+        ("https://clojure.org/feed.xml" programming clojure)
+        ("https://thelibre.news/latest/rss" freesoftware)
+        ("https://drewdevault.com/blog/index.xml" freesoftware linux)
+        ("https://landchad.net/rss.xml" linux)
+        ("https://lobste.rs/rss" firehose)
+        ("https://feeds.bbci.co.uk/news/rss.xml" news)
+        ("https://www.coryzue.com/feed.xml" django programming)
+        ("https://irreal.org/blog/?feed=rss2" emacs)
+        ("https://www.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/dg" weather)
+        ("https://baty.net/index.xml" personal productivity emacs)
+        ("https://dataswamp.org/~solene/rss.xml" BSD)
+        ("https://rubenerd.com/feed/" personal)
+        ("https://simonwillison.net/atom/everything/" python AI programming)
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCajqxDsE7PBMI_IkgMkQ39w" family)
+        ("https://jvns.ca/atom.xml" linux)
+        ("https://sive.rs/en.atom" discourse)))
 
-(use-package django-mode)
-(use-package django-snippets)
+;; recentf
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(setq recentf-max-saved-items 25)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
 
-(use-package yasnippet
-  :config
-  (yas-global-mode 1)
-  :hook (prog-mode . yas-minor-mode)
-  :bind (:map yas-minor-mode-map
-              ("C-c y" . yas-expand)))
 
-(use-package yasnippet-snippets)
-(use-package clojure-snippets)
+;; (use-package recentf
+;;   :hook (after-init . recentf-mode)
+;;   :bind (("C-x C-r" . recentf-open-files))
+;;   :custom
+;;   (recentf-auto-cleanup "05:00am")
+;;   (recentf-exclude '((expand-file-name package-user-dir)
+;;                ".cache"
+;;                ".cask"
+;;                ".elfeed"
+;;                "bookmarks"
+;;                "cache"
+;;                "ido.*"
+;;                "persp-confs"
+;;                "recentf"
+;;                "undo-tree-hist"
+;;                "url"
+;;                "COMMIT_EDITMSG\\'"))
+  
+;;   (setq recentf-max-menu-items 25)
+;;   (setq recentf-max-saved-items 25)
+;;   (recentf-mode t))
 
-(use-package elpy
-  :config
-  (elpy-enable))
+;; projectile
+(rc/require 'projectile)
+(projectile-mode +1)
+;; Recommended keymap prefix on Windows/Linux
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
-(use-package direnv
-  :config
-  (direnv-mode))
+;; ensure that pyright is installed for Python programming
+(rc/require 'pyvenv)
+(add-hook 'python-mode-hook
+          (lambda ()
+            (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
+              (when (file-directory-p venv-dir)
+                (pyvenv-activate venv-dir)))))
 
-(use-package diff-hl
-  :hook (prog-mode . diff-hl-mode))
+;; fix characters in compile buffer
+(add-hook 'compilation-filter-hook
+          (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
 
-(use-package beacon
-  :config
-  (beacon-mode 1))
+;; django
+(rc/require 'django-mode)
+(rc/require 'django-snippets)
 
-(use-package org-caldav
-  :config
-  (setq org-caldav-url "http://radicale.banded-neon.ts.net/radicale/lemon")
-  (setq org-icalendar-timezone "Europe/London")
-  (setq org-caldav-calendars
-        '((:calendar-id "7c38e0c7-4a42-9863-c9e0-6025a32c4a65"
-           :files ("~/Documents/org/radcal.org")
-           :inbox "~/Documents/org/radbox.org")
-          (:calendar-id "ae785050-e1f8-5d83-faa0-38eb10b6b53a"
-           :files ("~/Documents/org/radcal_coding.org")
-           :inbox "~/Documents/org/radcal_coding.org")
-          (:calendar-id "bb48f855-f7bc-183f-f79d-275327d426d5"
-           :files ("~/Documents/org/radcal_alt.org")
-           :inbox "~/Documents/org/radbox_alt.org"))))
+;; yasnippet
+(rc/require 'yasnippet)
+(rc/require 'yasnippet-snippets)
+(rc/require 'clojure-snippets)
+(require 'yasnippet)
+(yas-global-mode 1)
+(add-hook 'prog-mode-hook #'yas-minor-mode)
+;; (define-key yas-minor-mode-map (kbd "<tab>") nil)
+;; (define-key yas-minor-mode-map (kbd "TAB") nil)
+(define-key yas-minor-mode-map (kbd "C-c y") #'yas-expand)
 
-(use-package dockerfile-mode)
+;; elpy
+(rc/require 'elpy)
+(elpy-enable)
 
-(use-package markdown-mode
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+;; winmove - use <S-left> <S-right> to move windows
+;; (windmove-default-keybindings)
 
-(use-package diminish
-  :config
-  (diminish 'projectile-mode)
-  (diminish 'completion-preview-mode)
-  (diminish 'which-key-mode)
-  (diminish 'beacon-mode))
+;; font
+(add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font-14" ))
+(set-face-attribute 'default t :font "Iosevka Nerd Font-14")
+;; (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
+;; (set-face-attribute 'default t :font "DejaVu Sans Mono-12")
+;; (add-to-list 'default-frame-alist '(font . "Liberation Mono-12"))
+;; (set-face-attribute 'default t :font "Liberation Mono-12")
+;; (add-to-list 'default-frame-alist '(font . "Cascadia Mono-12"))
+;; (set-face-attribute 'default t :font "Cascadia Mono-12")
+;; (add-to-list 'default-frame-alist '(font . "Hack Nerd Font-10"))
+;; (set-face-attribute 'default t :font "Hack Nerd Font-10")
 
-(use-package company
-  :hook (after-init . global-company-mode)
-  :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 2)
-  (setq company-show-numbers t)
-  (setq company-dabbrev-downcase nil)
-  (setq company-dabbrev-ignore-case nil)
-  (setq company-dabbrev-code-ignore-case nil)
-  (setq company-global-modes '(not org-mode)))
+;; set custom file
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(load custom-file 'noerror)
+(add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
+
+;; Don't save the clipboard as this tends to hang
+;; (setq x-select-enable-clipboard-manager nil)
+;; (setq select-enable-clipboard nil)
+
+;; easy revert buffer, which I never use
+(global-set-key (kbd "C-c R") (lambda () (interactive) (revert-buffer t t)))
+
+;; make sure you require this - otherwise it will not work...
+(require 'org-protocol)
+
+(setq column-number-mode t
+      mode-line-in-non-selected-windows t)
+
+(setq history-length 25)
+(savehist-mode 1)
+
+(setq-default truncate-lines t)
+(add-hook 'eshell-mode-hook (lambda () (setq-local truncate-lines nil)))
+(add-hook 'shell-mode-hook (lambda () (setq-local truncate-lines nil)))
+
+(defun mrl/display-relative-lines ()
+  (setq display-line-numbers 'relative))
+
+(add-hook 'prog-mode-hook #'mrl/display-relative-lines)
+(add-hook 'yaml-mode-hook #'mrl/display-relative-lines)
+
+(unless (display-graphic-p)
+(add-hook 'text-mode-hook #'mrl/display-relative-lines))
+
+(delete-selection-mode t)
+(setq compilation-scroll-output 'first-error)
+(setq use-short-answers t)
+
+(setq confirm-kill-emacs 'yes-or-no-p)
+
+(put 'narrow-to-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
+(setq-default mark-ring-max 32)
+(setq global-mark-ring-max 32)
+
+(setq set-mark-command-repeat-pop t)
+
+;; load my crap
+(add-to-list 'load-path "~/.emacs.d/lisp")
+(require 'mrl-functions)
+
+;; dictionary
+(global-set-key (kbd "M-#") #'dictionary-lookup-definition)
+
+;; set bookmarks file
+(setq bookmark-default-file (concat user-emacs-directory "bookmarks"))
+
+(require 'org)
+(add-to-list 'org-modules 'org-habit)
+;; (org-babel-load-file (expand-file-name "~/.config/emacs/myinit.org"))
+
+;; Babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (python . t)
+   (clojure . t)))
+
+;; diminish
+(rc/require 'diminish)
+(diminish 'projectile-mode)
+(diminish 'completion-preview-mode)
+(diminish 'which-key-mode)
+(diminish 'beacon-mode)
+
+;; company mode
+(rc/require 'company)
+(setq company-idle-delay 0)
+(setq company-minimum-prefix-length 2)
+(setq company-show-numbers t)
+;; To prevent default down-casing.
+;; https://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text
+(setq company-dabbrev-downcase nil)
+;; 2023-01-13 From a Reddit post on mixed case issue.
+(setq company-dabbrev-ignore-case nil)
+(setq company-dabbrev-code-ignore-case nil)
+(add-hook 'after-init-hook 'global-company-mode)
+(setq company-global-modes '(not org-mode))
+
+;; Enable Completion Preview mode in code buffers
+;;(add-hook 'prog-mode-hook #'completion-preview-mode)
+;; also in text buffers
+;;(add-hook 'text-mode-hook #'completion-preview-mode)
+;; and in \\[shell] and friends
+;; (with-eval-after-load 'comint
+;;   (add-hook 'comint-mode-hook #'completion-preview-mode))
 
 (with-eval-after-load 'completion-preview
   ;; Show the preview already after two symbol characters
@@ -303,6 +493,10 @@
   (keymap-set completion-preview-active-mode-map "M-p" #'completion-preview-prev-candidate)
   ;; Convenient alternative to C-i after typing one of the above
   (keymap-set completion-preview-active-mode-map "M-i" #'completion-preview-insert))
+
+;; direnv
+(rc/require 'direnv)
+(direnv-mode)
 
 ;; MISC optimizations
 (setq idle-update-delay 1.0)
@@ -367,6 +561,24 @@
 ;; Simply has to be done
 (setq visible-bell t)
 
+;; org-caldav
+(rc/require 'org-caldav)
+(setq org-caldav-url "http://radicale.banded-neon.ts.net/radicale/lemon")
+(setq org-icalendar-timezone "Europe/London")
+(setq org-caldav-calendars
+      '((:calendar-id "7c38e0c7-4a42-9863-c9e0-6025a32c4a65" :files ("~/Documents/org/radcal.org")
+                      :inbox "~/Documents/org/radbox.org")
+        (:calendar-id "ae785050-e1f8-5d83-faa0-38eb10b6b53a"
+                      :files ("~/Documents/org/radcal_coding.org")
+                      :inbox "~/Documents/org/radcal_coding.org")
+        (:calendar-id "bb48f855-f7bc-183f-f79d-275327d426d5"
+                      :files ("~/Documents/org/radcal_alt.org")
+                      :inbox "~/Documents/org/radbox_alt.org")))
+
+;; Dockerfile syntax highlighting
+(rc/require 'dockerfile-mode)
+(dockerfile-mode)
+
 (setq display-line-numbers-type `relative)
 (setq undo-limit 8000000) ; raise limit to 80Mb
 (setq truncate-string-ellipsis "…") ; better than using dots
@@ -401,6 +613,20 @@
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
+;; markdown-mode
+(rc/require 'markdown-mode)
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist
+             '("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . markdown-mode))
+
+(autoload 'gfm-mode "markdown-mode"
+   "Major mode for editing GitHub Flavored Markdown files" t)
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+
+(with-eval-after-load 'markdown-mode
+  (define-key markdown-mode-map (kbd "C-c C-e") #'markdown-do))
+
 ;; Enable LSP support by default in programming buffers
 ;;(add-hook 'prog-mode-hook #'eglot-ensure)
 
@@ -414,6 +640,10 @@
 ;; Enable autocompletion by default in programming buffers
 ;; (rc/require 'corfu)
 ;; (add-hook 'prog-mode-hook #'corfu-mode)
+
+;;
+(rc/require 'beacon)
+(beacon-mode 1)
 
 ;; turn off flycheck-mode for org
 (setq flycheck-global-modes '(not org-mode))
