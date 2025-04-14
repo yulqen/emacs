@@ -128,6 +128,8 @@
          (lisp-interaction-mode . enable-paredit-mode)
          (scheme-mode . enable-paredit-mode))
   :config
+  ;; Do this if you get problems
+  ;;(define-key paredit-mode-map (kbd "RET") nil)
   (show-paren-mode t))
 
 (use-package forge
