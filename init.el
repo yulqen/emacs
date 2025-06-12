@@ -151,8 +151,8 @@
 ;;   ;;(define-key paredit-mode-map (kbd "RET") nil)
 ;;   (show-paren-mode t))
 
-(use-package forge
-  :after magit)
+;; (use-package forge
+;;   :after magit)
 
 (use-package which-key
   :config
@@ -303,9 +303,12 @@
           (:calendar-id "ae785050-e1f8-5d83-faa0-38eb10b6b53a"
            :files ("~/Documents/org/radcal_coding.org")
            :inbox "~/Documents/org/radcal_coding.org")
+          (:calendar-id "e951175b-f02f-a759-5d25-3ca5d2a3d268"
+                        :files ("~/Documents/org/radcal_work.org")
+                        :inbox "~/Documents/org/radbox_work.org")
           (:calendar-id "bb48f855-f7bc-183f-f79d-275327d426d5"
-           :files ("~/Documents/org/radcal_alt.org")
-           :inbox "~/Documents/org/radbox_alt.org"))))
+                        :files ("~/Documents/org/radcal_alt.org")
+                        :inbox "~/Documents/org/radbox_alt.org"))))
 
 (use-package dockerfile-mode)
 
@@ -547,7 +550,9 @@
                                "~/Documents/org/radcal.org"
                                "~/Documents/org/radcal_alt.org"
                                "~/Documents/org/radcal_coding.org"
-                               "~/Documents/org/mod.org"
+                               "~/Documents/org/radcal_work.org"
+                               "~/Documents/org/alphabet_learning.org"
+                               "~/Documents/org/dft.org"
                                "~/Documents/org/calendar/cal.org"
                                "~/Documents/org/habits.org")))
 (setq org-agenda-window-setup 'other-window)
@@ -566,10 +571,10 @@
          (
           (agenda)
           (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
-          (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "MOD WAITING")
+          (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "DfT WAITING")
                                          (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
-                     ((org-agenda-overriding-header "MOD NEXT UNSCHEDULED")
+                     ((org-agenda-overriding-header "DfT NEXT UNSCHEDULED")
                       (org-agenda-sorting-strategy '(deadline-up priority-down))))
           (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
                                          (org-agenda-sorting-strategy '(alpha-up))))
@@ -577,7 +582,7 @@
                                       (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
                                       (org-agenda-sorting-strategy '(alpha-up)))))
-         ((org-agenda-category-filter-preset '("+MOD" "+Proj/Task" "+radcal" "+radcal_alt" "+radcal_coding" "+Meeting" "+WorkTrip" "+refile"))))
+         ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radcal" "+radcal_alt" "+radcal_coding" "+Meeting" "+WorkTrip" "+refile"))))
 
         ("h" "Home"
          (
@@ -645,33 +650,33 @@
                :kill-buffer t
                :jump-to-captured t)
               ("w" "Work Tasks & Notes")
-              ("wt" "Work TODO" entry (file+headline "~/Documents/org/mod.org" "Tasks")
+              ("wt" "Work TODO" entry (file+headline "~/Documents/org/dft.org" "Tasks")
                "** TODO %?\nEntered on %U\n"
                :prepend t)
-              ("wn" "Work NEXT" entry (file+headline "~/Documents/org/mod.org" "Tasks")
+              ("wn" "Work NEXT" entry (file+headline "~/Documents/org/dft.org" "Tasks")
                "** NEXT %?\nEntered on %U\n"
                :prepend t)
-              ("wS" "Work Someday" entry (file+headline "~/Documents/org/mod.org" "Someday")
+              ("wS" "Work Someday" entry (file+headline "~/Documents/org/dft.org" "Someday")
                "** SOMEDAY %?\nEntered on %U\n")
               ("wN" "Note" entry (file+headline "~/Documents/org/mod.org" "Notes")
                "* %?\nEntered on %U\n")
-              ("wc" "Note from Clipboard" entry (file+headline "~/Documents/org/mod.org" "Notes")
+              ("wc" "Note from Clipboard" entry (file+headline "~/Documents/org/dft.org" "Notes")
                "* %?\n\t\n%c")
-              ("wr" "Note from Region" entry (file+headline "~/Documents/org/mod.org" "Notes")
+              ("wr" "Note from Region" entry (file+headline "~/Documents/org/dft.org" "Notes")
                "* %?\n\t\n%i")
-              ("wj" "Journal" entry (file+olp+datetree "~/Documents/org/mod.org" "Journal")
+              ("wj" "Journal" entry (file+olp+datetree "~/Documents/org/dft.org" "Journal")
                "* %?\nEntered on %U\n")
-              ("wd" "Retrospective Tasks" entry (file+headline "~/Documents/org/mod.org" "Tasks")
+              ("wd" "Retrospective Tasks" entry (file+headline "~/Documents/org/dft.org" "Tasks")
                "* DONE %?\nCLOSED: %U")
-              ("ws" "Work Calendar - Single" entry (file+headline "~/Documents/org/mod.org" "Calendar")
+              ("ws" "Work Calendar - Single" entry (file+headline "~/Documents/org/dft.org" "Calendar")
                "* %?\n%^T")
-              ("wb" "Work Calendar - Block" entry (file+headline "~/Documents/org/mod.org" "Calendar")
+              ("wb" "Work Calendar - Block" entry (file+headline "~/Documents/org/dft.org" "Calendar")
                "* %?\n%^t--%^t")
-              ("wp" "Work Calendar - Trip" entry (file+headline "~/Documents/org/mod.org" "Work Trips")
+              ("wp" "Work Calendar - Trip" entry (file+headline "~/Documents/org/dft.org" "Work Trips")
                "* %?\n%^t--%^t")
-              ("wm" "Work Calendar - Meeting" entry (file+headline "~/Documents/org/mod.org" "Meetings")
+              ("wm" "Work Calendar - Meeting" entry (file+headline "~/Documents/org/dft.org" "Meetings")
                "* %?\n:PROPERTIES:\n:CATEGORY: Meeting\n:END:\n%^T")
-              ("wC" "Work Colleague - Block" entry (file+headline "~/Documents/org/mod.org" "Colleagues Calendar")
+              ("wC" "Work Colleague - Block" entry (file+headline "~/Documents/org/dft.org" "Colleagues Calendar")
                "* %?\n%^t--%^t")
               ("e" "Tech Tip")
               ("et" "Emacs Tip" entry (file+headline "~/Documents/org/tech-tips.org" "Emacs Tips")
