@@ -119,18 +119,37 @@
     :models '(llama3.1:latest deepseek-r1:latest)))
 
 (use-package paredit
-  :hook ((clojure-mode . enable-paredit-mode)
-         (cider-repl-mode . enable-paredit-mode)
-         (emacs-lisp-mode . enable-paredit-mode)
-         (eval-expression-minibuffer-setup . enable-paredit-mode)
-         (ielm-mode . enable-paredit-mode)
-         (lisp-mode . enable-paredit-mode)
-         (lisp-interaction-mode . enable-paredit-mode)
-         (scheme-mode . enable-paredit-mode))
+  :hook
+  (clojure-mode                     . paredit-mode) ; Clojure buffers
+  (emacs-lisp-mode                  . paredit-mode) ; Elisp buffers.
+  (lisp-mode                        . paredit-mode) ; Common Lisp buffers.
+  (lisp-interaction-mode            . paredit-mode) ; Scratch buffers.
+  (ielm-mode-hook                   . paredit-mode) ; ELM buffers.
+  (eval-expression-minibuffer-setup . paredit-mode) ; Eval minibuffers.
+  :bind
+  (:map paredit-mode-map
+        ("<return>" . my/paredit-RET))
   :config
-  ;; Do this if you get problems
-  ;;(define-key paredit-mode-map (kbd "RET") nil)
-  (show-paren-mode t))
+  (defun my/paredit-RET ()
+    "Wraps `paredit-RET' to provide a sensible minibuffer experience."
+    (interactive)
+    (if (minibufferp)
+        (read--expression-try-read)
+      (paredit-RET))))
+
+;; (use-package paredit
+;;   :hook ((clojure-mode . enable-paredit-mode)
+;;          (cider-repl-mode . enable-paredit-mode)
+;;          (emacs-lisp-mode . enable-paredit-mode)
+;;          (eval-expression-minibuffer-setup . enable-paredit-mode)
+;;          (ielm-mode . enable-paredit-mode)
+;;          (lisp-mode . enable-paredit-mode)
+;;          (lisp-interaction-mode . enable-paredit-mode)
+;;          (scheme-mode . enable-paredit-mode))
+;;   :config
+;;   ;; Do this if you get problems
+;;   ;;(define-key paredit-mode-map (kbd "RET") nil)
+;;   (show-paren-mode t))
 
 (use-package forge
   :after magit)
