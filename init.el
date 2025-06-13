@@ -13,6 +13,8 @@
 (load custom-file 'noerror)
 (add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
 
+(set-face-attribute 'default nil :height 160)
+
 ;; recentf
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
@@ -305,10 +307,10 @@
            :inbox "~/Documents/org/radcal_coding.org")
           (:calendar-id "e951175b-f02f-a759-5d25-3ca5d2a3d268"
                         :files ("~/Documents/org/radcal_work.org")
-                        :inbox "~/Documents/org/radbox_work.org")
+                        :inbox "~/Documents/org/radcal_work.org")
           (:calendar-id "bb48f855-f7bc-183f-f79d-275327d426d5"
                         :files ("~/Documents/org/radcal_alt.org")
-                        :inbox "~/Documents/org/radbox_alt.org"))))
+                        :inbox "~/Documents/org/radcal_alt.org"))))
 
 (use-package dockerfile-mode)
 
@@ -582,7 +584,7 @@
                                       (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
                                       (org-agenda-sorting-strategy '(alpha-up)))))
-         ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radcal" "+radcal_alt" "+radcal_coding" "+Meeting" "+WorkTrip" "+refile"))))
+         ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radcal" "+radcal_alt" "+radcal_work" "+radcal_coding" "+Meeting" "+WorkTrip" "+refile"))))
 
         ("h" "Home"
          (
@@ -602,7 +604,7 @@
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
                                       (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down)))))
-         ((org-agenda-category-filter-preset '("+home" "+habits" "+radcal" "+radcal_alt" "+radcal_coding" "+refile" "+Birthday"))))
+         ((org-agenda-category-filter-preset '("+home" "+habits" "+radcal" "+radcal_alt" "radcal_work" "+radcal_coding" "+refile" "+Birthday"))))
         ("i" tags "idea")
         ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
 
