@@ -42,10 +42,297 @@
 (use-package borland-blue-theme)
 (use-package autumn-light-theme)
 
+(use-package org-roam
+   :ensure t
+   :custom
+   (org-roam-dailies-directory "daily/")
+   (org-roam-directory "~/Documents/org-roam")
+   (org-roam-capture-ref-templates
+    '(("h" "default" plain
+       "%?"
+       :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+       :unnarrowed t)))
+   (org-roam-capture-templates
+    '(("h" "default" plain
+       "%?"
+       :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+       :unnarrowed t)
+      ("w" "work" plain
+       "%?"
+       :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+       :unnarrowed t)
+      ("c" "mod+cpr" plain
+       "%?"
+       :target (file+head "work/cpr/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+       :unnarrowed t)
+      ("e" "encrypted" plain
+       "%?"
+       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
+       :unnarrowed t)))
+   (org-roam-dailies-capture-templates
+    '(("h" "home" entry "* %<%T>: %?"
+       :target (file+head "home/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
+       :unnarrowed t)
+      ("w" "work" entry "* %<%T>: %?"
+       :target (file+head "work/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
+       :unnarrowed t)))
+   :bind (("C-c n l" . org-roam-buffer-toggle)
+          ("C-c n f" . org-roam-node-find)
+          ("C-c n i" . org-roam-node-insert)
+          ("C-c n n" . org-roam-dailies-capture-today)
+          ("C-c n t" . org-roam-dailies-goto-today)
+          :map org-roam-mode-map
+          ("y" . org-roam-dailies-goto-previous-note)
+          ("t" . org-roam-dailies-goto-next-note)
+          ("d" . org-roam-dailies-goto-date)
+          ("D" . org-roam-dailies-capture-date))
+   :bind-keymap ("C-c n D" . org-roam-mode-map)
+   :config
+   ;; this should allow us to type spaces in ido buffer when creating new nodes
+   ;; from https://org-roam.discourse.group/t/org-roam-node-find-space-not-allowed-in-node-title/1847/6
+   (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
+   (defun mrl/search-roam ()
+     "Run consult-ripgrep on the org roam directory"
+     (interactive)
+     (consult-ripgrep org-roam-directory nil))
+   (require 'org-roam-protocol)
+   (org-roam-db-autosync-mode)
+   ;; Bind this to C-c n I
+   (defun org-roam-node-insert-immediate (arg &rest args)
+     (interactive "P")
+     (let (([[id:06d0a643-662b-4440-9e1a-9b9dcf6e2dcb][test_node]]args (cons arg args))
+           (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                     '(:immediate-finish t)))))
+       (apply #'org-roam-node-insert args)))
+   :bind (("C-c n I" . org-roam-node-insert-immediate)))
+
+(use-package consult-org-roam
+   :ensure t
+   :after org-roam
+   :init
+   (require 'consult-org-roam)
+   ;; Activate the minor mode
+   (consult-org-roam-mode 1)
+   :custom
+   ;; Use `ripgrep' for searching with `consult-org-roam-search'
+   (consult-org-roam-grep-func #'consult-ripgrep)
+   ;; Configure a custom narrow key for `consult-buffer'
+   (consult-org-roam-buffer-narrow-key ?r)
+   ;; Display org-roam buffers right after non-org-roam buffers
+   ;; in consult-buffer (and not down at the bottom)
+   (consult-org-roam-buffer-after-buffers t)
+   :config
+   ;; Eventually suppress previewing for certain functions
+   (consult-customize
+    consult-org-roam-forward-links
+    :preview-key "M-.")
+   :bind
+   ;; Define some convenient keybindings as an addition
+   ("C-c n e" . consult-org-roam-file-find)
+   ("C-c n b" . consult-org-roam-backlinks)
+   ("C-c n B" . consult-org-roam-backlinks-recursive)
+   ("C-c n l" . consult-org-roam-forward-links)
+   ("C-c n r" . consult-org-roam-search))
+
+(use-package consult
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind ;; C-c bindings (mode-specific-map)
+  ("C-c h" . consult-history)
+  ("C-c m" . consult-mode-command)
+  ("C-c k" . consult-kmacro)
+  ;; C-x bindings (ctl-x-map)
+  ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
+  ;;("C-x b" . consult-buffer) ;; orig. switch-to-buffer
+  ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+  ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
+  ("C-x r b" . consult-bookmark) ;; orig. bookmark-jump
+  ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
+  ;; Custom M-# bindings for fast register access
+  ("M-#" . consult-register-load)
+  ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
+  ("C-M-#" . consult-register)
+  ;; Other custom bindings
+  ("M-y" . consult-yank-pop)     ;; orig. yank-pop
+  ("<help> a" . consult-apropos) ;; orig. apropos-command
+  ;; M-g bindings (goto-map)
+  ("M-g e" . consult-compile-error)
+  ("M-g f" . consult-flymake) ;; Alternative: consult-flycheck
+  ("M-g g" . consult-goto-line)   ;; orig. goto-line
+  ("M-g M-g" . consult-goto-line) ;; orig. goto-line
+  ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
+  ("M-g m" . consult-mark)
+  ("M-g k" . consult-global-mark)
+  ("M-g i" . consult-imenu)
+  ("M-g I" . consult-imenu-multi)
+  ;; M-s bindings (search-map)
+  ;; ("M-s d" . consult-find)
+  ;; ("M-s D" . consult-locate)
+  ;; ("M-s g" . consult-grep)
+  ;; ("M-g G" . consult-git-grep)
+  ("M-s r" . consult-ripgrep)
+  ;; ("M-s l" . consult-line)
+  ;; ("M-s L" . consult-line-multi)
+  ;; ("M-s m" . consult-multi-occur)
+  ;; ("M-s k" . consult-keep-lines)
+  ;; ("M-s u" . consult-focus-lines)
+  ;; ;; Isearch integration
+  ;; ("M-s e" . consult-isearch-history)
+  :map isearch-mode-map
+  ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
+  ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
+  ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
+  ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
+  ;; Minibuffer history
+  :map minibuffer-local-map
+  ("M-s" . consult-history) ;; orig. next-matching-history-element
+  ("M-r" . consult-history) ;; orig. previous-matching-history-element
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key (kbd "M-."))
+  ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key (kbd "M-.")
+   :preview-key '(:debounce 0.4 any))
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; (kbd "C-+")
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+  ;; By default `consult-project-function' uses `project-root' from project.el.
+  ;; Optionally configure a different project root function.
+  ;; There are multiple reasonable alternatives to chose from.
+;;;; 1. project.el (the default)
+  ;; (setq consult-project-function #'consult--default-project--function)
+;;;; 2. projectile.el (projectile-project-root)
+  ;; (autoload 'projectile-project-root "projectile")
+  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+;;;; 3. vc.el (vc-root-dir)
+  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+;;;; 4. locate-dominating-file
+  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  )
+
+
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory "~/Documents/org-roam/")
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-completion-everywhere t)
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
+
 (use-package flycheck-clj-kondo
   :hook (after-init . global-flycheck-mode))
 
 (use-package magit)
+
+;; Enable Vertico.
+(use-package vertico
+  :ensure t
+  ;; (vertico-scroll-margin 0) ;; Different scroll margin
+  ;; (vertico-count 20) ;; Show more candidates
+  ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+  ;; (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+  :init
+  (vertico-mode))
+
+;; Configure directory extension.
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init
+  (savehist-mode))
+
+;; Emacs minibuffer configurations.
+(use-package emacs
+  :custom
+  ;; Enable context menu. `vertico-multiform-mode' adds a menu in the minibuffer
+  ;; to switch display modes.
+  (context-menu-mode t)
+  ;; Support opening new minibuffers from inside existing minibuffers.
+  (enable-recursive-minibuffers t)
+  ;; Hide commands in M-x which do not work in the current mode.  Vertico
+  ;; commands are hidden in normal buffers. This setting is useful beyond
+  ;; Vertico.
+  (read-extended-command-predicate #'command-completion-default-include-p)
+  ;; Do not allow the cursor in the minibuffer prompt
+  (minibuffer-prompt-properties
+   '(read-only t cursor-intangible t face minibuffer-prompt)))
+
+;; Optionally use the `orderless' completion style.
+(use-package orderless
+  :custom
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
+
+;; Enable rich annotations using the Marginalia package
+(use-package marginalia
+  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+  ;; available in the *Completions* buffer, add it to the
+  ;; `completion-list-mode-map'.
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+
+  ;; The :init section is always executed.
+  :init
+
+  ;; Marginalia must be activated in the :init section of use-package such that
+  ;; the mode gets enabled right away. Note that this forces loading the
+  ;; package.
+  (marginalia-mode))
 
 (use-package mu4e
   :ensure nil
@@ -174,15 +461,15 @@
          ("M-X" . smex-major-mode-commands)
          ("C-c C-c M-x" . execute-extended-command)))
 
-(use-package ido-completing-read+
-  :config
-  (ido-mode 1)
-  (ido-everywhere 1)
-  (ido-ubiquitous-mode 1)
-  (setq ido-enable-flex-matching t)
-  (setq ido-create-new-buffer 'always)
-  (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
-  (setq ido-enable-flex-matching t))
+;; (use-package ido-completing-read+
+;;   :config
+;;   (ido-mode 1)
+;;   (ido-everywhere 1)
+;;   (ido-ubiquitous-mode 1)
+;;   (setq ido-enable-flex-matching t)
+;;   (setq ido-create-new-buffer 'always)
+;;   (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
+;;   (setq ido-enable-flex-matching t))
 
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
@@ -213,28 +500,13 @@
   :config
   (setq web-mode-markup-indent-offset 2))
 
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
-  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
-  ;; available in the *Completions* buffer, add it to the
-  ;; `completion-list-mode-map'.
-  :bind (:map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
-
-  ;; The :init section is always executed.
-  :init
-
-  ;; Marginalia must be activated in the :init section of use-package such that
-  ;; the mode gets enabled right away. Note that this forces loading the
-  ;; package.
-  (marginalia-mode))
-
 (use-package elfeed
   :bind ("C-x w" . elfeed)
   :config
   (setq elfeed-feeds
         '(("https://joeyh.name/blog/index.rss" debian linux)
           ("https://lukesmith.xyz/rss.xml" linux)
+          ("https://www.tumfatig.net/index.xml" bsd)
           ("https://discoverbsd.com/feeds/posts/default" bsd)
           ("https://planet.debian.org/rss20.xml" debian)
           ("https://blog.cleancoder.com/atom.xml" programming)
