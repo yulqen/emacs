@@ -46,7 +46,7 @@
    :ensure t
    :custom
    (org-roam-dailies-directory "daily/")
-   (org-roam-directory "~/Documents/org-roam")
+   (org-roam-directory "~/Documents/org/org-roam")
    (org-roam-capture-ref-templates
     '(("h" "default" plain
        "%?"
