@@ -570,19 +570,20 @@
   :config
   (setq org-caldav-url "http://radicale.banded-neon.ts.net/radicale/lemon")
   (setq org-icalendar-timezone "Europe/London")
+  (setq org-caldav-sync-direction 'cal->org)
   (setq org-caldav-calendars
         '((:calendar-id "7c38e0c7-4a42-9863-c9e0-6025a32c4a65"
-           :files ("~/Documents/org/radcal.org")
-           :inbox "~/Documents/org/radbox.org")
+                        :files ("~/Documents/org/radcal.org")
+                        :inbox "~/Documents/org/radbox.org")
           (:calendar-id "ae785050-e1f8-5d83-faa0-38eb10b6b53a"
-           :files ("~/Documents/org/radcal_coding.org")
-           :inbox "~/Documents/org/radcal_coding.org")
+                        :files ("~/Documents/org/radcal_coding.org")
+                        :inbox "~/Documents/org/radbox_coding.org")
           (:calendar-id "e951175b-f02f-a759-5d25-3ca5d2a3d268"
                         :files ("~/Documents/org/radcal_work.org")
-                        :inbox "~/Documents/org/radcal_work.org")
+                        :inbox "~/Documents/org/radbox_work.org")
           (:calendar-id "bb48f855-f7bc-183f-f79d-275327d426d5"
                         :files ("~/Documents/org/radcal_alt.org")
-                        :inbox "~/Documents/org/radcal_alt.org"))))
+                        :inbox "~/Documents/org/radbox_alt.org"))))
 
 (use-package dockerfile-mode)
 
@@ -823,6 +824,7 @@
                                "~/Documents/org/refile.org"
                                "~/Documents/org/radcal.org"
                                "~/Documents/org/radcal_alt.org"
+                               "~/Documents/org/radbox_alt.org"
                                "~/Documents/org/radcal_coding.org"
                                "~/Documents/org/radcal_work.org"
                                "~/Documents/org/alphabet_learning.org"
@@ -845,6 +847,10 @@
          (
           (agenda)
           (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
+          (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
+                                      (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
+          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
+                                      (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "DfT WAITING")
                                          (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
@@ -852,10 +858,7 @@
                       (org-agenda-sorting-strategy '(deadline-up priority-down))))
           (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
                                          (org-agenda-sorting-strategy '(alpha-up))))
-          (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
-                                      (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
-          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
-                                      (org-agenda-sorting-strategy '(alpha-up)))))
+          )
          ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radcal" "+radcal_alt" "+radcal_work" "+radcal_coding" "+Meeting" "+WorkTrip" "+refile"))))
 
         ("h" "Home"
@@ -863,6 +866,10 @@
           (agenda)
           (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")
                                                                         (org-agenda-sorting-strategy '(priority-down alpha-up))))
+          (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
+                                      (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
+          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
+                                      (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
           (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "Home WAITING")
                                          (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
@@ -871,11 +878,7 @@
           (tags "idea" ((org-agenda-overriding-header "Ideas")
                         (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
-                                         (org-agenda-sorting-strategy '(alpha-up))))
-          (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
-                                      (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
-          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
-                                      (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down)))))
+                                         (org-agenda-sorting-strategy '(alpha-up)))))
          ((org-agenda-category-filter-preset '("+home" "+habits" "+radcal" "+radcal_alt" "radcal_work" "+radcal_coding" "+refile" "+Birthday"))))
         ("i" tags "idea")
         ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
@@ -1041,9 +1044,15 @@ https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-o
             (goto-char line-begin)
             (when (re-search-forward "radcal_alt" line-end t)
               (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-alt-highlight-face))
+            (when (re-search-forward "radbox_alt" line-end t)
+              (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-alt-highlight-face))
             (when (re-search-forward "radcal_coding" line-end t)
               (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-coding-highlight-face))
+            (when (re-search-forward "radbox_coding" line-end t)
+              (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-coding-highlight-face))
             (when (re-search-forward "radcal" line-end t)
+              (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-highlight-face))
+            (when (re-search-forward "radbox" line-end t)
               (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-highlight-face))))
         (forward-line 1)))))
 
