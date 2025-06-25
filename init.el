@@ -42,6 +42,39 @@
 (use-package borland-blue-theme)
 (use-package autumn-light-theme)
 
+;; Install SLIME if not already installed
+(unless (package-installed-p 'slime)
+  (package-refresh-contents) ; Refresh package list
+  (package-install 'slime))
+
+;; Configure SLIME
+(use-package slime
+  :init
+  ;; Load the quicklisp-slime-helper if you use Quicklisp
+  (load (expand-file-name "~/quicklisp/slime-helper.el"))
+
+  :config
+  ;; Set SBCL as the inferior Lisp program
+  (setq inferior-lisp-program "sbcl")
+
+  ;; Load SLIME contrib modules for extended functionality
+  (setq slime-contribs '(slime-fancy ; comprehensive set of features
+                         slime-quicklisp ; Quicklisp integration
+                         slime-asdf ; ASDF integration
+                         slime-mrepl ; multiple REPLs
+                         ;; Add other contribs as needed, e.g.,
+                         ;; slime-autodoc
+                         ;; slime-editing-commands
+                         ))
+  (slime-setup slime-contribs)
+
+  ;; Optional: Enable paredit for structural editing of Lisp code
+  (autoload 'paredit-mode "paredit" "Minor mode for structural editing of Lisp code." t)
+  (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
+  (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
+  (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
+)
+
 (use-package org-roam
    :ensure t
    :custom
