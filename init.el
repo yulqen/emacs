@@ -42,13 +42,14 @@
 (use-package borland-blue-theme)
 (use-package autumn-light-theme)
 
-;; Install SLIME if not already installed
-(unless (package-installed-p 'slime)
-  (package-refresh-contents) ; Refresh package list
-  (package-install 'slime))
+;; ;; Install SLIME if not already installed
+;; (unless (package-installed-p 'slime)
+;;   (package-refresh-contents) ; Refresh package list
+;;   (package-install 'slime))
 
 ;; Configure SLIME
 (use-package slime
+  :ensure t
   :init
   ;; Load the quicklisp-slime-helper if you use Quicklisp
   (load (expand-file-name "~/quicklisp/slime-helper.el"))
