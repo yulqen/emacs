@@ -859,7 +859,7 @@
                                "~/Documents/org/radcal_alt.org"
                                "~/Documents/org/radbox_alt.org"
                                "~/Documents/org/radcal_coding.org"
-                               "~/Documents/org/radcal_work.org"
+                               "~/Documents/org/radbox_work.org"
                                "~/Documents/org/alphabet_learning.org"
                                "~/Documents/org/dft.org"
                                "~/Documents/org/calendar/cal.org"
