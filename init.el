@@ -861,6 +861,19 @@
           )
          ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radcal" "+radcal_alt" "+radcal_work" "+radcal_coding" "+Meeting" "+WorkTrip" "+refile"))))
 
+        ("c" "Central Project Register"
+         (
+          (tags "current")
+          (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
+          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
+                                      (org-agenda-sorting-strategy '(alpha-up))))
+          (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "CPR Waiting/Blocked")
+                                         (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+          (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
+                     ((org-agenda-overriding-header "DfT NEXT UNSCHEDULED")
+                      (org-agenda-sorting-strategy '(deadline-up priority-down))))
+          )
+         ((org-agenda-category-filter-preset '("+CPR-Tasks"))))
         ("h" "Home"
          (
           (agenda)
