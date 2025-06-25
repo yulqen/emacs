@@ -46,7 +46,7 @@
    :ensure t
    :custom
    (org-roam-dailies-directory "daily/")
-   (org-roam-directory "~/Documents/org/org-roam")
+   (org-roam-directory "~/Documents/org")
    (org-roam-capture-ref-templates
     '(("h" "default" plain
        "%?"
@@ -863,7 +863,6 @@
 
         ("c" "Central Project Register"
          (
-          (tags "current")
           (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
                                       (org-agenda-sorting-strategy '(alpha-up))))
