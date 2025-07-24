@@ -76,97 +76,97 @@
   (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
 )
 
-(use-package org-roam
-   :ensure t
-   :custom
-   (org-roam-dailies-directory "daily/")
-   (org-roam-directory "~/Documents/org")
-   (org-roam-capture-ref-templates
-    '(("h" "default" plain
-       "%?"
-       :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-       :unnarrowed t)))
-   (org-roam-capture-templates
-    '(("h" "default" plain
-       "%?"
-       :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-       :unnarrowed t)
-      ("w" "work" plain
-       "%?"
-       :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-       :unnarrowed t)
-      ("c" "mod+cpr" plain
-       "%?"
-       :target (file+head "work/cpr/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-       :unnarrowed t)
-      ("e" "encrypted" plain
-       "%?"
-       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
-       :unnarrowed t)))
-   (org-roam-dailies-capture-templates
-    '(("h" "home" entry "* %<%T>: %?"
-       :target (file+head "home/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
-       :unnarrowed t)
-      ("w" "work" entry "* %<%T>: %?"
-       :target (file+head "work/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
-       :unnarrowed t)))
-   :bind (("C-c n l" . org-roam-buffer-toggle)
-          ("C-c n f" . org-roam-node-find)
-          ("C-c n i" . org-roam-node-insert)
-          ("C-c n n" . org-roam-dailies-capture-today)
-          ("C-c n t" . org-roam-dailies-goto-today)
-          :map org-roam-mode-map
-          ("y" . org-roam-dailies-goto-previous-note)
-          ("t" . org-roam-dailies-goto-next-note)
-          ("d" . org-roam-dailies-goto-date)
-          ("D" . org-roam-dailies-capture-date))
-   :bind-keymap ("C-c n D" . org-roam-mode-map)
-   :config
-   ;; this should allow us to type spaces in ido buffer when creating new nodes
-   ;; from https://org-roam.discourse.group/t/org-roam-node-find-space-not-allowed-in-node-title/1847/6
-   (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
-   (defun mrl/search-roam ()
-     "Run consult-ripgrep on the org roam directory"
-     (interactive)
-     (consult-ripgrep org-roam-directory nil))
-   (require 'org-roam-protocol)
-   (org-roam-db-autosync-mode)
-   ;; Bind this to C-c n I
-   (defun org-roam-node-insert-immediate (arg &rest args)
-     (interactive "P")
-     (let (([[id:06d0a643-662b-4440-9e1a-9b9dcf6e2dcb][test_node]]args (cons arg args))
-           (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                     '(:immediate-finish t)))))
-       (apply #'org-roam-node-insert args)))
-   :bind (("C-c n I" . org-roam-node-insert-immediate)))
+;; (use-package org-roam
+;;    :ensure t
+;;    :custom
+;;    (org-roam-dailies-directory "daily/")
+;;    (org-roam-directory "~/Documents/org")
+;;    (org-roam-capture-ref-templates
+;;     '(("h" "default" plain
+;;        "%?"
+;;        :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+;;        :unnarrowed t)))
+;;    (org-roam-capture-templates
+;;     '(("h" "default" plain
+;;        "%?"
+;;        :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+;;        :unnarrowed t)
+;;       ("w" "work" plain
+;;        "%?"
+;;        :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+;;        :unnarrowed t)
+;;       ("c" "mod+cpr" plain
+;;        "%?"
+;;        :target (file+head "work/cpr/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+;;        :unnarrowed t)
+;;       ("e" "encrypted" plain
+;;        "%?"
+;;        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
+;;        :unnarrowed t)))
+;;    (org-roam-dailies-capture-templates
+;;     '(("h" "home" entry "* %<%T>: %?"
+;;        :target (file+head "home/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
+;;        :unnarrowed t)
+;;       ("w" "work" entry "* %<%T>: %?"
+;;        :target (file+head "work/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
+;;        :unnarrowed t)))
+;;    :bind (("C-c n l" . org-roam-buffer-toggle)
+;;           ("C-c n f" . org-roam-node-find)
+;;           ("C-c n i" . org-roam-node-insert)
+;;           ("C-c n n" . org-roam-dailies-capture-today)
+;;           ("C-c n t" . org-roam-dailies-goto-today)
+;;           :map org-roam-mode-map
+;;           ("y" . org-roam-dailies-goto-previous-note)
+;;           ("t" . org-roam-dailies-goto-next-note)
+;;           ("d" . org-roam-dailies-goto-date)
+;;           ("D" . org-roam-dailies-capture-date))
+;;    :bind-keymap ("C-c n D" . org-roam-mode-map)
+;;    :config
+;;    ;; this should allow us to type spaces in ido buffer when creating new nodes
+;;    ;; from https://org-roam.discourse.group/t/org-roam-node-find-space-not-allowed-in-node-title/1847/6
+;;    (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
+;;    (defun mrl/search-roam ()
+;;      "Run consult-ripgrep on the org roam directory"
+;;      (interactive)
+;;      (consult-ripgrep org-roam-directory nil))
+;;    (require 'org-roam-protocol)
+;;    (org-roam-db-autosync-mode)
+;;    ;; Bind this to C-c n I
+;;    (defun org-roam-node-insert-immediate (arg &rest args)
+;;      (interactive "P")
+;;      (let (([[id:06d0a643-662b-4440-9e1a-9b9dcf6e2dcb][test_node]]args (cons arg args))
+;;            (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+;;                                                      '(:immediate-finish t)))))
+;;        (apply #'org-roam-node-insert args)))
+;;    :bind (("C-c n I" . org-roam-node-insert-immediate)))
 
-(use-package consult-org-roam
-   :ensure t
-   :after org-roam
-   :init
-   (require 'consult-org-roam)
-   ;; Activate the minor mode
-   (consult-org-roam-mode 1)
-   :custom
-   ;; Use `ripgrep' for searching with `consult-org-roam-search'
-   (consult-org-roam-grep-func #'consult-ripgrep)
-   ;; Configure a custom narrow key for `consult-buffer'
-   (consult-org-roam-buffer-narrow-key ?r)
-   ;; Display org-roam buffers right after non-org-roam buffers
-   ;; in consult-buffer (and not down at the bottom)
-   (consult-org-roam-buffer-after-buffers t)
-   :config
-   ;; Eventually suppress previewing for certain functions
-   (consult-customize
-    consult-org-roam-forward-links
-    :preview-key "M-.")
-   :bind
-   ;; Define some convenient keybindings as an addition
-   ("C-c n e" . consult-org-roam-file-find)
-   ("C-c n b" . consult-org-roam-backlinks)
-   ("C-c n B" . consult-org-roam-backlinks-recursive)
-   ("C-c n l" . consult-org-roam-forward-links)
-   ("C-c n r" . consult-org-roam-search))
+;; (use-package consult-org-roam
+;;    :ensure t
+;;    :after org-roam
+;;    :init
+;;    (require 'consult-org-roam)
+;;    ;; Activate the minor mode
+;;    (consult-org-roam-mode 1)
+;;    :custom
+;;    ;; Use `ripgrep' for searching with `consult-org-roam-search'
+;;    (consult-org-roam-grep-func #'consult-ripgrep)
+;;    ;; Configure a custom narrow key for `consult-buffer'
+;;    (consult-org-roam-buffer-narrow-key ?r)
+;;    ;; Display org-roam buffers right after non-org-roam buffers
+;;    ;; in consult-buffer (and not down at the bottom)
+;;    (consult-org-roam-buffer-after-buffers t)
+;;    :config
+;;    ;; Eventually suppress previewing for certain functions
+;;    (consult-customize
+;;     consult-org-roam-forward-links
+;;     :preview-key "M-.")
+;;    :bind
+;;    ;; Define some convenient keybindings as an addition
+;;    ("C-c n e" . consult-org-roam-file-find)
+;;    ("C-c n b" . consult-org-roam-backlinks)
+;;    ("C-c n B" . consult-org-roam-backlinks-recursive)
+;;    ("C-c n l" . consult-org-roam-forward-links)
+;;    ("C-c n r" . consult-org-roam-search))
 
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
@@ -273,7 +273,139 @@
 ;;;; 4. locate-dominating-file
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   )
+(use-package denote
+  :ensure t
+  :init
+  (add-hook 'dired-mode-hook #'denote-dired-mode)
+  :config
+  (setq denote-directory (expand-file-name "~/Documents/denote/"))
+  (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work" "technote"))
+  (setq denote-file-type 'text)
+  (setq denote-prompts '(title keywords))
+  (setq denote-date-prompt-use-org-read-date t)
 
+  (defun mrl/denote-find-file ()
+      "Find file in the current `denote-directory'."
+      (interactive)
+      (require 'consult)
+      (require 'denote)
+      (consult-find (denote-directory)))
+
+  (defun mrl/is-todays-journal? (f)
+    "If f is today's journal in denote, f is returned"
+    (let* ((month-regexp (car (calendar-current-date)))
+           (day-regexp (nth 1 (calendar-current-date)))
+           (year-regexp (nth 2 (calendar-current-date)))
+           (journal-files (directory-files (denote-directory) nil "_journal"))
+           (day-match? (string-match-p (concat "^......" (format "%02d" day-regexp)) f))
+           (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
+           (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
+      (when (and day-match? year-match? month-match?)
+        f)))
+
+  (defvar my-denote-silo-directories
+  `("/home/lemon/Documents/mod-denote"
+    ;; You don't actually need to include the `denote-directory' here
+    ;; if you use the regular commands in their global context.  I am
+    ;; including it for completeness.
+    ,denote-directory)
+  "List of file paths pointing to my Denote silos.
+  This is a list of strings.")
+
+(defvar my-denote-commands-for-silos
+  '(denote
+    denote-date
+    denote-subdirectory
+    denote-template
+    denote-type)
+  "List of Denote commands to call after selecting a silo.
+  This is a list of symbols that specify the note-creating
+  interactive functions that Denote provides.")
+
+(defun my-denote-pick-silo-then-command (silo command)
+  "Select SILO and run Denote COMMAND in it.
+  SILO is a file path from `my-denote-silo-directories', while
+  COMMAND is one among `my-denote-commands-for-silos'."
+  (interactive
+   (list (completing-read "Select a silo: " my-denote-silo-directories nil t)
+         (intern (completing-read
+                  "Run command in silo: "
+                  my-denote-commands-for-silos nil t))))
+  (let ((denote-directory silo))
+    (call-interactively command)))
+
+  (defun mrl/denote-journal ()
+    "Create an entry tagged journal with the date as its title."
+    (interactive)
+    (defvar mrl/in-mod-denote nil)
+    (let* ((journal-dir (concat (denote-directory) "journals"))
+           (today-journal
+            (car (-non-nil
+                  (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
+      (if today-journal
+          (find-file (concat journal-dir "/" today-journal))
+        (if mrl/in-mod-denote ; this variable is from the .dir-locals.el file in the silo directory; we want to use a specific template
+            (denote
+             (format-time-string "%A %e %B %Y")
+             '("journal") nil journal-dir nil 'modjournal)
+          (denote
+           (format-time-string "%A %e %B %Y")
+           '("journal") nil journal-dir)))))
+  
+  :bind (("C-c n n" . denote-create-note)
+         ("C-c n d" . mrl/denote-journal)
+         ("C-c n t" . denote-type)
+         ("C-c n f" . mrl/denote-find-file)
+         ("C-c n l" . denote-link))
+  )
+
+;; ef-themes configuration
+;; Make customisations that affect Emacs faces BEFORE loading a theme
+;; (any change needs a theme re-load to take effect).
+(require 'ef-themes)
+
+;; If you like two specific themes and want to switch between them, you
+;; can specify them in `ef-themes-to-toggle' and then invoke the command
+;; `ef-themes-toggle'.  All the themes are included in the variable
+;; `ef-themes-collection'.
+(setq ef-themes-to-toggle '(ef-summer ef-winter))
+
+(setq ef-themes-headings ; read the manual's entry or the doc string
+      '((0 variable-pitch light 1.9)
+        (1 variable-pitch light 1.8)
+        (2 variable-pitch regular 1.7)
+        (3 variable-pitch regular 1.6)
+        (4 variable-pitch regular 1.5)
+        (5 variable-pitch 1.4) ; absence of weight means `bold'
+        (6 variable-pitch 1.3)
+        (7 variable-pitch 1.2)
+        (t variable-pitch 1.1)))
+
+;; They are nil by default...
+(setq ef-themes-mixed-fonts t
+      ef-themes-variable-pitch-ui t)
+
+;; Disable all other themes to avoid awkward blending:
+(mapc #'disable-theme custom-enabled-themes)
+
+;; Load the theme of choice:
+;;(load-theme 'ef-summer :no-confirm)
+
+;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
+(ef-themes-select 'ef-dark)
+
+;; The themes we provide are recorded in the `ef-themes-dark-themes',
+;; `ef-themes-light-themes'.
+
+;; We also provide these commands, but do not assign them to any key:
+;;
+;; - `ef-themes-toggle'
+;; - `ef-themes-select'
+;; - `ef-themes-select-dark'
+;; - `ef-themes-select-light'
+;; - `ef-themes-load-random'
+;; - `ef-themes-preview-colors'
+;; - `ef-themes-preview-colors-current'
 
 (use-package flycheck-clj-kondo
   :hook (after-init . global-flycheck-mode))
@@ -324,14 +456,14 @@
    '(read-only t cursor-intangible t face minibuffer-prompt)))
 
 ;; Optionally use the `orderless' completion style.
-(use-package orderless
-  :custom
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
-  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
-  (completion-styles '(orderless basic))
-  (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion)))))
+;; (use-package orderless
+;;   :custom
+;;   ;; Configure a custom style dispatcher (see the Consult wiki)
+;;   ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+;;   ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+;;   (completion-styles '(orderless basic))
+;;   (completion-category-defaults nil)
+;;   (completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
@@ -471,10 +603,10 @@
   :mode ("\\.h\\(pp\\)?\\'" . simpc-mode)
   :mode ("\\.c\\(pp\\)?\\'" . simpc-mode))
 
-(use-package smex
-  :bind (("M-x" . smex)
-         ("M-X" . smex-major-mode-commands)
-         ("C-c C-c M-x" . execute-extended-command)))
+;; (use-package smex
+;;   :bind (("M-x" . smex)
+;;          ("M-X" . smex-major-mode-commands)
+;;          ("C-c C-c M-x" . execute-extended-command)))
 
 ;; (use-package ido-completing-read+
 ;;   :config
