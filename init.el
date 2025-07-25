@@ -273,96 +273,179 @@
 ;;;; 4. locate-dominating-file
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   )
+
+;; OLD DENOTE CONFIG - COMMENTED JULY25
+;; (use-package denote
+;;   :ensure t
+;;   :init
+;;   (add-hook 'dired-mode-hook #'denote-dired-mode)
+;;   :config
+;;   (setq denote-directory (expand-file-name "~/Documents/denote/"))
+;;   (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work" "technote"))
+;;   (setq denote-file-type 'text)
+;;   (setq denote-prompts '(title keywords))
+;;   (setq denote-date-prompt-use-org-read-date t)
+
+;;   (defun mrl/denote-find-file ()
+;;       "Find file in the current `denote-directory'."
+;;       (interactive)
+;;       (require 'consult)
+;;       (require 'denote)
+;;       (consult-find (denote-directory)))
+
+;;   (defun mrl/is-todays-journal? (f)
+;;     "If f is today's journal in denote, f is returned"
+;;     (let* ((month-regexp (car (calendar-current-date)))
+;;            (day-regexp (nth 1 (calendar-current-date)))
+;;            (year-regexp (nth 2 (calendar-current-date)))
+;;            (journal-files (directory-files (denote-directory) nil "_journal"))
+;;            (day-match? (string-match-p (concat "^......" (format "%02d" day-regexp)) f))
+;;            (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
+;;            (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
+;;       (when (and day-match? year-match? month-match?)
+;;         f)))
+
+;;   (defvar my-denote-silo-directories
+;;   `("/home/lemon/Documents/mod-denote"
+;;     ;; You don't actually need to include the `denote-directory' here
+;;     ;; if you use the regular commands in their global context.  I am
+;;     ;; including it for completeness.
+;;     ,denote-directory)
+;;   "List of file paths pointing to my Denote silos.
+;;   This is a list of strings.")
+
+;; (defvar my-denote-commands-for-silos
+;;   '(denote
+;;     denote-date
+;;     denote-subdirectory
+;;     denote-template
+;;     denote-type)
+;;   "List of Denote commands to call after selecting a silo.
+;;   This is a list of symbols that specify the note-creating
+;;   interactive functions that Denote provides.")
+
+;; (defun my-denote-pick-silo-then-command (silo command)
+;;   "Select SILO and run Denote COMMAND in it.
+;;   SILO is a file path from `my-denote-silo-directories', while
+;;   COMMAND is one among `my-denote-commands-for-silos'."
+;;   (interactive
+;;    (list (completing-read "Select a silo: " my-denote-silo-directories nil t)
+;;          (intern (completing-read
+;;                   "Run command in silo: "
+;;                   my-denote-commands-for-silos nil t))))
+;;   (let ((denote-directory silo))
+;;     (call-interactively command)))
+
+;;   (defun mrl/denote-journal ()
+;;     "Create an entry tagged journal with the date as its title."
+;;     (interactive)
+;;     (defvar mrl/in-mod-denote nil)
+;;     (let* ((journal-dir (concat (denote-directory) "journals"))
+;;            (today-journal
+;;             (car (-non-nil
+;;                   (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
+;;       (if today-journal
+;;           (find-file (concat journal-dir "/" today-journal))
+;;         (if mrl/in-mod-denote ; this variable is from the .dir-locals.el file in the silo directory; we want to use a specific template
+;;             (denote
+;;              (format-time-string "%A %e %B %Y")
+;;              '("journal") nil journal-dir nil 'modjournal)
+;;           (denote
+;;            (format-time-string "%A %e %B %Y")
+;;            '("journal") nil journal-dir)))))
+  
+;;   :bind (("C-c n n" . denote-create-note)
+;;          ("C-c n d" . mrl/denote-journal)
+;;          ("C-c n t" . denote-type)
+;;          ("C-c n f" . mrl/denote-find-file)
+;;          ("C-c n l" . denote-link))
+;;   )
+
 (use-package denote
   :ensure t
-  :init
-  (add-hook 'dired-mode-hook #'denote-dired-mode)
+  :hook
+  (;; If you use Markdown or plain text files, then you want to make
+   ;; the Denote links clickable (Org renders links as buttons right
+   ;; away)
+   (text-mode . denote-fontify-links-mode-maybe)
+   ;; Apply colours to Denote names in Dired.  This applies to all
+   ;; directories.  Check `denote-dired-directories' for the specific
+   ;; directories you may prefer instead.  Then, instead of
+   ;; `denote-dired-mode', use `denote-dired-mode-in-directories'.
+   (dired-mode . denote-dired-mode))
+  :bind
+  ;; Denote DOES NOT define any key bindings.  This is for the user to
+  ;; decide.  For example:
+  ( :map global-map
+    ("C-c n n" . denote)
+    ("C-c n d" . denote-dired)
+    ("C-c n g" . denote-grep)
+    ;; If you intend to use Denote with a variety of file types, it is
+    ;; easier to bind the link-related commands to the `global-map', as
+    ;; shown here.  Otherwise follow the same pattern for `org-mode-map',
+    ;; `markdown-mode-map', and/or `text-mode-map'.
+    ("C-c n l" . denote-link)
+    ("C-c n L" . denote-add-links)
+    ("C-c n b" . denote-backlinks)
+    ("C-c n q c" . denote-query-contents-link) ; create link that triggers a grep
+    ("C-c n q f" . denote-query-filenames-link) ; create link that triggers a dired
+    ;; Note that `denote-rename-file' can work from any context, not just
+    ;; Dired bufffers.  That is why we bind it here to the `global-map'.
+    ("C-c n r" . denote-rename-file)
+    ("C-c n R" . denote-rename-file-using-front-matter)
+
+    ;; Key bindings specifically for Dired.
+    :map dired-mode-map
+    ("C-c C-d C-i" . denote-dired-link-marked-notes)
+    ("C-c C-d C-r" . denote-dired-rename-files)
+    ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
+    ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter))
+
   :config
+  ;; Remember to check the doc string of each of those variables.
   (setq denote-directory (expand-file-name "~/Documents/denote/"))
-  (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work" "technote"))
-  (setq denote-file-type 'text)
+  (setq denote-save-buffers nil)
+  (setq denote-known-keywords '("emacs" "computer" "family"))
+  (setq denote-infer-keywords t)
+  ;;(setq denote-file-type 'text)
+  (setq denote-sort-keywords t)
   (setq denote-prompts '(title keywords))
+  (setq denote-excluded-directories-regexp nil)
+  (setq denote-history-completion-in-prompts t)
+  (setq denote-excluded-keywords-regexp nil)
+  (setq denote-rename-confirmations '(rewrite-front-matter modify-file-name))
+
+  ;; Pick dates, where relevant, with Org's advanced interface:
   (setq denote-date-prompt-use-org-read-date t)
 
-  (defun mrl/denote-find-file ()
-      "Find file in the current `denote-directory'."
-      (interactive)
-      (require 'consult)
-      (require 'denote)
-      (consult-find (denote-directory)))
+  ;; Automatically rename Denote buffers using the `denote-rename-buffer-format'.
+  (denote-rename-buffer-mode 1))
 
-  (defun mrl/is-todays-journal? (f)
-    "If f is today's journal in denote, f is returned"
-    (let* ((month-regexp (car (calendar-current-date)))
-           (day-regexp (nth 1 (calendar-current-date)))
-           (year-regexp (nth 2 (calendar-current-date)))
-           (journal-files (directory-files (denote-directory) nil "_journal"))
-           (day-match? (string-match-p (concat "^......" (format "%02d" day-regexp)) f))
-           (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
-           (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
-      (when (and day-match? year-match? month-match?)
-        f)))
-
-  (defvar my-denote-silo-directories
-  `("/home/lemon/Documents/mod-denote"
-    ;; You don't actually need to include the `denote-directory' here
-    ;; if you use the regular commands in their global context.  I am
-    ;; including it for completeness.
-    ,denote-directory)
-  "List of file paths pointing to my Denote silos.
-  This is a list of strings.")
-
-(defvar my-denote-commands-for-silos
-  '(denote
-    denote-date
-    denote-subdirectory
-    denote-template
-    denote-type)
-  "List of Denote commands to call after selecting a silo.
-  This is a list of symbols that specify the note-creating
-  interactive functions that Denote provides.")
-
-(defun my-denote-pick-silo-then-command (silo command)
-  "Select SILO and run Denote COMMAND in it.
-  SILO is a file path from `my-denote-silo-directories', while
-  COMMAND is one among `my-denote-commands-for-silos'."
-  (interactive
-   (list (completing-read "Select a silo: " my-denote-silo-directories nil t)
-         (intern (completing-read
-                  "Run command in silo: "
-                  my-denote-commands-for-silos nil t))))
-  (let ((denote-directory silo))
-    (call-interactively command)))
-
-  (defun mrl/denote-journal ()
-    "Create an entry tagged journal with the date as its title."
-    (interactive)
-    (defvar mrl/in-mod-denote nil)
-    (let* ((journal-dir (concat (denote-directory) "journals"))
-           (today-journal
-            (car (-non-nil
-                  (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
-      (if today-journal
-          (find-file (concat journal-dir "/" today-journal))
-        (if mrl/in-mod-denote ; this variable is from the .dir-locals.el file in the silo directory; we want to use a specific template
-            (denote
-             (format-time-string "%A %e %B %Y")
-             '("journal") nil journal-dir nil 'modjournal)
-          (denote
-           (format-time-string "%A %e %B %Y")
-           '("journal") nil journal-dir)))))
-  
-  :bind (("C-c n n" . denote-create-note)
-         ("C-c n d" . mrl/denote-journal)
-         ("C-c n t" . denote-type)
-         ("C-c n f" . mrl/denote-find-file)
-         ("C-c n l" . denote-link))
-  )
+(use-package denote-silo
+  :ensure t
+  ;; Bind these commands to key bindings of your choice.
+  :commands ( denote-silo-create-note
+              denote-silo-open-or-create
+              denote-silo-select-silo-then-command
+              denote-silo-dired
+              denote-silo-cd )
+  :bind
+  ( :map global-map
+    ("C-c n s" . denote-silo-open-or-create)
+    ("C-c n S" . denote-silo-select-silo-then-command))
+  :config
+  ;; Add your silos to this list.  By default, it only includes the
+  ;; value of the variable `denote-directory'.
+  (setq denote-silo-directories
+        (list denote-directory
+              "~/Documents/denote/"
+              "~/Documents/dft-denote/")))
 
 ;; ef-themes configuration
 ;; Make customisations that affect Emacs faces BEFORE loading a theme
 ;; (any change needs a theme re-load to take effect).
-(require 'ef-themes)
+(use-package ef-themes
+  :ensure t)
 
 ;; If you like two specific themes and want to switch between them, you
 ;; can specify them in `ef-themes-to-toggle' and then invoke the command
@@ -392,7 +475,7 @@
 ;;(load-theme 'ef-summer :no-confirm)
 
 ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
-(ef-themes-select 'ef-dark)
+(ef-themes-select 'ef-deuteranopia-dark)
 
 ;; The themes we provide are recorded in the `ef-themes-dark-themes',
 ;; `ef-themes-light-themes'.
@@ -406,6 +489,33 @@
 ;; - `ef-themes-load-random'
 ;; - `ef-themes-preview-colors'
 ;; - `ef-themes-preview-colors-current'
+
+(use-package doric-themes
+  :ensure t
+  :demand t
+  :config
+  ;; These are the default values.
+  (setq doric-themes-to-toggle '(doric-light doric-dark))
+  (setq doric-themes-to-rotate doric-themes-collection)
+
+  ;;(doric-themes-select 'doric-plum)
+
+  ;; ;; To load a random theme instead, use something like one of these:
+  ;;
+  ;; (doric-themes-load-random)
+  ;; (doric-themes-load-random 'light)
+  ;; (doric-themes-load-random 'dark)
+
+  ;; ;; For optimal results, also define your preferred font family (or use my `fontaine' package):
+  ;;
+  ;; (set-face-attribute 'default nil :family "Aporetic Sans Mono" :height 160)
+  ;; (set-face-attribute 'variable-pitch nil :family "Aporetic Sans" :height 1.0)
+  ;; (set-face-attribute 'fixed-pitch nil :family "Aporetic Sans Mono" :height 1.0)
+
+  :bind
+  (("<f5>" . doric-themes-toggle)
+   ("C-<f5>" . doric-themes-select)
+   ("M-<f5>" . doric-themes-rotate)))
 
 (use-package flycheck-clj-kondo
   :hook (after-init . global-flycheck-mode))
