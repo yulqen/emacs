@@ -402,6 +402,14 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 ;;          ("C-c n l" . denote-link))
 ;;   )
 
+(defun ml/misc-pick-font ()
+  (interactive)
+  (let ((font-name (completing-read "Select font:"
+                                    (font-family-list))))
+    (if (member font-name (font-family-list))
+        (set-face-attribute 'default nil :font font-name)
+      (error "'%s' font not found" font-name))))
+
 (use-package denote
   :ensure t
   :hook
