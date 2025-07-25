@@ -15,6 +15,9 @@
 
 (set-face-attribute 'default nil :height 140)
 
+;; use org mode as scratch buffer
+(setq initial-major-mode 'org-mode)
+
 ;; recentf
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
@@ -74,6 +77,17 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 ;;   (package-refresh-contents) ; Refresh package list
 ;;   (package-install 'slime))
 
+;; use arrows to go back and forth
+(use-package backward-forward
+  :ensure t
+  :demand t
+  :config
+  (backward-forward-mode t)
+  :bind
+  (:map backward-forward-mode-map
+        ("<left>" . backward-forward-previous-location)
+        ("<right>" . backward-forward-next-location)))
+
 ;; Configure SLIME
 (use-package slime
   :ensure t
@@ -86,10 +100,10 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (setq inferior-lisp-program "sbcl")
 
   ;; Load SLIME contrib modules for extended functionality
-  (setq slime-contribs '(slime-fancy ; comprehensive set of features
+  (setq slime-contribs '(slime-fancy   ; comprehensive set of features
                          slime-quicklisp ; Quicklisp integration
-                         slime-asdf ; ASDF integration
-                         slime-mrepl ; multiple REPLs
+                         slime-asdf      ; ASDF integration
+                         slime-mrepl     ; multiple REPLs
                          ;; Add other contribs as needed, e.g.,
                          ;; slime-autodoc
                          ;; slime-editing-commands
@@ -101,7 +115,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
   (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
   (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
-)
+  )
 
 ;; (use-package org-roam
 ;;    :ensure t
