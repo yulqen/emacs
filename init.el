@@ -520,10 +520,10 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 (mapc #'disable-theme custom-enabled-themes)
 
 ;; Load the theme of choice:
-;;(load-theme 'ef-summer :no-confirm)
+(load-theme 'ef-day :no-confirm)
 
 ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
-(ef-themes-select 'ef-deuteranopia-dark)
+;; (ef-themes-select 'ef-deuteranopia-dark)
 
 ;; The themes we provide are recorded in the `ef-themes-dark-themes',
 ;; `ef-themes-light-themes'.
@@ -538,32 +538,32 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 ;; - `ef-themes-preview-colors'
 ;; - `ef-themes-preview-colors-current'
 
-(use-package doric-themes
-  :ensure t
-  :demand t
-  :config
-  ;; These are the default values.
-  (setq doric-themes-to-toggle '(doric-light doric-dark))
-  (setq doric-themes-to-rotate doric-themes-collection)
+;; (use-package doric-themes
+;;   :ensure t
+;;   :demand t
+;;   :config
+;;   ;; These are the default values.
+;;   (setq doric-themes-to-toggle '(doric-light doric-dark))
+;;   (setq doric-themes-to-rotate doric-themes-collection)
 
-  ;;(doric-themes-select 'doric-plum)
+;;   ;;(doric-themes-select 'doric-plum)
 
-  ;; ;; To load a random theme instead, use something like one of these:
-  ;;
-  ;; (doric-themes-load-random)
-  ;; (doric-themes-load-random 'light)
-  ;; (doric-themes-load-random 'dark)
+;;   ;; ;; To load a random theme instead, use something like one of these:
+;;   ;;
+;;   ;; (doric-themes-load-random)
+;;   ;; (doric-themes-load-random 'light)
+;;   ;; (doric-themes-load-random 'dark)
 
-  ;; ;; For optimal results, also define your preferred font family (or use my `fontaine' package):
-  ;;
-  ;; (set-face-attribute 'default nil :family "Aporetic Sans Mono" :height 160)
-  ;; (set-face-attribute 'variable-pitch nil :family "Aporetic Sans" :height 1.0)
-  ;; (set-face-attribute 'fixed-pitch nil :family "Aporetic Sans Mono" :height 1.0)
+;;   ;; ;; For optimal results, also define your preferred font family (or use my `fontaine' package):
+;;   ;;
+;;   ;; (set-face-attribute 'default nil :family "Aporetic Sans Mono" :height 160)
+;;   ;; (set-face-attribute 'variable-pitch nil :family "Aporetic Sans" :height 1.0)
+;;   ;; (set-face-attribute 'fixed-pitch nil :family "Aporetic Sans Mono" :height 1.0)
 
-  :bind
-  (("<f5>" . doric-themes-toggle)
-   ("C-<f5>" . doric-themes-select)
-   ("M-<f5>" . doric-themes-rotate)))
+;;   :bind
+;;   (("<f5>" . doric-themes-toggle)
+;;    ("C-<f5>" . doric-themes-select)
+;;    ("M-<f5>" . doric-themes-rotate)))
 
 (use-package flycheck-clj-kondo
   :hook (after-init . global-flycheck-mode))
