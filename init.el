@@ -13,7 +13,7 @@
 (load custom-file 'noerror)
 (add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
 
-(set-face-attribute 'default nil :height 160)
+(set-face-attribute 'default nil :height 140)
 
 ;; recentf
 (recentf-mode 1)
@@ -489,6 +489,94 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   ;; Read the doc string of `denote-journal-title-format'.
   (setq denote-journal-title-format 'day-date-month-year))
 
+(require 'fontaine)
+
+(setq fontaine-latest-state-file
+      (locate-user-emacs-file "fontaine-latest-state.eld"))
+
+;; Aporetic is my highly customised build of Iosevka:
+;; <https://github.com/protesilaos/aporetic>.
+(setq fontaine-presets
+      '((small
+         :default-family "Aporetic Serif Mono"
+         :default-height 80
+         :variable-pitch-family "Aporetic Sans")
+        (regular) ; like this it uses all the fallback values and is named `regular'
+        (medium
+         :default-weight semilight
+         :default-height 115
+         :bold-weight extrabold)
+        (large
+         :inherit medium
+         :default-height 150)
+        (presentation
+         :default-height 180)
+        (t
+         ;; I keep all properties for didactic purposes, but most can be
+         ;; omitted.  See the fontaine manual for the technicalities:
+         ;; <https://protesilaos.com/emacs/fontaine>.
+         :default-family "Aporetic Sans Mono"
+         :default-weight regular
+         :default-height 100
+
+         :fixed-pitch-family nil ; falls back to :default-family
+         :fixed-pitch-weight nil ; falls back to :default-weight
+         :fixed-pitch-height 1.0
+
+         :fixed-pitch-serif-family nil ; falls back to :default-family
+         :fixed-pitch-serif-weight nil ; falls back to :default-weight
+         :fixed-pitch-serif-height 1.0
+
+         :variable-pitch-family "Aporetic Serif"
+         :variable-pitch-weight nil
+         :variable-pitch-height 1.0
+
+         :mode-line-active-family nil ; falls back to :default-family
+         :mode-line-active-weight nil ; falls back to :default-weight
+         :mode-line-active-height 0.9
+
+         :mode-line-inactive-family nil ; falls back to :default-family
+         :mode-line-inactive-weight nil ; falls back to :default-weight
+         :mode-line-inactive-height 0.9
+
+         :header-line-family nil ; falls back to :default-family
+         :header-line-weight nil ; falls back to :default-weight
+         :header-line-height 0.9
+
+         :line-number-family nil ; falls back to :default-family
+         :line-number-weight nil ; falls back to :default-weight
+         :line-number-height 0.9
+
+         :tab-bar-family nil ; falls back to :default-family
+         :tab-bar-weight nil ; falls back to :default-weight
+         :tab-bar-height 1.0
+
+         :tab-line-family nil ; falls back to :default-family
+         :tab-line-weight nil ; falls back to :default-weight
+         :tab-line-height 1.0
+
+         :bold-family nil ; use whatever the underlying face has
+         :bold-weight bold
+
+         :italic-family nil
+         :italic-slant italic
+
+         :line-spacing nil)))
+
+;; Set the last preset or fall back to desired style from `fontaine-presets'
+;; (the `regular' in this case).
+(fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
+
+;; Persist the latest font preset when closing/starting Emacs and
+;; while switching between themes.
+(fontaine-mode 1)
+
+;; fontaine does not define any key bindings.  This is just a sample that
+;; respects the key binding conventions.  Evaluate:
+;;
+;;     (info "(elisp) Key Binding Conventions")
+(define-key global-map (kbd "C-c f") #'fontaine-set-preset)
+
 ;; ef-themes configuration
 ;; Make customisations that affect Emacs faces BEFORE loading a theme
 ;; (any change needs a theme re-load to take effect).
@@ -503,14 +591,14 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 
 (setq ef-themes-headings ; read the manual's entry or the doc string
       '((0 variable-pitch light 1.9)
-        (1 variable-pitch light 1.8)
-        (2 variable-pitch regular 1.7)
-        (3 variable-pitch regular 1.6)
-        (4 variable-pitch regular 1.5)
-        (5 variable-pitch 1.4) ; absence of weight means `bold'
-        (6 variable-pitch 1.3)
-        (7 variable-pitch 1.2)
-        (t variable-pitch 1.1)))
+        (1 variable-pitch light 1.3)
+        (2 variable-pitch regular 1.2)
+        (3 variable-pitch regular 1.1)
+        (4 variable-pitch regular 1.0)
+        (5 variable-pitch 1.0) ; absence of weight means `bold'
+        (6 variable-pitch 1.0)
+        (7 variable-pitch 1.0)
+        (t variable-pitch 1.0)))
 
 ;; They are nil by default...
 (setq ef-themes-mixed-fonts t
@@ -538,32 +626,32 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 ;; - `ef-themes-preview-colors'
 ;; - `ef-themes-preview-colors-current'
 
-;; (use-package doric-themes
-;;   :ensure t
-;;   :demand t
-;;   :config
-;;   ;; These are the default values.
-;;   (setq doric-themes-to-toggle '(doric-light doric-dark))
-;;   (setq doric-themes-to-rotate doric-themes-collection)
+(use-package doric-themes
+  :ensure t
+  :demand t
+  :config
+  ;; These are the default values.
+  (setq doric-themes-to-toggle '(doric-light doric-dark))
+  (setq doric-themes-to-rotate doric-themes-collection)
 
-;;   ;;(doric-themes-select 'doric-plum)
+  ;;(doric-themes-select 'doric-plum)
 
-;;   ;; ;; To load a random theme instead, use something like one of these:
-;;   ;;
-;;   ;; (doric-themes-load-random)
-;;   ;; (doric-themes-load-random 'light)
-;;   ;; (doric-themes-load-random 'dark)
+  ;; ;; To load a random theme instead, use something like one of these:
+  ;;
+  ;; (doric-themes-load-random)
+  ;; (doric-themes-load-random 'light)
+  ;; (doric-themes-load-random 'dark)
 
-;;   ;; ;; For optimal results, also define your preferred font family (or use my `fontaine' package):
-;;   ;;
-;;   ;; (set-face-attribute 'default nil :family "Aporetic Sans Mono" :height 160)
-;;   ;; (set-face-attribute 'variable-pitch nil :family "Aporetic Sans" :height 1.0)
-;;   ;; (set-face-attribute 'fixed-pitch nil :family "Aporetic Sans Mono" :height 1.0)
+  ;; ;; For optimal results, also define your preferred font family (or use my `fontaine' package):
+  ;;
+  ;; (set-face-attribute 'default nil :family "Aporetic Sans Mono" :height 160)
+  ;; (set-face-attribute 'variable-pitch nil :family "Aporetic Sans" :height 1.0)
+  ;; (set-face-attribute 'fixed-pitch nil :family "Aporetic Sans Mono" :height 1.0)
 
-;;   :bind
-;;   (("<f5>" . doric-themes-toggle)
-;;    ("C-<f5>" . doric-themes-select)
-;;    ("M-<f5>" . doric-themes-rotate)))
+  :bind
+  (("<f5>" . doric-themes-toggle)
+   ("C-<f5>" . doric-themes-select)
+   ("M-<f5>" . doric-themes-rotate)))
 
 (use-package flycheck-clj-kondo
   :hook (after-init . global-flycheck-mode))
@@ -639,42 +727,42 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   ;; package.
   (marginalia-mode))
 
-(use-package mu4e
-  :ensure nil
-  :load-path "/usr/local/share/emacs/site-lisp/mu4e"
-  :config
-  (setq mail-user-agent 'mu4e-user-agent)
-  (setq mu4e-sent-folder   "/Sent"
-        mu4e-drafts-folder "/Drafts"
-        mu4e-refile-folder "/Archive"
-        mu4e-trash-folder  "/Trash")
-  (setq mu4e-maildir-shortcuts
-        '((:maildir "/Archive" :key ?a)
-          (:maildir "/inbox"   :key ?i)
-          (:maildir "/work"    :key ?w)
-          (:maildir "/sent"    :key ?s)))
-  (setq mu4e-headers-fields
-        '((:date          .  25)
-          (:flags         .   6)
-          (:from          .  22)
-          (:subject       .  nil)))
-  (add-to-list 'mu4e-bookmarks
-               '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
-  (setq mu4e-get-mail-command "mbsync purelymailchannel")
-  (setq mu4e-compose-reply-to-address "matt@matthewlemon.com"
-        user-mail-address "matt@matthewlemon.com"
-        user-full-name  "Matthew Lemon")
-  (setq message-signature "M R Lemon\n")
-  (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-default-smtp-server "smtp.purelymail.com"
-        smtpmail-smtp-user "mrlemon@purelymail.com"
-        smtpmail-stream-type 'ssl
-        smtpmail-smtp-service 465
-        smtpmail-smtp-server "smtp.purelymail.com")
-  (setq message-kill-buffer-on-exit t))
+;; (use-package mu4e
+;;   :ensure nil
+;;   :load-path "/usr/local/share/emacs/site-lisp/mu4e"
+;;   :config
+;;   (setq mail-user-agent 'mu4e-user-agent)
+;;   (setq mu4e-sent-folder   "/Sent"
+;;         mu4e-drafts-folder "/Drafts"
+;;         mu4e-refile-folder "/Archive"
+;;         mu4e-trash-folder  "/Trash")
+;;   (setq mu4e-maildir-shortcuts
+;;         '((:maildir "/Archive" :key ?a)
+;;           (:maildir "/inbox"   :key ?i)
+;;           (:maildir "/work"    :key ?w)
+;;           (:maildir "/sent"    :key ?s)))
+;;   (setq mu4e-headers-fields
+;;         '((:date          .  25)
+;;           (:flags         .   6)
+;;           (:from          .  22)
+;;           (:subject       .  nil)))
+;;   (add-to-list 'mu4e-bookmarks
+;;                '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
+;;   (setq mu4e-get-mail-command "mbsync purelymailchannel")
+;;   (setq mu4e-compose-reply-to-address "matt@matthewlemon.com"
+;;         user-mail-address "matt@matthewlemon.com"
+;;         user-full-name  "Matthew Lemon")
+;;   (setq message-signature "M R Lemon\n")
+;;   (setq message-send-mail-function 'smtpmail-send-it
+;;         smtpmail-default-smtp-server "smtp.purelymail.com"
+;;         smtpmail-smtp-user "mrlemon@purelymail.com"
+;;         smtpmail-stream-type 'ssl
+;;         smtpmail-smtp-service 465
+;;         smtpmail-smtp-server "smtp.purelymail.com")
+;;   (setq message-kill-buffer-on-exit t))
 
-(require 'mu4e-transient)
-(global-set-key (kbd "C-c m") #'mu4e-transient-menu)
+;; (require 'mu4e-transient)
+;; (global-set-key (kbd "C-c m") #'mu4e-transient-menu)
 
 (use-package cider
   :config
