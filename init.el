@@ -405,7 +405,7 @@
   ;; Remember to check the doc string of each of those variables.
   (setq denote-directory (expand-file-name "~/Documents/denote/"))
   (setq denote-save-buffers nil)
-  (setq denote-known-keywords '("emacs" "computer" "family"))
+  (setq denote-known-keywords '("emacs" "computer" "family" "health"))
   (setq denote-infer-keywords t)
   ;;(setq denote-file-type 'text)
   (setq denote-sort-keywords t)
@@ -440,6 +440,27 @@
         (list denote-directory
               "~/Documents/denote/"
               "~/Documents/dft-denote/")))
+
+(use-package denote-journal
+  :ensure t
+  ;; Bind those to some key for your convenience.
+  :commands ( denote-journal-new-entry
+              denote-journal-new-or-existing-entry
+              denote-journal-link-or-create-entry )
+  :hook (calendar-mode . denote-journal-calendar-mode)
+  :bind
+  ( :map global-map
+    ("C-c n j". denote-journal-new-or-existing-entry))
+  :config
+  ;; Use the "journal" subdirectory of the `denote-directory'.  Set this
+  ;; to nil to use the `denote-directory' instead.
+  (setq denote-journal-directory
+        (expand-file-name "journal" denote-directory))
+  ;; Default keyword for new journal entries. It can also be a list of
+  ;; strings.
+  (setq denote-journal-keyword "journal")
+  ;; Read the doc string of `denote-journal-title-format'.
+  (setq denote-journal-title-format 'day-date-month-year))
 
 ;; ef-themes configuration
 ;; Make customisations that affect Emacs faces BEFORE loading a theme
@@ -1195,6 +1216,10 @@
                :immediate-finish nil
                :kill-buffer t
                :jump-to-captured t)
+              ("hJ" "Denote Journal" entry (file denote-journal-path-to-new-or-existing-entry)
+               "* %U %?\n%i\n%a"
+               :kill-buffer t
+               :empty-lines 1)
               ("w" "Work Tasks & Notes")
               ("wt" "Work TODO" entry (file+headline "~/Documents/org/dft.org" "Tasks")
                "** TODO %?\nEntered on %U\n"
