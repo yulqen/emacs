@@ -24,6 +24,33 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(defun mrl/org-word-count ()
+  "Count words in region/buffer, estimate pages, and reading time.
+Excludes lines beginning with * or #. Prints result in echo area. 
+Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-functions/"
+  (interactive)
+  (let* ((start (if (use-region-p) (region-beginning) (point-min)))
+         (end (if (use-region-p) (region-end) (point-max)))
+         (word-count
+          (save-excursion
+            (goto-char start)
+            (let ((count 0)
+                  (inhibit-field-text-motion t))
+              (while (< (point) end)
+                (beginning-of-line)
+                (unless (looking-at-p "^[*#<]")
+                  (let ((line-end (line-end-position)))
+                    (while (re-search-forward "\\w+\\W*" line-end t)
+                      (setq count (1+ count)))))
+                (forward-line 1))
+              count)))
+         (words-per-page 400)
+         (reading-speed 215)
+         (page-count (/ (+ word-count words-per-page -1) words-per-page))
+         (reading-time (/ (+ word-count reading-speed -1) reading-speed)))
+    (message "%d words, ~%d pages, ~%d min read"
+             word-count page-count reading-time)))
+
 (defun mrl/insert-timestamp-default ()
   "Insert the current timestamp"
   (interactive)
@@ -587,14 +614,14 @@
    '(read-only t cursor-intangible t face minibuffer-prompt)))
 
 ;; Optionally use the `orderless' completion style.
-;; (use-package orderless
-;;   :custom
-;;   ;; Configure a custom style dispatcher (see the Consult wiki)
-;;   ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
-;;   ;; (orderless-component-separator #'orderless-escapable-split-on-space)
-;;   (completion-styles '(orderless basic))
-;;   (completion-category-defaults nil)
-;;   (completion-category-overrides '((file (styles partial-completion)))))
+(use-package orderless
+  :custom
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
