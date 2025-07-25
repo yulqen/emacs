@@ -1346,7 +1346,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
                :kill-buffer t
                :jump-to-captured t)
               ("hJ" "Denote Journal" entry (file denote-journal-path-to-new-or-existing-entry)
-               "* %U %?\n%i\n%a"
+               "* %U %?\n%i"
                :kill-buffer t
                :empty-lines 1)
               ("w" "Work Tasks & Notes")
