@@ -1307,6 +1307,14 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
           (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
                                          (org-agenda-sorting-strategy '(alpha-up)))))
          ((org-agenda-category-filter-preset '("+home" "+habits" "+radcal" "+radcal_alt" "radcal_work" "+radcal_coding" "+refile" "+Birthday"))))
+        ("A" "Alphabet Learning Project"
+         (
+          (tags-todo "TODO=\"DOING\"" ((org-agenda-overriding-header "Doing")
+                                       (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-down scheduled-down))))
+          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
+                                      (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-down scheduled-down))))
+          )
+         ((org-agenda-category-filter-preset '("+AL"))))
         ("i" tags "idea")
         ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
 
