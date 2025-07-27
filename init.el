@@ -786,6 +786,9 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 ;; (require 'mu4e-transient)
 ;; (global-set-key (kbd "C-c m") #'mu4e-transient-menu)
 
+(use-package ansi-color
+    :hook (compilation-filter . ansi-color-compilation-filter))
+
 (use-package cider
   :config
   (setq cider-jack-in-default 'clojure-cli)
