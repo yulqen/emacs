@@ -634,7 +634,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 (mapc #'disable-theme custom-enabled-themes)
 
 ;; Load the theme of choice:
-(load-theme 'ef-day :no-confirm)
+;; (load-theme 'ef-day :no-confirm)
 
 ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
 ;; (ef-themes-select 'ef-deuteranopia-dark)
@@ -657,10 +657,10 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   :demand t
   :config
   ;; These are the default values.
-  (setq doric-themes-to-toggle '(doric-light doric-dark))
+  (setq doric-themes-to-toggle '(doric-marble doric-dark))
   (setq doric-themes-to-rotate doric-themes-collection)
 
-  ;;(doric-themes-select 'doric-plum)
+  (doric-themes-select 'doric-marble)
 
   ;; ;; To load a random theme instead, use something like one of these:
   ;;
