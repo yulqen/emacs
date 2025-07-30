@@ -922,6 +922,9 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   :config
   (setq web-mode-markup-indent-offset 2))
 
+;; eww as default browser
+(setq browse-url-browser-function 'eww-browse-url)
+
 (use-package elfeed
   :bind ("C-x w" . elfeed)
   :config
