@@ -774,17 +774,17 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
           (:subject       .  nil)))
   (add-to-list 'mu4e-bookmarks
                '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
-  (setq mu4e-get-mail-command "mbsync purelymailchannel")
+  (setq mu4e-get-mail-command "mbsync fastmailchannel")
   (setq mu4e-compose-reply-to-address "matt@matthewlemon.com"
         user-mail-address "matt@matthewlemon.com"
         user-full-name  "Matthew Lemon")
   (setq message-signature "M R Lemon\n")
   (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-default-smtp-server "smtp.purelymail.com"
-        smtpmail-smtp-user "mrlemon@purelymail.com"
+        smtpmail-default-smtp-server "smtp.fastmail.com"
+        smtpmail-smtp-user "mrlemon@fastmail.com"
         smtpmail-stream-type 'ssl
         smtpmail-smtp-service 465
-        smtpmail-smtp-server "smtp.purelymail.com")
+        smtpmail-smtp-server "smtp.fastmail.com")
   (setq message-kill-buffer-on-exit t))
 
 (require 'mu4e-transient)
