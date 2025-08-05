@@ -13,7 +13,11 @@
 (load custom-file 'noerror)
 (add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
 
-(set-face-attribute 'default nil :height 140)
+(defun mrl/increase-face-size (height)
+  "Increases size of font to HEIGHT in points .e.g 110 is,
+is good for laptops but maybe 180 for 4k."
+  (interactive "New height: ")
+  (set-face-attribute 'default nil :height height))
 
 ;; use org mode as scratch buffer
 (setq initial-major-mode 'org-mode)
