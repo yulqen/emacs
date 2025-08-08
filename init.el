@@ -948,6 +948,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (setq dired-mouse-drag-files t))
 
 (use-package web-mode
+  :ensure t
   :mode (("\\.phtml\\'" . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
          ("\\.[agj]sp\\'" . web-mode)
@@ -955,9 +956,26 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
          ("\\.erb\\'" . web-mode)
          ("\\.mustache\\'" . web-mode)
          ("\\.djhtml\\'" . web-mode)
+         ("\\.jsx?\\'". web-mode)
+         ("\\.tsx?\\'". web-mode)
          ("\\.html?\\'" . web-mode))
   :config
+  (setq web-mode-enable-auto-pairing t)
+  (setq web-mode-enable-auto-closing t)
+  (setq web-mode-enable-auto-quoting t)
+  (setq web-mode-enable-current-element-highlight t)
+  (setq web-mode-enable-auto-indentation t)
   (setq web-mode-markup-indent-offset 2))
+
+(use-package emmet-mode
+  :ensure t
+  :hook ((web-mode css-mode sgml-mode html-mode) . emmet-mode)
+  :config
+  (setq emmet-move-cursor-between-quotes t))
+
+
+(use-package lsp-mode
+  :hook ((web-mode . lsp-preferred)))
 
 ;; eww as default browser
 (setq browse-url-browser-function 'eww-browse-url)
@@ -1205,6 +1223,13 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 
 ;; turn off flycheck-mode for org
 (setq flycheck-global-modes '(not org-mode))
+
+;; javascript etc
+(use-package js2-mode
+  :ensure t
+  :mode (("\\.js\\'" . javascript-mode)
+         ("\\.jsx\\'" . js-jsx-mode))
+  :interpreter ("node" . js2-mode))
 
 ;; some core bindings
 ;; Use iBuffer instead of Buffer List
