@@ -1081,9 +1081,9 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (diminish 'beacon-mode))
 
 (use-package company
-  :hook (after-init . global-company-mode)
+  :hook (prog-mode . company-mode)
   :config
-  (setq company-idle-delay 0)
+  (setq company-idle-delay 0.3)
   (setq company-minimum-prefix-length 2)
   (setq company-show-numbers t)
   (setq company-dabbrev-downcase nil)
