@@ -89,10 +89,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
      (format-time-string "%z")))))
 
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '(text-mode . ("harper-ls" "--stdio"))))
-
 (use-package gruber-darker-theme)
 (use-package borland-blue-theme)
 (use-package autumn-light-theme)
@@ -142,291 +138,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
   (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
   )
-
-;; (use-package org-roam
-;;    :ensure t
-;;    :custom
-;;    (org-roam-dailies-directory "daily/")
-;;    (org-roam-directory "~/Documents/org")
-;;    (org-roam-capture-ref-templates
-;;     '(("h" "default" plain
-;;        "%?"
-;;        :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;        :unnarrowed t)))
-;;    (org-roam-capture-templates
-;;     '(("h" "default" plain
-;;        "%?"
-;;        :target (file+head "home/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;        :unnarrowed t)
-;;       ("w" "work" plain
-;;        "%?"
-;;        :target (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;        :unnarrowed t)
-;;       ("c" "mod+cpr" plain
-;;        "%?"
-;;        :target (file+head "work/cpr/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;        :unnarrowed t)
-;;       ("e" "encrypted" plain
-;;        "%?"
-;;        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
-;;        :unnarrowed t)))
-;;    (org-roam-dailies-capture-templates
-;;     '(("h" "home" entry "* %<%T>: %?"
-;;        :target (file+head "home/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
-;;        :unnarrowed t)
-;;       ("w" "work" entry "* %<%T>: %?"
-;;        :target (file+head "work/%<%Y-%m-%d>.org" "#+title: %<%A %Y-%m-%d>\n")
-;;        :unnarrowed t)))
-;;    :bind (("C-c n l" . org-roam-buffer-toggle)
-;;           ("C-c n f" . org-roam-node-find)
-;;           ("C-c n i" . org-roam-node-insert)
-;;           ("C-c n n" . org-roam-dailies-capture-today)
-;;           ("C-c n t" . org-roam-dailies-goto-today)
-;;           :map org-roam-mode-map
-;;           ("y" . org-roam-dailies-goto-previous-note)
-;;           ("t" . org-roam-dailies-goto-next-note)
-;;           ("d" . org-roam-dailies-goto-date)
-;;           ("D" . org-roam-dailies-capture-date))
-;;    :bind-keymap ("C-c n D" . org-roam-mode-map)
-;;    :config
-;;    ;; this should allow us to type spaces in ido buffer when creating new nodes
-;;    ;; from https://org-roam.discourse.group/t/org-roam-node-find-space-not-allowed-in-node-title/1847/6
-;;    (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
-;;    (defun mrl/search-roam ()
-;;      "Run consult-ripgrep on the org roam directory"
-;;      (interactive)
-;;      (consult-ripgrep org-roam-directory nil))
-;;    (require 'org-roam-protocol)
-;;    (org-roam-db-autosync-mode)
-;;    ;; Bind this to C-c n I
-;;    (defun org-roam-node-insert-immediate (arg &rest args)
-;;      (interactive "P")
-;;      (let (([[id:06d0a643-662b-4440-9e1a-9b9dcf6e2dcb][test_node]]args (cons arg args))
-;;            (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-;;                                                      '(:immediate-finish t)))))
-;;        (apply #'org-roam-node-insert args)))
-;;    :bind (("C-c n I" . org-roam-node-insert-immediate)))
-
-;; (use-package consult-org-roam
-;;    :ensure t
-;;    :after org-roam
-;;    :init
-;;    (require 'consult-org-roam)
-;;    ;; Activate the minor mode
-;;    (consult-org-roam-mode 1)
-;;    :custom
-;;    ;; Use `ripgrep' for searching with `consult-org-roam-search'
-;;    (consult-org-roam-grep-func #'consult-ripgrep)
-;;    ;; Configure a custom narrow key for `consult-buffer'
-;;    (consult-org-roam-buffer-narrow-key ?r)
-;;    ;; Display org-roam buffers right after non-org-roam buffers
-;;    ;; in consult-buffer (and not down at the bottom)
-;;    (consult-org-roam-buffer-after-buffers t)
-;;    :config
-;;    ;; Eventually suppress previewing for certain functions
-;;    (consult-customize
-;;     consult-org-roam-forward-links
-;;     :preview-key "M-.")
-;;    :bind
-;;    ;; Define some convenient keybindings as an addition
-;;    ("C-c n e" . consult-org-roam-file-find)
-;;    ("C-c n b" . consult-org-roam-backlinks)
-;;    ("C-c n B" . consult-org-roam-backlinks-recursive)
-;;    ("C-c n l" . consult-org-roam-forward-links)
-;;    ("C-c n r" . consult-org-roam-search))
-
-;; (use-package consult
-;;   ;; Replace bindings. Lazily loaded due by `use-package'.
-;;   :bind ;; C-c bindings (mode-specific-map)
-;;   ("C-c h" . consult-history)
-;;   ("C-c m" . consult-mode-command)
-;;   ("C-c k" . consult-kmacro)
-;;   ;; C-x bindings (ctl-x-map)
-;;   ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
-;;   ;;("C-x b" . consult-buffer) ;; orig. switch-to-buffer
-;;   ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-;;   ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
-;;   ("C-x r b" . consult-bookmark) ;; orig. bookmark-jump
-;;   ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
-;;   ;; Custom M-# bindings for fast register access
-;;   ("M-#" . consult-register-load)
-;;   ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
-;;   ("C-M-#" . consult-register)
-;;   ;; Other custom bindings
-;;   ("M-y" . consult-yank-pop)     ;; orig. yank-pop
-;;   ("<help> a" . consult-apropos) ;; orig. apropos-command
-;;   ;; M-g bindings (goto-map)
-;;   ("M-g e" . consult-compile-error)
-;;   ("M-g f" . consult-flymake) ;; Alternative: consult-flycheck
-;;   ("M-g g" . consult-goto-line)   ;; orig. goto-line
-;;   ("M-g M-g" . consult-goto-line) ;; orig. goto-line
-;;   ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
-;;   ("M-g m" . consult-mark)
-;;   ("M-g k" . consult-global-mark)
-;;   ("M-g i" . consult-imenu)
-;;   ("M-g I" . consult-imenu-multi)
-;;   ;; M-s bindings (search-map)
-;;   ;; ("M-s d" . consult-find)
-;;   ;; ("M-s D" . consult-locate)
-;;   ;; ("M-s g" . consult-grep)
-;;   ;; ("M-g G" . consult-git-grep)
-;;   ("M-s r" . consult-ripgrep)
-;;   ;; ("M-s l" . consult-line)
-;;   ;; ("M-s L" . consult-line-multi)
-;;   ;; ("M-s m" . consult-multi-occur)
-;;   ;; ("M-s k" . consult-keep-lines)
-;;   ;; ("M-s u" . consult-focus-lines)
-;;   ;; ;; Isearch integration
-;;   ;; ("M-s e" . consult-isearch-history)
-;;   ;;:map isearch-mode-map
-;;   ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
-;;   ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
-;;   ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
-;;   ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
-;;   ;; Minibuffer history
-;;   ;;:map minibuffer-local-map
-;;   ("M-s" . consult-history) ;; orig. next-matching-history-element
-;;   ("M-r" . consult-history) ;; orig. previous-matching-history-element
-;;   ;; Enable automatic preview at point in the *Completions* buffer. This is
-;;   ;; relevant when you use the default completion UI.
-;;   :hook (completion-list-mode . consult-preview-at-point-mode)
-;;   ;; The :init configuration is always executed (Not lazy)
-;;   :init
-;;   ;; Optionally configure the register formatting. This improves the register
-;;   ;; preview for `consult-register', `consult-register-load',
-;;   ;; `consult-register-store' and the Emacs built-ins.
-;;   (setq register-preview-delay 0.5
-;;         register-preview-function #'consult-register-format)
-;;   ;; Optionally tweak the register preview window.
-;;   ;; This adds thin lines, sorting and hides the mode line of the window.
-;;   (advice-add #'register-preview :override #'consult-register-window)
-;;   ;; Use Consult to select xref locations with preview
-;;   ;; (setq xref-show-xrefs-function #'consult-xref
-;;   ;;       xref-show-definitions-function #'consult-xref)
-;;   ;; Configure other variables and modes in the :config section,
-;;   ;; after lazily loading the package.
-;;   :config
-;;   ;; Optionally configure preview. The default value
-;;   ;; is 'any, such that any key triggers the preview.
-;;   ;; (setq consult-preview-key 'any)
-;;   ;; (setq consult-preview-key (kbd "M-."))
-;;   ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
-;;   ;; For some commands and buffer sources it is useful to configure the
-;;   ;; :preview-key on a per-command basis using the `consult-customize' macro.
-;;   ;; (consult-customize
-;;   ;;  consult-theme :preview-key '(:debounce 0.2 any)
-;;   ;;  consult-ripgrep consult-git-grep consult-grep
-;;   ;;  consult-bookmark consult-recent-file consult-xref
-;;   ;;  consult--source-bookmark consult--source-file-register
-;;   ;;  consult--source-recent-file consult--source-project-recent-file
-;;   ;;  ;; :preview-key (kbd "M-.")
-;;   ;;  :preview-key '(:debounce 0.4 any))
-;;   ;; Optionally configure the narrowing key.
-;;   ;; Both < and C-+ work reasonably well.
-;;   (setq consult-narrow-key "<") ;; (kbd "C-+")
-;;   ;; Optionally make narrowing help available in the minibuffer.
-;;   ;; You may want to use `embark-prefix-help-command' or which-key instead.
-;;   ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
-;;   ;; By default `consult-project-function' uses `project-root' from project.el.
-;;   ;; Optionally configure a different project root function.
-;;   ;; There are multiple reasonable alternatives to chose from.
-;; ;;;; 1. project.el (the default)
-;;   ;; (setq consult-project-function #'consult--default-project--function)
-;; ;;;; 2. projectile.el (projectile-project-root)
-;;   ;; (autoload 'projectile-project-root "projectile")
-;;   ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
-;; ;;;; 3. vc.el (vc-root-dir)
-;;   ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
-;; ;;;; 4. locate-dominating-file
-;;   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
-;;   )
-
-;; OLD DENOTE CONFIG - COMMENTED JULY25
-;; (use-package denote
-;;   :ensure t
-;;   :init
-;;   (add-hook 'dired-mode-hook #'denote-dired-mode)
-;;   :config
-;;   (setq denote-directory (expand-file-name "~/Documents/denote/"))
-;;   (setq denote-known-keywords '("emacs" "clojure" "org-mode" "work" "technote"))
-;;   (setq denote-file-type 'text)
-;;   (setq denote-prompts '(title keywords))
-;;   (setq denote-date-prompt-use-org-read-date t)
-
-;;   (defun mrl/denote-find-file ()
-;;       "Find file in the current `denote-directory'."
-;;       (interactive)
-;;       (require 'consult)
-;;       (require 'denote)
-;;       (consult-find (denote-directory)))
-
-;;   (defun mrl/is-todays-journal? (f)
-;;     "If f is today's journal in denote, f is returned"
-;;     (let* ((month-regexp (car (calendar-current-date)))
-;;            (day-regexp (nth 1 (calendar-current-date)))
-;;            (year-regexp (nth 2 (calendar-current-date)))
-;;            (journal-files (directory-files (denote-directory) nil "_journal"))
-;;            (day-match? (string-match-p (concat "^......" (format "%02d" day-regexp)) f))
-;;            (year-match? (string-match-p (concat "^" (number-to-string year-regexp)) f))
-;;            (month-match? (string-match-p (concat (number-to-string month-regexp) "..T") f)))
-;;       (when (and day-match? year-match? month-match?)
-;;         f)))
-
-;;   (defvar my-denote-silo-directories
-;;   `("/home/lemon/Documents/mod-denote"
-;;     ;; You don't actually need to include the `denote-directory' here
-;;     ;; if you use the regular commands in their global context.  I am
-;;     ;; including it for completeness.
-;;     ,denote-directory)
-;;   "List of file paths pointing to my Denote silos.
-;;   This is a list of strings.")
-
-;; (defvar my-denote-commands-for-silos
-;;   '(denote
-;;     denote-date
-;;     denote-subdirectory
-;;     denote-template
-;;     denote-type)
-;;   "List of Denote commands to call after selecting a silo.
-;;   This is a list of symbols that specify the note-creating
-;;   interactive functions that Denote provides.")
-
-;; (defun my-denote-pick-silo-then-command (silo command)
-;;   "Select SILO and run Denote COMMAND in it.
-;;   SILO is a file path from `my-denote-silo-directories', while
-;;   COMMAND is one among `my-denote-commands-for-silos'."
-;;   (interactive
-;;    (list (completing-read "Select a silo: " my-denote-silo-directories nil t)
-;;          (intern (completing-read
-;;                   "Run command in silo: "
-;;                   my-denote-commands-for-silos nil t))))
-;;   (let ((denote-directory silo))
-;;     (call-interactively command)))
-
-;;   (defun mrl/denote-journal ()
-;;     "Create an entry tagged journal with the date as its title."
-;;     (interactive)
-;;     (defvar mrl/in-mod-denote nil)
-;;     (let* ((journal-dir (concat (denote-directory) "journals"))
-;;            (today-journal
-;;             (car (-non-nil
-;;                   (mapcar #'mrl/is-todays-journal? (directory-files journal-dir nil "_journal"))))))
-;;       (if today-journal
-;;           (find-file (concat journal-dir "/" today-journal))
-;;         (if mrl/in-mod-denote ; this variable is from the .dir-locals.el file in the silo directory; we want to use a specific template
-;;             (denote
-;;              (format-time-string "%A %e %B %Y")
-;;              '("journal") nil journal-dir nil 'modjournal)
-;;           (denote
-;;            (format-time-string "%A %e %B %Y")
-;;            '("journal") nil journal-dir)))))
-  
-;;   :bind (("C-c n n" . denote-create-note)
-;;          ("C-c n d" . mrl/denote-journal)
-;;          ("C-c n t" . denote-type)
-;;          ("C-c n f" . mrl/denote-find-file)
-;;          ("C-c n l" . denote-link))
-;;   )
 
 (defun ml/misc-pick-font ()
   (interactive)
@@ -701,6 +412,14 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
    ("C-<f5>" . doric-themes-select)
    ("M-<f5>" . doric-themes-rotate)))
 
+(use-package flycheck
+  :ensure t
+  :hook (prog-mode . flycheck-mode)
+  :config
+  (setq flycheck-global-modes '(not org-mode))
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (flycheck-add-mode 'javascript-eslint 'js-ts-mode))
+
 (use-package flycheck-clj-kondo
   :hook (after-init . global-flycheck-mode))
 
@@ -820,7 +539,20 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (setq cider-jack-in-default 'clojure-cli)
   (setq nrepl-use-ssh-fallback-for-remote-hosts t))
 
-(use-package clojure-mode)
+(use-package clojure-mode
+  :ensure t
+  :hook ((clojure-mode . eglot-ensure)
+         (clojure-mode . paredit-mode)))
+(use-package cider
+  :ensure t
+  :config
+  (setq cider-jack-in-default 'clojure-cli
+        nrepl-use-ssh-fallback-for-remote-hosts t)
+  :hook (cider-repl-mode . paredit-mode))
+(use-package flycheck-clj-kondo
+  :ensure t
+  :hook (clojure-mode . flycheck-mode))
+
 (use-package parseedn)
 
 (setq treesit-language-source-alist
@@ -885,24 +617,8 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
         (read--expression-try-read)
       (paredit-RET))))
 
-;; (use-package paredit
-;;   :hook ((clojure-mode . enable-paredit-mode)
-;;          (cider-repl-mode . enable-paredit-mode)
-;;          (emacs-lisp-mode . enable-paredit-mode)
-;;          (eval-expression-minibuffer-setup . enable-paredit-mode)
-;;          (ielm-mode . enable-paredit-mode)
-;;          (lisp-mode . enable-paredit-mode)
-;;          (lisp-interaction-mode . enable-paredit-mode)
-;;          (scheme-mode . enable-paredit-mode))
-;;   :config
-;;   ;; Do this if you get problems
-;;   ;;(define-key paredit-mode-map (kbd "RET") nil)
-;;   (show-paren-mode t))
-
-;; (use-package forge
-;;   :after magit)
-
 (use-package which-key
+  :ensure t
   :config
   (which-key-mode))
 
@@ -915,20 +631,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   :mode ("\\.h\\(pp\\)?\\'" . simpc-mode)
   :mode ("\\.c\\(pp\\)?\\'" . simpc-mode))
 
-;; (use-package smex
-;;   :bind (("M-x" . smex)
-;;          ("M-X" . smex-major-mode-commands)
-;;          ("C-c C-c M-x" . execute-extended-command)))
-
-;; (use-package ido-completing-read+
-;;   :config
-;;   (ido-mode 1)
-;;   (ido-everywhere 1)
-;;   (ido-ubiquitous-mode 1)
-;;   (setq ido-enable-flex-matching t)
-;;   (setq ido-create-new-buffer 'always)
-;;   (setq ido-file-extensions-order '(".org" ".txt" ".py" ".emacs" ".md" ".xml" ".el" ".ini"))
-;;   (setq ido-enable-flex-matching t))
 
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
@@ -949,23 +651,24 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 
 (use-package web-mode
   :ensure t
-  :mode (("\\.phtml\\'" . web-mode)
-         ("\\.tpl\\.php\\'" . web-mode)
-         ("\\.[agj]sp\\'" . web-mode)
-         ("\\.as[cp]x\\'" . web-mode)
-         ("\\.erb\\'" . web-mode)
-         ("\\.mustache\\'" . web-mode)
-         ("\\.djhtml\\'" . web-mode)
-         ("\\.jsx?\\'". web-mode)
-         ("\\.tsx?\\'". web-mode)
-         ("\\.html?\\'" . web-mode))
+  :mode (("\\.jsx\\'" . web-mode)
+         ("\\.tsx\\'" . web-mode)
+         ("\\.html\\'" . web-mode))
+  :hook (web-mode . eglot-ensure)
   :config
-  (setq web-mode-enable-auto-pairing t)
-  (setq web-mode-enable-auto-closing t)
-  (setq web-mode-enable-auto-quoting t)
-  (setq web-mode-enable-current-element-highlight t)
-  (setq web-mode-enable-auto-indentation t)
-  (setq web-mode-markup-indent-offset 2))
+  (setq web-mode-markup-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-enable-auto-pairing t
+        web-mode-enable-auto-closing t
+        web-mode-enable-auto-quoting t
+        web-mode-enable-current-element-highlight t
+        web-mode-enable-auto-indentation t))
+
+(use-package treesit
+  :ensure nil
+  :mode (("\\.js\\'" . js-ts-mode)
+         ("\\.ts\\'" . typescript-ts-mode)))
 
 (use-package emmet-mode
   :ensure t
@@ -973,9 +676,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   :config
   (setq emmet-move-cursor-between-quotes t))
 
-
-(use-package lsp-mode
-  :hook ((web-mode . lsp-preferred)))
 
 ;; eww as default browser
 (setq browse-url-browser-function 'eww-browse-url)
@@ -1008,15 +708,89 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
           ("https://sive.rs/en.atom" discourse))))
 
 (use-package projectile
+  :ensure t
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
-  (projectile-mode +1))
+  (projectile-mode +1)
+  (setq projectile-project-search-path '("~/code/")))
+
+(use-package python
+  :ensure nil
+  :mode (("\\.py\\'" . python-ts-mode))
+  :hook ((python-ts-mode . eglot-ensure)
+         (python-ts-mode . pyvenv-mode)
+         (python-ts-mode . flycheck-mode))
+  :bind (:map python-ts-mode-map
+              ("C-c t f" . mrl/run-django-test-at-point))
+  :config
+  (setq python-indent-offset 2))
+
+(setq major-mode-remap-alist
+      '((python-mode . python-ts-mode)))
+
 
 (use-package pyvenv
+  :ensure t
   :hook (python-mode . (lambda ()
-                        (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
-                          (when (file-directory-p venv-dir)
-                            (pyvenv-activate venv-dir))))))
+                         (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
+                           (when (file-directory-p venv-dir)
+                             (pyvenv-activate venv-dir))))))
+
+(use-package treesit
+  :ensure nil
+  :config
+  (setq treesit-language-source-alist
+        '((python "https://github.com/tree-sitter/tree-sitter-python")
+          (html "https://github.com/tree-sitter/tree-sitter-html"))))
+
+(defun mrl/run-django-test-at-point ()
+  "Run the Django test function or method at point."
+  (interactive)
+  (unless (eq major-mode 'python-ts-mode)
+    (error "Not in python-ts-mode"))
+  (let* ((project-root (projectile-project-root))
+         (file-path (buffer-file-name))
+         (test-path nil))
+    (unless project-root
+      (error "No project root found"))
+    (unless file-path
+      (error "Buffer is not visiting a file"))
+    ;; Ensure virtualenv is activated
+    (when (and (fboundp 'pyvenv-activate)
+               (file-directory-p (expand-file-name ".venv" project-root)))
+      (pyvenv-activate (expand-file-name ".venv" project-root)))
+    ;; Get test path using Tree-sitter
+    (require 'treesit)
+    (let* ((node (treesit-node-at (point)))
+           (defun-node (treesit-parent-until
+                        node
+                        (lambda (n)
+                          (member (treesit-node-type n) '("function_definition" "method_definition")))))
+           (class-node (when defun-node
+                         (treesit-parent-until
+                          defun-node
+                          (lambda (n) (equal (treesit-node-type n) "class_definition"))))))
+      (unless defun-node
+        (error "Not inside a function or method"))
+      (let* ((func-name (treesit-node-text
+                         (treesit-node-child-by-field-name defun-node "name")))
+             (class-name (when class-node
+                           (treesit-node-text
+                            (treesit-node-child-by-field-name class-node "name"))))
+             (relative-path (file-relative-name file-path project-root))
+             (module-path (replace-regexp-in-string
+                           "/" "."
+                           (replace-regexp-in-string
+                            "\\.py\\'" ""
+                            relative-path))))
+        (setq test-path
+              (if class-name
+                  (concat module-path "." class-name "." func-name)
+                (concat module-path "." func-name))))
+      ;; Run the test
+      (let ((default-directory project-root))
+        (compile (concat "python manage.py test " test-path))))))
+
 
 ;; (use-package django-mode)
 (use-package django-snippets)
@@ -1031,9 +805,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 (use-package yasnippet-snippets)
 (use-package clojure-snippets)
 
-(use-package elpy
-  :config
-  (elpy-enable))
 
 (use-package direnv
   :config
@@ -1045,6 +816,10 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 (use-package beacon
   :config
   (beacon-mode 1))
+
+(use-package beacon
+  :ensure t
+  :hook (prog-mode . beacon-mode))
 
 (use-package org-caldav
   :config
@@ -1081,15 +856,16 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (diminish 'beacon-mode))
 
 (use-package company
+  :ensure t
   :hook (prog-mode . company-mode)
   :config
-  (setq company-idle-delay 0.3)
-  (setq company-minimum-prefix-length 2)
-  (setq company-show-numbers t)
-  (setq company-dabbrev-downcase nil)
-  (setq company-dabbrev-ignore-case nil)
-  (setq company-dabbrev-code-ignore-case nil)
-  (setq company-global-modes '(not org-mode)))
+  (setq company-idle-delay 0.2
+        company-minimum-prefix-length 2
+        company-show-numbers t
+        company-dabbrev-downcase nil
+        company-dabbrev-ignore-case nil
+        company-dabbrev-code-ignore-case nil
+        company-global-modes '(not org-mode)))
 
 (with-eval-after-load 'completion-preview
   ;; Show the preview already after two symbol characters
@@ -1223,13 +999,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 
 ;; turn off flycheck-mode for org
 (setq flycheck-global-modes '(not org-mode))
-
-;; javascript etc
-(use-package js2-mode
-  :ensure t
-  :mode (("\\.js\\'" . javascript-mode)
-         ("\\.jsx\\'" . js-jsx-mode))
-  :interpreter ("node" . js2-mode))
 
 ;; some core bindings
 ;; Use iBuffer instead of Buffer List
