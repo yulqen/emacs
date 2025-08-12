@@ -667,8 +667,26 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 
 (use-package treesit
   :ensure nil
-  :mode (("\\.js\\'" . js-ts-mode)
-         ("\\.ts\\'" . typescript-ts-mode)))
+  :config
+  ;; This is the correct format: (LANG . (URL [REVISION] [SUBDIR]))
+  (setq treesit-language-source-alist
+        '((bash . ("https://github.com/tree-sitter/tree-sitter-bash"))
+          (css . ("https://github.com/tree-sitter/tree-sitter-css"))
+          (go . ("https://github.com/tree-sitter/tree-sitter-go"))
+          (html . ("https://github.com/tree-sitter/tree-sitter-html"))
+          (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
+          (json . ("https://github.com/tree-sitter/tree-sitter-json"))
+          (python . ("https://github.com/tree-sitter/tree-sitter-python"))
+          (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
+          (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
+          (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
+          (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
+          (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"))))
+  :hook
+  ;; Use the modern *-ts-mode for languages that have it
+  ((js-mode . js-ts-mode)
+   (typescript-mode . typescript-ts-mode)
+   (python-mode . python-ts-mode)))
 
 (use-package emmet-mode
   :ensure t
@@ -714,34 +732,115 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (projectile-mode +1)
   (setq projectile-project-search-path '("~/code/")))
 
-(use-package python
-  :ensure nil
-  :mode (("\\.py\\'" . python-ts-mode))
-  :hook ((python-ts-mode . eglot-ensure)
-         (python-ts-mode . pyvenv-mode)
-         (python-ts-mode . flycheck-mode))
-  :bind (:map python-ts-mode-map
-              ("C-c t f" . mrl/run-django-test-at-point))
-  :config
-  (setq python-indent-offset 2))
 
 (setq major-mode-remap-alist
       '((python-mode . python-ts-mode)))
 
 
+(defun mrl/django-get-test-parts ()
+  "Helper to get project root and test path components.
+Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
+  (let* ((project-root (projectile-project-root))
+         (file-path (buffer-file-name)))
+    (unless (and project-root file-path)
+      (error "Not in a project or buffer is not visiting a file"))
+    (list project-root
+          (file-relative-name file-path project-root)
+          (replace-regexp-in-string
+           "/" "."
+           (replace-regexp-in-string "\\.py\\'" "" (file-relative-name file-path project-root))))))
+
+(defun mrl/django-run-test (test-path)
+  "Execute a Django test command in the project root."
+  (let ((project-root (projectile-project-root)))
+    (when project-root
+      ;; The pyvenv-mode hook should handle this, but activating
+      ;; here ensures the correct venv is used for the compile command.
+      (let ((venv-dir (expand-file-name ".venv" project-root)))
+        (when (and (fboundp 'pyvenv-activate) (file-directory-p venv-dir))
+          (pyvenv-activate venv-dir)))
+      (let ((default-directory project-root))
+        (compile (concat "python manage.py test " test-path))))))
+
+(defun mrl/run-django-test-at-point ()
+  "Run the Django test function or method at point.
+If the function is a method of a class, run that specific method.
+If it's a standalone test function, run all tests in the current file,
+as the Django test runner cannot target a single standalone function."
+  (interactive)
+  (let* ((parts (mrl/django-get-test-parts))
+         (module-path (caddr parts))
+         (node (treesit-node-at (point)))
+         (defun-node (treesit-parent-until
+                      node
+                      (lambda (n) (member (treesit-node-type n) '("function_definition" "decorated_definition")))))
+         (class-node (when defun-node
+                       (treesit-parent-until
+                        defun-node
+                        (lambda (n) (equal (treesit-node-type n) "class_definition")))))
+         (test-path nil))
+    (unless defun-node
+      (error "Not inside a function or method"))
+    (let* ((func-name-node (or (treesit-node-child-by-field-name defun-node "name")
+                               (when (equal (treesit-node-type defun-node) "decorated_definition")
+                                 (treesit-node-child-by-field-name (treesit-node-child-by-field-name defun-node "definition") "name"))))
+           (func-name (treesit-node-text func-name-node))
+           (class-name (when class-node
+                         (treesit-node-text (treesit-node-child-by-field-name class-node "name")))))
+      (setq test-path
+            (if class-name
+                ;; It's a method in a class; we can target it specifically.
+                (concat module-path "." class-name "." func-name)
+              ;; It's a standalone function; fall back to running the whole file.
+              module-path)))
+    (message "Running test: %s" test-path)
+    (mrl/django-run-test test-path)))
+
+(defun mrl/run-django-tests-in-buffer ()
+  "Run all Django tests in the current buffer's file."
+  (interactive)
+  (let ((module-path (caddr (mrl/django-get-test-parts))))
+    (mrl/django-run-test module-path)))
+
+(defun mrl/run-django-tests-for-app ()
+  "Run Django tests for the current file's app.
+Assumes the app is the first directory in the path relative to the project root."
+  (interactive)
+  (let* ((parts (mrl/django-get-test-parts))
+         (relative-path (cadr parts))
+         (app-name (car (split-string relative-path "/"))))
+    (if (and app-name (> (length app-name) 0))
+        (mrl/django-run-test app-name)
+      (error "Could not determine Django app from file path."))))
+
+(defun mrl/run-django-tests-for-project ()
+  "Run the entire Django test suite for the project."
+  (interactive)
+  (mrl/django-run-test ""))
+
+;; --- PYTHON USE-PACKAGE CONFIGURATION ---
+
+(use-package python-ts-mode
+  :ensure nil ;; It's built-in, but we configure it
+  :config
+  (setq python-indent-offset 2)
+  :hook ((python-ts-mode . eglot-ensure)
+         (python-ts-mode . pyvenv-mode)
+         (python-ts-mode . flycheck-mode))
+  :bind (:map python-ts-mode-map
+              ("C-c t p" . mrl/run-django-tests-for-project)
+              ("C-c t a" . mrl/run-django-tests-for-app)
+              ("C-c t b" . mrl/run-django-tests-in-buffer)
+              ("C-c t f" . mrl/run-django-test-at-point)))
+
 (use-package pyvenv
   :ensure t
-  :hook (python-mode . (lambda ()
-                         (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
-                           (when (file-directory-p venv-dir)
-                             (pyvenv-activate venv-dir))))))
+  :hook (python-ts-mode . (lambda ()
+                           (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
+                             (when (file-directory-p venv-dir)
+                               (pyvenv-activate venv-dir))))))
 
-(use-package treesit
-  :ensure nil
-  :config
-  (setq treesit-language-source-alist
-        '((python "https://github.com/tree-sitter/tree-sitter-python")
-          (html "https://github.com/tree-sitter/tree-sitter-html"))))
+
 
 (defun mrl/run-django-test-at-point ()
   "Run the Django test function or method at point."
