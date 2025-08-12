@@ -737,7 +737,15 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
       '((python-mode . python-ts-mode)))
 
 
-(defun mrl/django-get-test-parts ()
+(defcustom mrl/python-test-runner 'django
+  "The test runner to use for Python projects.
+Can be set to 'django or 'pytest.
+This can be set per-project using file-local variables."
+  :type '(choice (const :tag "Django Default" 'django)
+                 (const :tag "Pytest" 'pytest))
+  :group 'python)
+
+(defun mrl/python-get-test-parts ()
   "Helper to get project root and test path components.
 Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
   (let* ((project-root (projectile-project-root))
@@ -750,25 +758,28 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
            "/" "."
            (replace-regexp-in-string "\\.py\\'" "" (file-relative-name file-path project-root))))))
 
-(defun mrl/django-run-test (test-path)
-  "Execute a Django test command in the project root."
-  (let ((project-root (projectile-project-root)))
+(defun mrl/python-run-test (test-target)
+  "Execute a Python test command in the project root using the configured runner."
+  (let* ((project-root (projectile-project-root))
+         (command (cond
+                   ((eq mrl/python-test-runner 'pytest)
+                    (concat "pytest " test-target))
+                   ((eq mrl/python-test-runner 'django)
+                    (concat "python manage.py test " test-target))
+                   (t (error "Unknown test runner: %s" mrl/python-test-runner)))))
     (when project-root
-      ;; The pyvenv-mode hook should handle this, but activating
-      ;; here ensures the correct venv is used for the compile command.
       (let ((venv-dir (expand-file-name ".venv" project-root)))
         (when (and (fboundp 'pyvenv-activate) (file-directory-p venv-dir))
           (pyvenv-activate venv-dir)))
       (let ((default-directory project-root))
-        (compile (concat "python manage.py test " test-path))))))
+        (message "Running: %s" command)
+        (compile command)))))
 
-(defun mrl/run-django-test-at-point ()
-  "Run the Django test function or method at point.
-If the function is a method of a class, run that specific method.
-If it's a standalone test function, run all tests in the current file,
-as the Django test runner cannot target a single standalone function."
+(defun mrl/run-python-test-at-point ()
+  "Run the test function/method at point using the configured runner."
   (interactive)
-  (let* ((parts (mrl/django-get-test-parts))
+  (let* ((parts (mrl/python-get-test-parts))
+         (relative-path (cadr parts))
          (module-path (caddr parts))
          (node (treesit-node-at (point)))
          (defun-node (treesit-parent-until
@@ -778,7 +789,7 @@ as the Django test runner cannot target a single standalone function."
                        (treesit-parent-until
                         defun-node
                         (lambda (n) (equal (treesit-node-type n) "class_definition")))))
-         (test-path nil))
+         (test-target nil))
     (unless defun-node
       (error "Not inside a function or method"))
     (let* ((func-name-node (or (treesit-node-child-by-field-name defun-node "name")
@@ -787,51 +798,58 @@ as the Django test runner cannot target a single standalone function."
            (func-name (treesit-node-text func-name-node))
            (class-name (when class-node
                          (treesit-node-text (treesit-node-child-by-field-name class-node "name")))))
-      (setq test-path
-            (if class-name
-                ;; It's a method in a class; we can target it specifically.
-                (concat module-path "." class-name "." func-name)
-              ;; It's a standalone function; fall back to running the whole file.
-              module-path)))
-    (message "Running test: %s" test-path)
-    (mrl/django-run-test test-path)))
+      (setq test-target
+            (cond
+             ((eq mrl/python-test-runner 'pytest)
+              (if class-name
+                  (concat relative-path "::" class-name "::" func-name)
+                (concat relative-path "::" func-name)))
+             ((eq mrl/python-test-runner 'django)
+              (if class-name
+                  (concat module-path "." class-name "." func-name)
+                module-path)) ;; Fallback for function-based tests
+             (t (error "Unknown test runner: %s" mrl/python-test-runner)))))
+    (mrl/python-run-test test-target)))
 
-(defun mrl/run-django-tests-in-buffer ()
-  "Run all Django tests in the current buffer's file."
+(defun mrl/run-python-tests-in-buffer ()
+  "Run all tests in the current buffer's file."
   (interactive)
-  (let ((module-path (caddr (mrl/django-get-test-parts))))
-    (mrl/django-run-test module-path)))
-
-(defun mrl/run-django-tests-for-app ()
-  "Run Django tests for the current file's app.
-Assumes the app is the first directory in the path relative to the project root."
-  (interactive)
-  (let* ((parts (mrl/django-get-test-parts))
+  (let* ((parts (mrl/python-get-test-parts))
          (relative-path (cadr parts))
-         (app-name (car (split-string relative-path "/"))))
-    (if (and app-name (> (length app-name) 0))
-        (mrl/django-run-test app-name)
-      (error "Could not determine Django app from file path."))))
+         (module-path (caddr parts))
+         (test-target (if (eq mrl/python-test-runner 'pytest) relative-path module-path)))
+    (mrl/python-run-test test-target)))
 
-(defun mrl/run-django-tests-for-project ()
-  "Run the entire Django test suite for the project."
+(defun mrl/run-python-tests-for-app ()
+  "Run tests for the current file's app."
   (interactive)
-  (mrl/django-run-test ""))
+  (let* ((parts (mrl/python-get-test-parts))
+         (relative-path (cadr parts))
+         (app-path (car (split-string relative-path "/")))
+         (test-target (if (eq mrl/python-test-runner 'pytest) app-path app-path)))
+    (if (and app-path (> (length app-path) 0))
+        (mrl/python-run-test test-target)
+      (error "Could not determine app from file path."))))
+
+(defun mrl/run-python-tests-for-project ()
+  "Run the entire test suite for the project."
+  (interactive)
+  (mrl/python-run-test ""))
 
 ;; --- PYTHON USE-PACKAGE CONFIGURATION ---
 
 (use-package python-ts-mode
-  :ensure nil ;; It's built-in, but we configure it
+  :ensure nil
   :config
   (setq python-indent-offset 2)
   :hook ((python-ts-mode . eglot-ensure)
          (python-ts-mode . pyvenv-mode)
          (python-ts-mode . flycheck-mode))
   :bind (:map python-ts-mode-map
-              ("C-c t p" . mrl/run-django-tests-for-project)
-              ("C-c t a" . mrl/run-django-tests-for-app)
-              ("C-c t b" . mrl/run-django-tests-in-buffer)
-              ("C-c t f" . mrl/run-django-test-at-point)))
+              ("C-c t p" . mrl/run-python-tests-for-project)
+              ("C-c t a" . mrl/run-python-tests-for-app)
+              ("C-c t b" . mrl/run-python-tests-in-buffer)
+              ("C-c t f" . mrl/run-python-test-at-point)))
 
 (use-package pyvenv
   :ensure t
@@ -839,56 +857,6 @@ Assumes the app is the first directory in the path relative to the project root.
                            (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
                              (when (file-directory-p venv-dir)
                                (pyvenv-activate venv-dir))))))
-
-
-
-(defun mrl/run-django-test-at-point ()
-  "Run the Django test function or method at point."
-  (interactive)
-  (unless (eq major-mode 'python-ts-mode)
-    (error "Not in python-ts-mode"))
-  (let* ((project-root (projectile-project-root))
-         (file-path (buffer-file-name))
-         (test-path nil))
-    (unless project-root
-      (error "No project root found"))
-    (unless file-path
-      (error "Buffer is not visiting a file"))
-    ;; Ensure virtualenv is activated
-    (when (and (fboundp 'pyvenv-activate)
-               (file-directory-p (expand-file-name ".venv" project-root)))
-      (pyvenv-activate (expand-file-name ".venv" project-root)))
-    ;; Get test path using Tree-sitter
-    (require 'treesit)
-    (let* ((node (treesit-node-at (point)))
-           (defun-node (treesit-parent-until
-                        node
-                        (lambda (n)
-                          (member (treesit-node-type n) '("function_definition" "method_definition")))))
-           (class-node (when defun-node
-                         (treesit-parent-until
-                          defun-node
-                          (lambda (n) (equal (treesit-node-type n) "class_definition"))))))
-      (unless defun-node
-        (error "Not inside a function or method"))
-      (let* ((func-name (treesit-node-text
-                         (treesit-node-child-by-field-name defun-node "name")))
-             (class-name (when class-node
-                           (treesit-node-text
-                            (treesit-node-child-by-field-name class-node "name"))))
-             (relative-path (file-relative-name file-path project-root))
-             (module-path (replace-regexp-in-string
-                           "/" "."
-                           (replace-regexp-in-string
-                            "\\.py\\'" ""
-                            relative-path))))
-        (setq test-path
-              (if class-name
-                  (concat module-path "." class-name "." func-name)
-                (concat module-path "." func-name))))
-      ;; Run the test
-      (let ((default-directory project-root))
-        (compile (concat "python manage.py test " test-path))))))
 
 
 ;; (use-package django-mode)
