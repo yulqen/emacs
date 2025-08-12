@@ -423,7 +423,9 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 (use-package flycheck-clj-kondo
   :hook (after-init . global-flycheck-mode))
 
-(use-package magit)
+(use-package magit
+  :ensure t
+  :bind ("C-x g" . magit-status))
 
 ;; Enable Vertico.
 (use-package vertico
@@ -535,6 +537,9 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
     :hook (compilation-filter . ansi-color-compilation-filter))
 
 (use-package cider
+  :ensure t
+  :hook ((cider-repl-mode . paredit-mode)
+         (clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
   :config
   (setq cider-jack-in-default 'clojure-cli)
   (setq nrepl-use-ssh-fallback-for-remote-hosts t))
@@ -543,12 +548,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   :ensure t
   :hook ((clojure-mode . eglot-ensure)
          (clojure-mode . paredit-mode)))
-(use-package cider
-  :ensure t
-  :config
-  (setq cider-jack-in-default 'clojure-cli
-        nrepl-use-ssh-fallback-for-remote-hosts t)
-  :hook (cider-repl-mode . paredit-mode))
+
 (use-package flycheck-clj-kondo
   :ensure t
   :hook (clojure-mode . flycheck-mode))
@@ -699,6 +699,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 (setq browse-url-browser-function 'eww-browse-url)
 
 (use-package elfeed
+  :ensure t
   :bind ("C-x w" . elfeed)
   :config
   (setq elfeed-feeds
@@ -731,10 +732,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   :config
   (projectile-mode +1)
   (setq projectile-project-search-path '("~/code/")))
-
-
-(setq major-mode-remap-alist
-      '((python-mode . python-ts-mode)))
 
 
 (defcustom mrl/python-test-runner 'django
@@ -837,10 +834,15 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
   (mrl/python-run-test ""))
 
 ;; --- PYTHON USE-PACKAGE CONFIGURATION ---
-
-(use-package python-ts-mode
-  :ensure nil
+(use-package python
+  :ensure nil ;; This is a built-in feature
+  ;; The :mode keyword is the trigger. It tells use-package to create an
+  ;; autoload that says "when a .py file is opened, use python-ts-mode".
+  ;; Because we are configuring the 'python' feature itself, this
+  ;; reliably overrides the default.
+  :mode ("\\.py\\'" . python-ts-mode)
   :config
+  ;; This :config block will now run correctly when python-ts-mode is loaded.
   (setq python-indent-offset 2)
   :hook ((python-ts-mode . eglot-ensure)
          (python-ts-mode . pyvenv-mode)
@@ -851,23 +853,30 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
               ("C-c t b" . mrl/run-python-tests-in-buffer)
               ("C-c t f" . mrl/run-python-test-at-point)))
 
+;; (setq major-mode-remap-alist
+;;       '((python-mode . python-ts-mode)))
+
 (use-package pyvenv
   :ensure t
   :hook (python-ts-mode . (lambda ()
-                           (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
-                             (when (file-directory-p venv-dir)
-                               (pyvenv-activate venv-dir))))))
+                            (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
+                              (when (file-directory-p venv-dir)
+                                (pyvenv-activate venv-dir))))))
 
 
 ;; (use-package django-mode)
 (use-package django-snippets)
 
 (use-package yasnippet
-  :config
-  (yas-global-mode 1)
+  :ensure t
   :hook (prog-mode . yas-minor-mode)
   :bind (:map yas-minor-mode-map
-              ("C-c y" . yas-expand)))
+              ("C-c y" . yas-expand))
+  :config
+  ;; Your config here
+  :init
+  (yas-global-mode 1))
+
 
 (use-package yasnippet-snippets)
 (use-package clojure-snippets)
@@ -983,11 +992,6 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 ;; we don't want the old buffer list!
 ;;; (global-unset-key (kbd "C-x C-b"))
 
-;; Put backups in /tmp where they belong
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
 
 ;; recursively copy by default
 (setq dired-recursive-copies 'always)
@@ -998,17 +1002,10 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 ;; auto revert files
 (global-auto-revert-mode)
 
-;; BACKUPS/LOCKFILES --------
-;; Don't generate backups or lockfiles.
-(setq create-lockfiles nil
-      make-backup-files nil
-      ;; But in case the user does enable it, some sensible defaults:
-      version-control t     ; number each backup file
-      backup-by-copying t   ; instead of renaming current file (clobbers links)
-      delete-old-versions t ; clean up after itself
-      kept-old-versions 5
-      kept-new-versions 5
-      backup-directory-alist (list (cons "." (concat user-emacs-directory "backup/"))))
+(setq make-backup-files nil          ; don't create backup files
+      create-lockfiles nil           ; don't create lockfiles
+      auto-save-default nil          ; don't auto-save to #file#
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t))) ; but if auto-save is on, put it in /tmp
 
 ;; Display the current time
 (display-time-mode t)
@@ -1031,7 +1028,6 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 (setq-default tab-width 2 indent-tabs-mode nil)
 (setq-default indent-tabs-mode nil)
 (setq js-indent-level 2)
-(setq python-indent 2)
 (setq css-indent-offset 2)
 (add-hook 'sh-mode-hook
           (lambda ()
@@ -1050,19 +1046,9 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
-;; Enable LSP support by default in programming buffers
-;;(add-hook 'prog-mode-hook #'eglot-ensure)
-
-;;; Indication of local VCS changes
-(unless (package-installed-p 'diff-hl)
-  (package-install 'diff-hl))
-
-;; Enable `diff-hl' support by default in programming buffers
-(add-hook 'prog-mode-hook #'diff-hl-mode)
-
-;; Enable autocompletion by default in programming buffers
-;; (rc/require 'corfu)
-;; (add-hook 'prog-mode-hook #'corfu-mode)
+(use-package diff-hl
+  :ensure t
+  :hook (prog-mode . diff-hl-mode))
 
 ;; turn off flycheck-mode for org
 (setq flycheck-global-modes '(not org-mode))
