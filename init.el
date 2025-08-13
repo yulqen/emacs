@@ -460,6 +460,12 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   ;; Enable context menu. `vertico-multiform-mode' adds a menu in the minibuffer
   ;; to switch display modes.
   (context-menu-mode t)
+  (completion-cycle-threshold 3) ;; see corfu config
+  (tab-always-indent 'complete) ;; see corfu config
+  (text-mode-ispell-word-completion nil) ;; see corfu config
+  ;; hide commands in M-x which not apply to the current mode
+  ;; Got this from corfu docs but suggests it is useful elsewhere
+  (read-extended-command-predicate #'command-completion-default-include-p)
   ;; Support opening new minibuffers from inside existing minibuffers.
   (enable-recursive-minibuffers t)
   ;; Hide commands in M-x which do not work in the current mode.  Vertico
@@ -726,17 +732,37 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
           ("https://jvns.ca/atom.xml" linux)
           ("https://sive.rs/en.atom" discourse))))
 
-(use-package projectile
+(use-package corfu
   :ensure t
-  :bind-keymap ("C-c p" . projectile-command-map)
-  :config
-  (projectile-mode +1)
-  (setq projectile-project-search-path '("~/code/")))
+  ;; Optional customizations
+  ;; :custom
+  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
 
+  ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
+  :hook ((prog-mode . corfu-mode)
+         (shell-mode . corfu-mode)
+         (eshell-mode . corfu-mode))
+
+  :init
+
+  ;; Recommended: Enable Corfu globally.  Recommended since many modes provide
+  ;; Capfs and Dabbrev can be used globally (M-/).  See also the customization
+  ;; variable `global-corfu-modes' to exclude certain modes.
+  (global-corfu-mode)
+
+  ;; Enable optional extension modes:
+  ;; (corfu-history-mode)
+  ;; (corfu-popupinfo-mode)
+  )
 
 (defcustom mrl/python-test-runner 'django
   "The test runner to use for Python projects.
-Can be set to 'django or 'pytest.
+Can be set to \='dango or \='pytest.
 This can be set per-project using file-local variables."
   :type '(choice (const :tag "Django Default" 'django)
                  (const :tag "Pytest" 'pytest))
@@ -745,7 +771,9 @@ This can be set per-project using file-local variables."
 (defun mrl/python-get-test-parts ()
   "Helper to get project root and test path components.
 Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
-  (let* ((project-root (projectile-project-root))
+  (let* ((current-project (project-current))
+         ;; First get the project object, then get its root string.
+         (project-root (when current-project (project-root current-project)))
          (file-path (buffer-file-name)))
     (unless (and project-root file-path)
       (error "Not in a project or buffer is not visiting a file"))
@@ -757,13 +785,16 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 
 (defun mrl/python-run-test (test-target)
   "Execute a Python test command in the project root using the configured runner."
-  (let* ((project-root (projectile-project-root))
+  (let* ((current-project (project-current))
+         ;; Correctly get the project root as a string
+         (project-root (when current-project (project-root current-project)))
          (command (cond
                    ((eq mrl/python-test-runner 'pytest)
                     (concat "pytest " test-target))
                    ((eq mrl/python-test-runner 'django)
                     (concat "python manage.py test " test-target))
                    (t (error "Unknown test runner: %s" mrl/python-test-runner)))))
+    ;; Now project-root is a string path, so the rest of the function works
     (when project-root
       (let ((venv-dir (expand-file-name ".venv" project-root)))
         (when (and (fboundp 'pyvenv-activate) (file-directory-p venv-dir))
@@ -826,7 +857,7 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
          (test-target (if (eq mrl/python-test-runner 'pytest) app-path app-path)))
     (if (and app-path (> (length app-path) 0))
         (mrl/python-run-test test-target)
-      (error "Could not determine app from file path."))))
+      (error "Could not determine app from file path"))))
 
 (defun mrl/run-python-tests-for-project ()
   "Run the entire test suite for the project."
@@ -859,7 +890,7 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 (use-package pyvenv
   :ensure t
   :hook (python-ts-mode . (lambda ()
-                            (let ((venv-dir (expand-file-name ".venv" (projectile-project-root))))
+                            (let ((venv-dir (expand-file-name ".venv" (project-current))))
                               (when (file-directory-p venv-dir)
                                 (pyvenv-activate venv-dir))))))
 
@@ -926,7 +957,6 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 
 (use-package diminish
   :config
-  (diminish 'projectile-mode)
   (diminish 'completion-preview-mode)
   (diminish 'which-key-mode)
   (diminish 'beacon-mode))
