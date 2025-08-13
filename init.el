@@ -89,9 +89,9 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
      (format-time-string "%z")))))
 
-(use-package gruber-darker-theme)
-(use-package borland-blue-theme)
-(use-package autumn-light-theme)
+;; (use-package gruber-darker-theme)
+;; (use-package borland-blue-theme)
+;; (use-package autumn-light-theme)
 
 ;; ;; Install SLIME if not already installed
 ;; (unless (package-installed-p 'slime)
@@ -393,7 +393,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (setq doric-themes-to-toggle '(doric-marble doric-dark))
   (setq doric-themes-to-rotate doric-themes-collection)
 
-  (doric-themes-select 'doric-marble)
+  (doric-themes-select 'doric-obsidian)
 
   ;; ;; To load a random theme instead, use something like one of these:
   ;;
