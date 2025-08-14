@@ -22,6 +22,10 @@ For example, 110 is good for laptops but maybe 180 for 4k."
 ;; use org mode as scratch buffer
 (setq initial-major-mode 'org-mode)
 
+;;; Enable the Emacs server, allows editing via emacsclient
+(require 'server)
+(when (not (server-running-p)) (server-start))
+
 ;; match PATH
 (defun set-exec-path-from-shell-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
