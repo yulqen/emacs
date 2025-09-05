@@ -396,7 +396,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (setq doric-themes-to-toggle '(doric-marble doric-dark))
   (setq doric-themes-to-rotate doric-themes-collection)
 
-  (doric-themes-select 'doric-obsidian)
+ (doric-themes-select 'doric-obsidian)
 
   ;; ;; To load a random theme instead, use something like one of these:
   ;;
@@ -1170,8 +1170,8 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
                                "~/Documents/org/radbox_alt.org"
                                "~/Documents/org/radcal_coding.org"
                                "~/Documents/org/radbox_work.org"
-                               "~/Documents/org/alphabet_learning.org"
                                "~/Documents/org/dft.org"
+                               "~/Documents/org/alphabet_learning.org"
                                "~/Documents/org/calendar/cal.org"
                                "~/Documents/org/habits.org")))
 (setq org-agenda-window-setup 'other-window)
@@ -1237,6 +1237,12 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
          ((org-agenda-category-filter-preset '("+home" "+habits" "+radcal" "+radcal_alt" "radcal_work" "+radcal_coding" "+refile" "+Birthday"))))
         ("A" "Alphabet Learning Project"
          (
+          (tags "bug" ((org-agenda-overriding-header "Bugs")
+                       (org-agenda-sorting-strategy '(priority-down alpha-up))))
+          (tags "ui" ((org-agenda-overriding-header "UI")
+                      (org-agenda-sorting-strategy '(priority-down alpha-up))))
+          (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "Next")
+                                      (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-done schedule-down))))
           (tags-todo "TODO=\"DOING\"" ((org-agenda-overriding-header "Doing")
                                        (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-down scheduled-down))))
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
@@ -1249,13 +1255,21 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 (setq org-capture-templates
       (quote (("i" "Inbox" entry (file+headline "~/Documents/org/refile.org" "Inbox")
                "* %?\nCaptured: %U\n")
+              ("a" "Alphabet Learning Tasks")
+              ("at" "Alphabet Learning TODO" entry (file+headline "~/Documents/org/alphabet_learning.org" "Tasks")
+               "** TODO %?\nEntered on %U\n"
+               :prepend t)
+              ("ab" "Alphabet Learning TODO" entry (file+headline "~/Documents/org/alphabet_learning.org" "Tasks")
+               "** TODO %? :bug:\nEntered on %U\n"
+               :prepend t)
               ("h" "Home Tasks & Notes")
               ;; ("w" "Protocol Capture" entry (file+headline "~/org/refile.org" "Web Capture")
               ;;  "* %^{Title or Comment}\nDescription: %:description\nSource: %:link\n%:initial\nCaptured: %U\n")
-              ("x" "Protocol Capture" entry (file+headline "~/Documents/org/refile.org" "Web Capture")
-               "* TODO Review %:description\nSource: %:link\n%:initial\nCaptured: %U\n" :immediate-finish t)
-              ("w" "Protocol Capture" entry (file+headline "~/Documents/org/refile.org" "Web Capture")
-               "* %:description\nSource: %:link\n%:initial\nCaptured: %U\n")
+              ;; ("x" "Protocol Capture" entry (file+headline "~/Documents/org/refile.org" "Web Capture")
+              ;;  "* TODO Review %:description\nSource: %:link\n%:initial\nCaptured: %U\n" :immediate-finish t)
+              ;; ("w" "Protocol Capture" entry (file+headline "~/Documents/org/refile.org" "Web Capture")
+              ;;  "* %:description\nSource: %:link\n%:initial\nCaptured: %U\n")
+
               ("ht" "Home TODO" entry (file+headline "~/Documents/org/home.org" "Tasks")
                "** TODO %?\nEntered on %U\n"
                :prepend t)
