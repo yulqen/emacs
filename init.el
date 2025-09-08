@@ -1202,7 +1202,7 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
           (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
                                          (org-agenda-sorting-strategy '(alpha-up))))
           )
-         ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radcal" "+radcal_alt" "+radcal_work" "+radcal_coding" "+Meeting" "+WorkTrip" "+refile"))))
+         ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+Meeting" "+WorkTrip" "+refile"))))
 
         ("c" "Central Project Register"
          (
@@ -1234,7 +1234,7 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
                         (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
                                          (org-agenda-sorting-strategy '(alpha-up)))))
-         ((org-agenda-category-filter-preset '("+home" "+habits" "+radcal" "+radcal_alt" "radcal_work" "+radcal_coding" "+refile" "+Birthday"))))
+         ((org-agenda-category-filter-preset '("+home" "+habits" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+refile" "+Birthday"))))
         ("A" "Alphabet Learning Project"
          (
           (tags-todo "TODO=\"DOING\"" ((org-agenda-overriding-header "Doing")
