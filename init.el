@@ -260,13 +260,13 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 ;; <https://github.com/protesilaos/aporetic>.
 (setq fontaine-presets
       '((small
-         :default-family "Aporetic Serif Mono"
-         :default-height 80
-         :variable-pitch-family "Aporetic Sans")
+         :default-family "DejaVu Sans Mono"
+         :default-height 120
+         :variable-pitch-family "DejaVu Sans Mono")
         (regular) ; like this it uses all the fallback values and is named `regular'
         (medium
          :default-weight semilight
-         :default-height 115
+         :default-height 130
          :bold-weight extrabold)
         (large
          :inherit medium
@@ -277,7 +277,8 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
          ;; I keep all properties for didactic purposes, but most can be
          ;; omitted.  See the fontaine manual for the technicalities:
          ;; <https://protesilaos.com/emacs/fontaine>.
-         :default-family "Aporetic Sans Mono"
+         :default-family "DejaVu Sans Mono"
+         ;; :default-family "Aporetic Sans Mono"
          :default-weight regular
          :default-height 100
 
@@ -396,7 +397,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (setq doric-themes-to-toggle '(doric-marble doric-dark))
   (setq doric-themes-to-rotate doric-themes-collection)
 
- (doric-themes-select 'doric-obsidian)
+ (doric-themes-select 'doric-plum)
 
   ;; ;; To load a random theme instead, use something like one of these:
   ;;
