@@ -1383,6 +1383,7 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "|" "DEFERRED(r@/!)")
+              (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
               (sequence "TODO(t)" "NEXT(n)" "DOING(D)" "PROJECT(p)"  "|" "DONE(d!)")
               (sequence "WAITING(w@/!)" "SOMEDAY(s@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
