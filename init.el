@@ -142,7 +142,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
   )
 
-(defun ml/misc-pick-font ()
+(defun mrl/misc-pick-font ()
   (interactive)
   (let ((font-name (completing-read "Select font:"
                                     (font-family-list))))
