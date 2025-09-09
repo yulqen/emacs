@@ -1389,15 +1389,15 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 
 
 (setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "MediumBlue" :weight bold)
-              ("PROJECT" :foreground "blue" :weight bold)
-              ("DOING" :foreground "orchid" :weight bold)
-              ("DONE" :foreground "ForestGreen" :weight bold)
+      (quote (("TODO" :foreground "yellow")
+              ("NEXT" :foreground "dark orange")
+              ("PROJECT" :foreground "blue")
+              ("DOING" :foreground "orchid")
+              ("DONE" :foreground "ForestGreen")
               ("WAITING" :foreground "black" :background "yellow" :weight bold)
-              ("SOMEDAY" :foreground "blue" :weight bold)
-              ("HOLD" :foreground "magenta" :weight bold)
-              ("CANCELLED" :foreground "snow4" :weight bold))))
+              ("SOMEDAY" :foreground "dark violet")
+              ("HOLD" :foreground "magenta")
+              ("CANCELLED" :foreground "snow4"))))
 
 (setq org-todo-state-tags-triggers
       (quote (("CANCELLED" ("CANCELLED" . t))
