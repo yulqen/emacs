@@ -581,6 +581,7 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 
 (use-package undo-tree
   :config
+  (setq undo-tree-auto-save-history nil)
   (setq undo-tree-show-minibuffer-help t)
   (setq undo-tree-minibuffer-help-dynamic t))
 
