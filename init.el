@@ -42,6 +42,27 @@ apps are not started from a shell."
 
 (set-exec-path-from-shell-PATH)
 
+;; select stuff in brackets, etc
+(defvar mrl/brackets '( "“”" "()" "[]" "{}" "<>" "＜＞" "（）" "［］" "｛｝" "⦅⦆" "〚〛" "⦃⦄" "‹›" "«»" "「」" "〈〉" "《》" "【】" "〔〕" "⦗⦘" "『』" "〖〗" "〘〙" "｢｣" "⟦⟧" "⟨⟩" "⟪⟫" "⟮⟯" "⟬⟭" "⌈⌉" "⌊⌋" "⦇⦈" "⦉⦊" "❛❜" "❝❞" "❨❩" "❪❫" "❴❵" "❬❭" "❮❯" "❰❱" "❲❳" "〈〉" "⦑⦒" "⧼⧽" "﹙﹚" "﹛﹜" "﹝﹞" "⁽⁾" "₍₎" "⦋⦌" "⦍⦎" "⦏⦐" "⁅⁆" "⸢⸣" "⸤⸥" "⟅⟆" "⦓⦔" "⦕⦖" "⸦⸧" "⸨⸩" "｟｠")
+ "A list of strings, each element is a string of 2 chars, the left bracket and a matching right bracket.
+Used by `mrl/select-text-in-quote' and others.")
+
+(defun mrl/select-text-in-quote ()
+  "Select text between the nearest left and right delimiters.
+Delimiters here includes QUOTATION MARK, GRAVE ACCENT, and anything in variable `xah-brackets'.
+This command ignores nesting. For example, if text is
+「(a(b)c▮)」
+the selected char is 「c」, not 「a(b)c」.
+
+Thanks! URL `http://xahlee.info/emacs/emacs/emacs_select_quote_text.html'
+Created: 2020-11-24
+Version: 2023-11-14"
+  (interactive)
+  (let ((xskipChars (concat "^\"`" (mapconcat #'identity mrl/brackets ""))))
+    (skip-chars-backward xskipChars)
+    (push-mark (point) t t)
+    (skip-chars-forward xskipChars)))
+
 ;; recentf
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
@@ -551,8 +572,12 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   :hook ((cider-repl-mode . paredit-mode)
          (clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
   :config
+  
   (setq cider-jack-in-default 'clojure-cli)
   (setq nrepl-use-ssh-fallback-for-remote-hosts t))
+
+; we need this for org-babel with clojure apparently (see https://orgmode.org/worg//org-contrib/babel/languages/ob-doc-clojure.html)
+(require 'ob-clojure)
 
 (use-package clojure-mode
   :ensure t
@@ -1137,6 +1162,8 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 (advice-add 'org-agenda-goto :after
             (lambda (&rest args)
               (org-narrow-to-subtree)))
+(setq org-babel-clojure-backend 'cider) ; use cider backend for clojure in babel - see https://orgmode.org/worg//org-contrib/babel/languages/ob-doc-clojure.html
+(setq org-confirm-babel-evaluate nil)
 (setq org-src-tab-acts-natively t)
 (setq org-directory "~/Documents/org/")
 (setq org-highest-priority ?A)
