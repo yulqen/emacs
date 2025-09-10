@@ -578,6 +578,17 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 
 ; we need this for org-babel with clojure apparently (see https://orgmode.org/worg//org-contrib/babel/languages/ob-doc-clojure.html)
 (require 'ob-clojure)
+(require 'ob-python)
+(require 'ob-ruby)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)
+   (clojure .t)
+   (bash . t)
+   (emacs-lisp . t)))
+
+
 
 (use-package clojure-mode
   :ensure t
@@ -1140,6 +1151,7 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 (org-crypt-use-before-save-magic)
 (setq org-tags-exclude-from-inheritance '("crypt" "current"))
 
+
 (setq org-crypt-key nil)
 ;; GPG key to use for encryption.
 ;; nil means  use symmetric encryption unconditionally.
@@ -1163,7 +1175,9 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
             (lambda (&rest args)
               (org-narrow-to-subtree)))
 (setq org-babel-clojure-backend 'cider) ; use cider backend for clojure in babel - see https://orgmode.org/worg//org-contrib/babel/languages/ob-doc-clojure.html
-(setq org-confirm-babel-evaluate nil)
+(setq org-confirm-babel-evaluate nil
+      org-src-fontify-natively t)
+(setq org-babel-python-command "/usr/bin/python3")
 (setq org-src-tab-acts-natively t)
 (setq org-directory "~/Documents/org/")
 (setq org-highest-priority ?A)
