@@ -577,16 +577,20 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (setq nrepl-use-ssh-fallback-for-remote-hosts t))
 
 ; we need this for org-babel with clojure apparently (see https://orgmode.org/worg//org-contrib/babel/languages/ob-doc-clojure.html)
-(require 'ob-clojure)
-(require 'ob-python)
-(require 'ob-ruby)
+;; (require 'ob-clojure)
+;; (require 'ob-python)
+;; (require 'ob-ruby)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t)
    (clojure .t)
-   (bash . t)
-   (emacs-lisp . t)))
+   (emacs-lisp . t)
+   (shell . t)
+   (js . t)
+   (perl . t)
+   (css . t)
+   (makefile . t)))
 
 
 
