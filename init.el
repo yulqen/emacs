@@ -12,15 +12,18 @@
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
 (add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 
-(defun mrl/increase-face-size (height)
-  "Increases size of font to HEIGHT in points.
-For example, 110 is good for laptops but maybe 180 for 4k."
-  (interactive "New height: ")
-  (set-face-attribute 'default nil :height height))
+;; require separate config files
+(require 'fontaine)
+(require 'mrl-functions)
+(require 'denote-stuff)
+(require 'org-babel-config)
+(require 'theme-config)
+(require 'font-config)
 
 ;; use org mode as scratch buffer
-(setq initial-major-mode 'org-mode)
+;;(setq initial-major-mode 'org-mode)
 
 ;;; Enable the Emacs server, allows editing via emacsclient
 (require 'server)
@@ -42,27 +45,6 @@ apps are not started from a shell."
 
 (set-exec-path-from-shell-PATH)
 
-;; select stuff in brackets, etc
-(defvar mrl/brackets '( "“”" "()" "[]" "{}" "<>" "＜＞" "（）" "［］" "｛｝" "⦅⦆" "〚〛" "⦃⦄" "‹›" "«»" "「」" "〈〉" "《》" "【】" "〔〕" "⦗⦘" "『』" "〖〗" "〘〙" "｢｣" "⟦⟧" "⟨⟩" "⟪⟫" "⟮⟯" "⟬⟭" "⌈⌉" "⌊⌋" "⦇⦈" "⦉⦊" "❛❜" "❝❞" "❨❩" "❪❫" "❴❵" "❬❭" "❮❯" "❰❱" "❲❳" "〈〉" "⦑⦒" "⧼⧽" "﹙﹚" "﹛﹜" "﹝﹞" "⁽⁾" "₍₎" "⦋⦌" "⦍⦎" "⦏⦐" "⁅⁆" "⸢⸣" "⸤⸥" "⟅⟆" "⦓⦔" "⦕⦖" "⸦⸧" "⸨⸩" "｟｠")
- "A list of strings, each element is a string of 2 chars, the left bracket and a matching right bracket.
-Used by `mrl/select-text-in-quote' and others.")
-
-(defun mrl/select-text-in-quote ()
-  "Select text between the nearest left and right delimiters.
-Delimiters here includes QUOTATION MARK, GRAVE ACCENT, and anything in variable `xah-brackets'.
-This command ignores nesting. For example, if text is
-「(a(b)c▮)」
-the selected char is 「c」, not 「a(b)c」.
-
-Thanks! URL `http://xahlee.info/emacs/emacs/emacs_select_quote_text.html'
-Created: 2020-11-24
-Version: 2023-11-14"
-  (interactive)
-  (let ((xskipChars (concat "^\"`" (mapconcat #'identity mrl/brackets ""))))
-    (skip-chars-backward xskipChars)
-    (push-mark (point) t t)
-    (skip-chars-forward xskipChars)))
-
 ;; recentf
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
@@ -72,47 +54,6 @@ Version: 2023-11-14"
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(defun mrl/org-word-count ()
-  "Count words in region/buffer, estimate pages, and reading time.
-Excludes lines beginning with * or #. Prints result in echo area. 
-Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-functions/"
-  (interactive)
-  (let* ((start (if (use-region-p) (region-beginning) (point-min)))
-         (end (if (use-region-p) (region-end) (point-max)))
-         (word-count
-          (save-excursion
-            (goto-char start)
-            (let ((count 0)
-                  (inhibit-field-text-motion t))
-              (while (< (point) end)
-                (beginning-of-line)
-                (unless (looking-at-p "^[*#<]")
-                  (let ((line-end (line-end-position)))
-                    (while (re-search-forward "\\w+\\W*" line-end t)
-                      (setq count (1+ count)))))
-                (forward-line 1))
-              count)))
-         (words-per-page 400)
-         (reading-speed 215)
-         (page-count (/ (+ word-count words-per-page -1) words-per-page))
-         (reading-time (/ (+ word-count reading-speed -1) reading-speed)))
-    (message "%d words, ~%d pages, ~%d min read"
-             word-count page-count reading-time)))
-
-(defun mrl/insert-timestamp-default ()
-  "Insert the current timestamp"
-  (interactive)
-  (insert (current-time-string)))
-
-(defun mrl/insert-timestamp-iso ()
-  "Insert the current timestamp (ISO 8601 format)"
-  (interactive)
-  (insert
-   (concat
-    (format-time-string "%Y-%m-%dT%T")
-    ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
-     (format-time-string "%z")))))
-
 ;; (use-package gruber-darker-theme)
 ;; (use-package borland-blue-theme)
 ;; (use-package autumn-light-theme)
@@ -121,7 +62,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
 ;; (unless (package-installed-p 'slime)
 ;;   (package-refresh-contents) ; Refresh package list
 ;;   (package-install 'slime))
-
 
 ;; use arrows to go back and forth
 (use-package backward-forward
@@ -162,280 +102,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
   (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
   )
-
-(defun mrl/misc-pick-font ()
-  (interactive)
-  (let ((font-name (completing-read "Select font:"
-                                    (font-family-list))))
-    (if (member font-name (font-family-list))
-        (set-face-attribute 'default nil :font font-name)
-      (error "'%s' font not found" font-name))))
-
-(use-package denote
-  :ensure t
-  :hook
-  (;; If you use Markdown or plain text files, then you want to make
-   ;; the Denote links clickable (Org renders links as buttons right
-   ;; away)
-   (text-mode . denote-fontify-links-mode-maybe)
-   ;; Apply colours to Denote names in Dired.  This applies to all
-   ;; directories.  Check `denote-dired-directories' for the specific
-   ;; directories you may prefer instead.  Then, instead of
-   ;; `denote-dired-mode', use `denote-dired-mode-in-directories'.
-   (dired-mode . denote-dired-mode))
-  :bind
-  ;; Denote DOES NOT define any key bindings.  This is for the user to
-  ;; decide.  For example:
-  ( :map global-map
-    ("C-c n n" . denote)
-    ("C-c n d" . denote-dired)
-    ("C-c n g" . denote-grep)
-    ;; If you intend to use Denote with a variety of file types, it is
-    ;; easier to bind the link-related commands to the `global-map', as
-    ;; shown here.  Otherwise follow the same pattern for `org-mode-map',
-    ;; `markdown-mode-map', and/or `text-mode-map'.
-    ("C-c n l" . denote-link)
-    ("C-c n L" . denote-add-links)
-    ("C-c n b" . denote-backlinks)
-    ("C-c n q c" . denote-query-contents-link) ; create link that triggers a grep
-    ("C-c n q f" . denote-query-filenames-link) ; create link that triggers a dired
-    ;; Note that `denote-rename-file' can work from any context, not just
-    ;; Dired bufffers.  That is why we bind it here to the `global-map'.
-    ("C-c n r" . denote-rename-file)
-    ("C-c n R" . denote-rename-file-using-front-matter)
-
-    ;; Key bindings specifically for Dired.
-    :map dired-mode-map
-    ("C-c C-d C-i" . denote-dired-link-marked-notes)
-    ("C-c C-d C-r" . denote-dired-rename-files)
-    ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
-    ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter))
-
-  :config
-  ;; Remember to check the doc string of each of those variables.
-  (setq denote-directory (expand-file-name "~/Documents/denote/"))
-  (setq denote-save-buffers nil)
-  (setq denote-known-keywords '("emacs" "computer" "family" "health"))
-  (setq denote-infer-keywords t)
-  ;;(setq denote-file-type 'text)
-  (setq denote-sort-keywords t)
-  (setq denote-prompts '(title keywords))
-  (setq denote-excluded-directories-regexp nil)
-  (setq denote-history-completion-in-prompts t)
-  (setq denote-excluded-keywords-regexp nil)
-  (setq denote-rename-confirmations '(rewrite-front-matter modify-file-name))
-
-  ;; Pick dates, where relevant, with Org's advanced interface:
-  (setq denote-date-prompt-use-org-read-date t)
-
-  ;; Automatically rename Denote buffers using the `denote-rename-buffer-format'.
-  (denote-rename-buffer-mode 1))
-
-(use-package denote-silo
-  :ensure t
-  ;; Bind these commands to key bindings of your choice.
-  :commands ( denote-silo-create-note
-              denote-silo-open-or-create
-              denote-silo-select-silo-then-command
-              denote-silo-dired
-              denote-silo-cd )
-  :bind
-  ( :map global-map
-    ("C-c n s" . denote-silo-open-or-create)
-    ("C-c n S" . denote-silo-select-silo-then-command))
-  :config
-  ;; Add your silos to this list.  By default, it only includes the
-  ;; value of the variable `denote-directory'.
-  (setq denote-silo-directories
-        (list denote-directory
-              "~/Documents/denote/"
-              "~/Documents/dft-denote/")))
-
-(use-package denote-journal
-  :ensure t
-  ;; Bind those to some key for your convenience.
-  :commands ( denote-journal-new-entry
-              denote-journal-new-or-existing-entry
-              denote-journal-link-or-create-entry )
-  :hook (calendar-mode . denote-journal-calendar-mode)
-  :bind
-  ( :map global-map
-    ("C-c n j". denote-journal-new-or-existing-entry))
-  :config
-  ;; Use the "journal" subdirectory of the `denote-directory'.  Set this
-  ;; to nil to use the `denote-directory' instead.
-  (setq denote-journal-directory
-        (expand-file-name "journal" denote-directory))
-  ;; Default keyword for new journal entries. It can also be a list of
-  ;; strings.
-  (setq denote-journal-keyword "journal")
-  ;; Read the doc string of `denote-journal-title-format'.
-  (setq denote-journal-title-format 'day-date-month-year))
-
-(require 'fontaine)
-
-(setq fontaine-latest-state-file
-      (locate-user-emacs-file "fontaine-latest-state.eld"))
-
-;; Aporetic is my highly customised build of Iosevka:
-;; <https://github.com/protesilaos/aporetic>.
-(setq fontaine-presets
-      '((small
-         :default-family "DejaVu Sans Mono"
-         :default-height 120
-         :variable-pitch-family "DejaVu Sans Mono")
-        (regular) ; like this it uses all the fallback values and is named `regular'
-        (medium
-         :default-weight semilight
-         :default-height 130
-         :bold-weight extrabold)
-        (large
-         :inherit medium
-         :default-height 150)
-        (presentation
-         :default-height 180)
-        (t
-         ;; I keep all properties for didactic purposes, but most can be
-         ;; omitted.  See the fontaine manual for the technicalities:
-         ;; <https://protesilaos.com/emacs/fontaine>.
-         :default-family "DejaVu Sans Mono"
-         ;; :default-family "Aporetic Sans Mono"
-         :default-weight regular
-         :default-height 100
-
-         :fixed-pitch-family nil ; falls back to :default-family
-         :fixed-pitch-weight nil ; falls back to :default-weight
-         :fixed-pitch-height 1.0
-
-         :fixed-pitch-serif-family nil ; falls back to :default-family
-         :fixed-pitch-serif-weight nil ; falls back to :default-weight
-         :fixed-pitch-serif-height 1.0
-
-         :variable-pitch-family "Aporetic Serif"
-         :variable-pitch-weight nil
-         :variable-pitch-height 1.0
-
-         :mode-line-active-family nil ; falls back to :default-family
-         :mode-line-active-weight nil ; falls back to :default-weight
-         :mode-line-active-height 0.9
-
-         :mode-line-inactive-family nil ; falls back to :default-family
-         :mode-line-inactive-weight nil ; falls back to :default-weight
-         :mode-line-inactive-height 0.9
-
-         :header-line-family nil ; falls back to :default-family
-         :header-line-weight nil ; falls back to :default-weight
-         :header-line-height 0.9
-
-         :line-number-family nil ; falls back to :default-family
-         :line-number-weight nil ; falls back to :default-weight
-         :line-number-height 0.9
-
-         :tab-bar-family nil ; falls back to :default-family
-         :tab-bar-weight nil ; falls back to :default-weight
-         :tab-bar-height 1.0
-
-         :tab-line-family nil ; falls back to :default-family
-         :tab-line-weight nil ; falls back to :default-weight
-         :tab-line-height 1.0
-
-         :bold-family nil ; use whatever the underlying face has
-         :bold-weight bold
-
-         :italic-family nil
-         :italic-slant italic
-
-         :line-spacing nil)))
-
-;; Set the last preset or fall back to desired style from `fontaine-presets'
-;; (the `regular' in this case).
-(fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
-
-;; Persist the latest font preset when closing/starting Emacs and
-;; while switching between themes.
-(fontaine-mode 1)
-
-;; fontaine does not define any key bindings.  This is just a sample that
-;; respects the key binding conventions.  Evaluate:
-;;
-;;     (info "(elisp) Key Binding Conventions")
-(define-key global-map (kbd "C-c f") #'fontaine-set-preset)
-
-;; ef-themes configuration
-;; Make customisations that affect Emacs faces BEFORE loading a theme
-;; (any change needs a theme re-load to take effect).
-(use-package ef-themes
-  :ensure t)
-
-;; If you like two specific themes and want to switch between them, you
-;; can specify them in `ef-themes-to-toggle' and then invoke the command
-;; `ef-themes-toggle'.  All the themes are included in the variable
-;; `ef-themes-collection'.
-(setq ef-themes-to-toggle '(ef-summer ef-winter))
-
-(setq ef-themes-headings ; read the manual's entry or the doc string
-      '((0 variable-pitch light 1.9)
-        (1 variable-pitch light 1.3)
-        (2 variable-pitch regular 1.2)
-        (3 variable-pitch regular 1.1)
-        (4 variable-pitch regular 1.0)
-        (5 variable-pitch 1.0) ; absence of weight means `bold'
-        (6 variable-pitch 1.0)
-        (7 variable-pitch 1.0)
-        (t variable-pitch 1.0)))
-
-;; They are nil by default...
-(setq ef-themes-mixed-fonts t
-      ef-themes-variable-pitch-ui t)
-
-;; Disable all other themes to avoid awkward blending:
-(mapc #'disable-theme custom-enabled-themes)
-
-;; Load the theme of choice:
-;; (load-theme 'ef-day :no-confirm)
-
-;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
-;; (ef-themes-select 'ef-deuteranopia-dark)
-
-;; The themes we provide are recorded in the `ef-themes-dark-themes',
-;; `ef-themes-light-themes'.
-
-;; We also provide these commands, but do not assign them to any key:
-;;
-;; - `ef-themes-toggle'
-;; - `ef-themes-select'
-;; - `ef-themes-select-dark'
-;; - `ef-themes-select-light'
-;; - `ef-themes-load-random'
-;; - `ef-themes-preview-colors'
-;; - `ef-themes-preview-colors-current'
-
-(use-package doric-themes
-  :ensure t
-  :demand t
-  :config
-  ;; These are the default values.
-  (setq doric-themes-to-toggle '(doric-marble doric-dark))
-  (setq doric-themes-to-rotate doric-themes-collection)
-
- (doric-themes-select 'doric-plum)
-
-  ;; ;; To load a random theme instead, use something like one of these:
-  ;;
-  ;; (doric-themes-load-random)
-  ;; (doric-themes-load-random 'light)
-  ;; (doric-themes-load-random 'dark)
-
-  ;; ;; For optimal results, also define your preferred font family (or use my `fontaine' package):
-  ;;
-  ;; (set-face-attribute 'default nil :family "Aporetic Sans Mono" :height 160)
-  ;; (set-face-attribute 'variable-pitch nil :family "Aporetic Sans" :height 1.0)
-  ;; (set-face-attribute 'fixed-pitch nil :family "Aporetic Sans Mono" :height 1.0)
-
-  :bind
-  (("<f5>" . doric-themes-toggle)
-   ("C-<f5>" . doric-themes-select)
-   ("M-<f5>" . doric-themes-rotate)))
 
 (use-package flycheck
   :ensure t
@@ -575,24 +241,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   
   (setq cider-jack-in-default 'clojure-cli)
   (setq nrepl-use-ssh-fallback-for-remote-hosts t))
-
-; we need this for org-babel with clojure apparently (see https://orgmode.org/worg//org-contrib/babel/languages/ob-doc-clojure.html)
-;; (require 'ob-clojure)
-;; (require 'ob-python)
-;; (require 'ob-ruby)
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((python . t)
-   (clojure .t)
-   (emacs-lisp . t)
-   (shell . t)
-   (js . t)
-   (perl . t)
-   (css . t)
-   (makefile . t)))
-
-
 
 (use-package clojure-mode
   :ensure t
@@ -804,110 +452,6 @@ Ripped from : https://chrismaiorana.com/summer-productivity-reset-emacs-function
   ;; (corfu-history-mode)
   ;; (corfu-popupinfo-mode)
   )
-
-(defcustom mrl/python-test-runner 'django
-  "The test runner to use for Python projects.
-Can be set to \='dango or \='pytest.
-This can be set per-project using file-local variables."
-  :type '(choice (const :tag "Django Default" 'django)
-                 (const :tag "Pytest" 'pytest))
-  :group 'python)
-
-(defun mrl/python-get-test-parts ()
-  "Helper to get project root and test path components.
-Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
-  (let* ((current-project (project-current))
-         ;; First get the project object, then get its root string.
-         (project-root (when current-project (project-root current-project)))
-         (file-path (buffer-file-name)))
-    (unless (and project-root file-path)
-      (error "Not in a project or buffer is not visiting a file"))
-    (list project-root
-          (file-relative-name file-path project-root)
-          (replace-regexp-in-string
-           "/" "."
-           (replace-regexp-in-string "\\.py\\'" "" (file-relative-name file-path project-root))))))
-
-(defun mrl/python-run-test (test-target)
-  "Execute a Python test command in the project root using the configured runner."
-  (let* ((current-project (project-current))
-         ;; Correctly get the project root as a string
-         (project-root (when current-project (project-root current-project)))
-         (command (cond
-                   ((eq mrl/python-test-runner 'pytest)
-                    (concat "pytest " test-target))
-                   ((eq mrl/python-test-runner 'django)
-                    (concat "python manage.py test " test-target))
-                   (t (error "Unknown test runner: %s" mrl/python-test-runner)))))
-    ;; Now project-root is a string path, so the rest of the function works
-    (when project-root
-      (let ((venv-dir (expand-file-name ".venv" project-root)))
-        (when (and (fboundp 'pyvenv-activate) (file-directory-p venv-dir))
-          (pyvenv-activate venv-dir)))
-      (let ((default-directory project-root))
-        (message "Running: %s" command)
-        (compile command)))))
-
-(defun mrl/run-python-test-at-point ()
-  "Run the test function/method at point using the configured runner."
-  (interactive)
-  (let* ((parts (mrl/python-get-test-parts))
-         (relative-path (cadr parts))
-         (module-path (caddr parts))
-         (node (treesit-node-at (point)))
-         (defun-node (treesit-parent-until
-                      node
-                      (lambda (n) (member (treesit-node-type n) '("function_definition" "decorated_definition")))))
-         (class-node (when defun-node
-                       (treesit-parent-until
-                        defun-node
-                        (lambda (n) (equal (treesit-node-type n) "class_definition")))))
-         (test-target nil))
-    (unless defun-node
-      (error "Not inside a function or method"))
-    (let* ((func-name-node (or (treesit-node-child-by-field-name defun-node "name")
-                               (when (equal (treesit-node-type defun-node) "decorated_definition")
-                                 (treesit-node-child-by-field-name (treesit-node-child-by-field-name defun-node "definition") "name"))))
-           (func-name (treesit-node-text func-name-node))
-           (class-name (when class-node
-                         (treesit-node-text (treesit-node-child-by-field-name class-node "name")))))
-      (setq test-target
-            (cond
-             ((eq mrl/python-test-runner 'pytest)
-              (if class-name
-                  (concat relative-path "::" class-name "::" func-name)
-                (concat relative-path "::" func-name)))
-             ((eq mrl/python-test-runner 'django)
-              (if class-name
-                  (concat module-path "." class-name "." func-name)
-                module-path)) ;; Fallback for function-based tests
-             (t (error "Unknown test runner: %s" mrl/python-test-runner)))))
-    (mrl/python-run-test test-target)))
-
-(defun mrl/run-python-tests-in-buffer ()
-  "Run all tests in the current buffer's file."
-  (interactive)
-  (let* ((parts (mrl/python-get-test-parts))
-         (relative-path (cadr parts))
-         (module-path (caddr parts))
-         (test-target (if (eq mrl/python-test-runner 'pytest) relative-path module-path)))
-    (mrl/python-run-test test-target)))
-
-(defun mrl/run-python-tests-for-app ()
-  "Run tests for the current file's app."
-  (interactive)
-  (let* ((parts (mrl/python-get-test-parts))
-         (relative-path (cadr parts))
-         (app-path (car (split-string relative-path "/")))
-         (test-target (if (eq mrl/python-test-runner 'pytest) app-path app-path)))
-    (if (and app-path (> (length app-path) 0))
-        (mrl/python-run-test test-target)
-      (error "Could not determine app from file path"))))
-
-(defun mrl/run-python-tests-for-project ()
-  "Run the entire test suite for the project."
-  (interactive)
-  (mrl/python-run-test ""))
 
 ;; --- PYTHON USE-PACKAGE CONFIGURATION ---
 (use-package python
@@ -1178,10 +722,6 @@ Returns a list: (PROJECT-ROOT RELATIVE-FILE-PATH MODULE-PATH)."
 (advice-add 'org-agenda-goto :after
             (lambda (&rest args)
               (org-narrow-to-subtree)))
-(setq org-babel-clojure-backend 'cider) ; use cider backend for clojure in babel - see https://orgmode.org/worg//org-contrib/babel/languages/ob-doc-clojure.html
-(setq org-confirm-babel-evaluate nil
-      org-src-fontify-natively t)
-(setq org-babel-python-command "/usr/bin/python3")
 (setq org-src-tab-acts-natively t)
 (setq org-directory "~/Documents/org/")
 (setq org-highest-priority ?A)

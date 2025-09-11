@@ -1,0 +1,55 @@
+* install required packages
+
+#+begin_src elisp :tangle yes
+   (use-package ob-clojurescript
+     :ensure t)
+#+end_src
+
+* languages
+
+Do we actually need this?
+
+#+begin_src elisp :tangle yes
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)
+     (clojure .t)
+     (clojurescript . t)
+     (emacs-lisp . t)
+     (shell . t)
+     (js . t)
+     (perl . t)
+     (css . t)
+     (makefile . t)))
+#+end_src
+
+* general settings
+
+We do not need to confirm evaluation every time, thanks.
+
+#+begin_src elisp :tangle yes
+  (setq org-confirm-babel-evaluate nil)
+  (setq org-src-fontify-natively t)
+#+end_src
+
+* clojure config
+
+We need to work with cider. https://orgmode.org/worg//org-contrib/babel/languages/ob-doc-clojure.html
+
+#+begin_src elisp :tangle yes
+  (setq org-babel-clojure-backend 'cider)
+#+end_src
+
+* python config
+
+We need to ensure org-babel can find the python binary.
+
+#+begin_src elisp :tangle yes
+  (setq org-babel-python-command "/usr/bin/python3")
+#+end_src
+
+* provide
+
+#+begin_src elisp :tangle yes
+  (provide 'org-babel-config)
+#+end_src

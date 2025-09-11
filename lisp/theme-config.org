@@ -1,0 +1,95 @@
+* ef-themes by Prot - install
+
+ Make customisations that affect Emacs faces BEFORE loading a theme (any change needs a theme re-load to take effect).
+
+#+begin_src elisp :tangle yes
+  (use-package ef-themes
+    :ensure t)
+#+end_src
+
+* ef-themes - config
+
+Enable toggling between themes, which I won't use.
+
+If you like two specific themes and want to switch between them, you can specify them in `ef-themes-to-toggle' and then invoke the command ~ef-themes-toggle~.  All the themes are included in the variable ~ef-themes-collection~.
+
+#+begin_src elisp :tangle yes
+  (setq ef-themes-to-toggle '(ef-summer ef-winter))
+#+end_src
+
+* ef-theme headings
+
+#+begin_src elisp :tangle yes
+  (setq ef-themes-headings ; read the manual's entry or the doc string
+      '((0 variable-pitch light 1.9)
+        (1 variable-pitch light 1.3)
+        (2 variable-pitch regular 1.2)
+        (3 variable-pitch regular 1.1)
+        (4 variable-pitch regular 1.0)
+        (5 variable-pitch 1.0) ; absence of weight means `bold'
+        (6 variable-pitch 1.0)
+        (7 variable-pitch 1.0)
+        (t variable-pitch 1.0)))
+#+end_src
+
+* ef-theme fonts
+
+We might want to switch this off as it's a bit distracting to be fair.
+
+#+begin_src elisp :tangle yes
+  (setq ef-themes-mixed-fonts nil
+      ef-themes-variable-pitch-ui nil)
+#+end_src
+
+* ef-load theme of choice or comment it out
+
+Disable all other themes to avoid awkward blending:
+
+#+begin_src elisp :tangle yes
+  (mapc #'disable-theme custom-enabled-themes)  
+#+end_src
+
+Comment this out if you don't want a ef-theme to be loaded.
+
+#+begin_src elisp :tangle yes
+  ;; (ef-themes-select 'ef-deuteranopia-dark)
+#+end_src
+
+
+
+
+* doric-themes by Prot - install
+
+#+begin_src elisp :tangle yes
+  (use-package doric-themes
+    :ensure t
+    :demand t
+    :config
+    ;; These are the default values.
+    (setq doric-themes-to-toggle '(doric-marble doric-dark))
+    (setq doric-themes-to-rotate doric-themes-collection))
+#+end_src
+
+I have no included the functions and bindings to select the theme - check the doric docs. If you need to change the theme when working, use ~doric-themes-select~.
+
+We set it here first off
+
+* doric-themes - select theme
+
+#+begin_src elisp :tangle yes
+  (doric-themes-select 'doric-plum)
+#+end_src
+
+* provide
+
+#+begin_src elisp :tangle yes
+  (provide 'theme-config)
+#+end_src
+
+
+
+
+
+
+
+
