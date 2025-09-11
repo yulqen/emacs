@@ -13,6 +13,7 @@
             (lambda (&rest args)
               (org-narrow-to-subtree)))
 (setq org-src-tab-acts-natively t)
+(setq org-startup-folded t)
 (setq org-directory "~/Documents/org/")
 (setq org-highest-priority ?A)
 (setq org-default-priority ?C)
