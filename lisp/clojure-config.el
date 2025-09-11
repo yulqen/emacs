@@ -16,8 +16,6 @@
 (setq cider-repl-display-help-banner nil)
 )
 
-(org-defkey org-mode-map "\C-x\C-e" 'cider-eval-last-sexp)
-
 (use-package clojure-mode
 :ensure t
 :hook ((clojure-mode . eglot-ensure)

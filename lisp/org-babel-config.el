@@ -20,4 +20,6 @@
 
 (setq org-babel-python-command "/usr/bin/python3")
 
+(org-defkey org-mode-map "\C-x\C-e" 'cider-eval-last-sexp)
+
 (provide 'org-babel-config)

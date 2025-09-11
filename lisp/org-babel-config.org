@@ -46,6 +46,11 @@ We need to ensure org-babel can find the python binary.
 #+begin_src elisp :tangle yes
   (setq org-babel-python-command "/usr/bin/python3")
 #+end_src
+* allow evaluating expressions in code block
+From https://emacs.stackexchange.com/questions/35582/evaluating-org-babel-clojure-blocks-returns-all-form-evaluations
+#+begin_src elisp :tangle yes
+  (org-defkey org-mode-map "\C-x\C-e" 'cider-eval-last-sexp)
+#+end_src
 
 * provide
 
