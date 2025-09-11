@@ -1,8 +1,10 @@
 (setq idle-update-delay 1.0)
+(add-hook 'focus-out-hook #'garbage-collect)
 (setq-default bidi-display-reordering 'left-to-right
               bidi-paragraph-direction 'left-to-right)
 (setq-default cursor-in-non-selected-windows nil)
 (setq hightlight-nonselected-windows nil)
+(setq x-stretch-cursor t)
 (setq fast-but-imprecise-scrolling t)
 (setq inhibit-compacting-font-caches t)
 (menu-bar-mode 0)

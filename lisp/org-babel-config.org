@@ -13,7 +13,7 @@ Do we actually need this?
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t)
-     (clojure .t)
+     (clojure . t)
      (clojurescript . t)
      (emacs-lisp . t)
      (shell . t)
@@ -39,7 +39,6 @@ We need to work with cider. https://orgmode.org/worg//org-contrib/babel/language
 #+begin_src elisp :tangle yes
   (setq org-babel-clojure-backend 'cider)
 #+end_src
-
 * python config
 
 We need to ensure org-babel can find the python binary.

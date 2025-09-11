@@ -8,11 +8,24 @@ This package is the best interactive environment for clojure development in the 
   :hook ((cider-repl-mode . paredit-mode)
          (clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
   :config
-  
-  (setq cider-jack-in-default 'clojure-cli)
-  (setq nrepl-use-ssh-fallback-for-remote-hosts t))
-#+end_src
 
+  (setq cider-jack-in-default 'clojure-cli)
+  (setq nrepl-use-ssh-fallback-for-remote-hosts t)
+  (setq cidr-repl-clear-help-banner t)
+  (setq nrepl-hide-special-buffers t)
+  (setq cider-font-lock-dynamically nil)
+  (setq cider-popup-stacktraces nil)
+  (setq cider-repl-popup-stacktraces t)
+  (setq cider-repl-use-pretty-printing t)
+  (setq cider-repl-pop-to-buffer-on-connect t)
+  (setq cider-repl-display-help-banner nil)
+  )
+#+end_src
+* allow evaluating expressions in code block
+From https://emacs.stackexchange.com/questions/35582/evaluating-org-babel-clojure-blocks-returns-all-form-evaluations
+#+begin_src elisp :tangle yes
+  (org-defkey org-mode-map "\C-x\C-e" 'cider-eval-last-sexp)
+#+end_src
 * clojure-mode settings
 
 #+begin_src elisp :tangle yes

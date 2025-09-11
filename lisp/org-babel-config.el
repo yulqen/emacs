@@ -1,9 +1,10 @@
-(use-package ob-clojurescript)
+(use-package ob-clojurescript
+  :ensure t)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t)
-   (clojure .t)
+   (clojure . t)
    (clojurescript . t)
    (emacs-lisp . t)
    (shell . t)

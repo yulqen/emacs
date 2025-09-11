@@ -157,7 +157,6 @@ Switches on environment variables if you have a .envrc file.
     :init (setq markdown-command "multimarkdown"))
 #+end_src
 
-
 * provide
 #+begin_src elisp :tangle yes
   (provide 'programming-generic)

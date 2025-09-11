@@ -1,18 +1,3 @@
-* cider
-
-This package is the best interactive environment for clojure development in the world.
-
-#+begin_src elisp :tangle yes
-  (use-package cider
-  :ensure t
-  :hook ((cider-repl-mode . paredit-mode)
-         (clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
-  :config
-  
-  (setq cider-jack-in-default 'clojure-cli)
-  (setq nrepl-use-ssh-fallback-for-remote-hosts t))
-#+end_src
-
 * clojure-mode settings
 
 #+begin_src elisp :tangle yes

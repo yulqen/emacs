@@ -1,12 +1,3 @@
-(use-package cider
-:ensure t
-:hook ((cider-repl-mode . paredit-mode)
-       (clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
-:config
-
-(setq cider-jack-in-default 'clojure-cli)
-(setq nrepl-use-ssh-fallback-for-remote-hosts t))
-
 (use-package clojure-mode
 :ensure t
 :hook ((clojure-mode . eglot-ensure)
