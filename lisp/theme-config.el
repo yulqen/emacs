@@ -21,6 +21,13 @@
 
 ;; (ef-themes-select 'ef-deuteranopia-dark)
 
+;; (use-package gruber-darker-theme
+;;  :ensure t)
+;; (use-package borland-blue-theme
+;;   :ensure t)
+;; (use-package autumn-light-theme
+;;   :ensure t)
+
 (use-package doric-themes
   :ensure t
   :demand t

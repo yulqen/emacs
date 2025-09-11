@@ -57,6 +57,15 @@ Comment this out if you don't want a ef-theme to be loaded.
 
 
 
+* other themes
+#+begin_src elisp :tangle yes
+  ;; (use-package gruber-darker-theme
+  ;;  :ensure t)
+  ;; (use-package borland-blue-theme
+  ;;   :ensure t)
+  ;; (use-package autumn-light-theme
+  ;;   :ensure t)
+#+end_src
 
 * doric-themes by Prot - install
 

@@ -1,0 +1,58 @@
+* cider
+
+This package is the best interactive environment for clojure development in the world.
+
+#+begin_src elisp :tangle yes
+  (use-package cider
+  :ensure t
+  :hook ((cider-repl-mode . paredit-mode)
+         (clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
+  :config
+  
+  (setq cider-jack-in-default 'clojure-cli)
+  (setq nrepl-use-ssh-fallback-for-remote-hosts t))
+#+end_src
+
+* clojure-mode settings
+
+#+begin_src elisp :tangle yes
+  (use-package clojure-mode
+  :ensure t
+  :hook ((clojure-mode . eglot-ensure)
+         (clojure-mode . paredit-mode)))
+#+end_src
+
+* flycheck kondo and parseedn
+
+#+begin_src elisp :tangle yes
+  (use-package flycheck-clj-kondo
+  :ensure t
+  :hook (clojure-mode . flycheck-mode))
+
+  (use-package parseedn)
+#+end_src
+
+* paredit - we'll put in there
+
+#+begin_src elisp :tangle yes
+  (use-package paredit
+  :hook
+  (clojure-mode                     . paredit-mode) ; Clojure buffers
+  (emacs-lisp-mode                  . paredit-mode) ; Elisp buffers.
+  (lisp-mode                        . paredit-mode) ; Common Lisp buffers.
+  (lisp-interaction-mode            . paredit-mode) ; Scratch buffers.
+  (ielm-mode-hook                   . paredit-mode) ; ELM buffers.
+  (eval-expression-minibuffer-setup . paredit-mode) ; Eval minibuffers.
+  :bind
+  (:map paredit-mode-map
+        ("<return>" . my/paredit-RET))
+  :config
+  (defun my/paredit-RET ()
+    "Wraps `paredit-RET' to provide a sensible minibuffer experience."
+    (interactive)
+    (if (minibufferp)
+        (read--expression-try-read)
+      (paredit-RET))))
+#+end_src
+
+

@@ -1,0 +1,73 @@
+(use-package cider
+:ensure t
+:hook ((cider-repl-mode . paredit-mode)
+       (clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
+:config
+
+(setq cider-jack-in-default 'clojure-cli)
+(setq nrepl-use-ssh-fallback-for-remote-hosts t))
+
+(use-package clojure-mode
+:ensure t
+:hook ((clojure-mode . eglot-ensure)
+       (clojure-mode . paredit-mode)))
+
+(use-package flycheck-clj-kondo
+:ensure t
+:hook (clojure-mode . flycheck-mode))
+
+(use-package parseedn)
+
+(use-package paredit
+:hook
+(clojure-mode                     . paredit-mode) ; Clojure buffers
+(emacs-lisp-mode                  . paredit-mode) ; Elisp buffers.
+(lisp-mode                        . paredit-mode) ; Common Lisp buffers.
+(lisp-interaction-mode            . paredit-mode) ; Scratch buffers.
+(ielm-mode-hook                   . paredit-mode) ; ELM buffers.
+(eval-expression-minibuffer-setup . paredit-mode) ; Eval minibuffers.
+:bind
+(:map paredit-mode-map
+      ("<return>" . my/paredit-RET))
+:config
+(defun my/paredit-RET ()
+  "Wraps `paredit-RET' to provide a sensible minibuffer experience."
+  (interactive)
+  (if (minibufferp)
+      (read--expression-try-read)
+    (paredit-RET))))
+
+(use-package rainbow-delimiters
+:hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package slime
+:ensure t
+:init
+;; Load the quicklisp-slime-helper if you use Quicklisp
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
+
+:config
+;; Set SBCL as the inferior Lisp program
+(setq inferior-lisp-program "sbcl")
+
+;; Load SLIME contrib modules for extended functionality
+(setq slime-contribs '(slime-fancy   ; comprehensive set of features
+                       slime-quicklisp ; Quicklisp integration
+                       slime-asdf      ; ASDF integration
+                       slime-mrepl     ; multiple REPLs
+                       ;; Add other contribs as needed, e.g.,
+                       ;; slime-autodoc
+                       ;; slime-editing-commands
+                       ))
+(slime-setup slime-contribs)
+
+;; Optional: Enable paredit for structural editing of Lisp code
+(autoload 'paredit-mode "paredit" "Minor mode for structural editing of Lisp code." t)
+(add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
+)
+
+(use-package clojure-snippets)
+
+(provide 'lisp-language-config)
