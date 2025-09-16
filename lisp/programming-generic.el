@@ -67,7 +67,10 @@
   :ensure nil ;; this is built in but we configure it here
   :mode ("\\.py\\'" . python-ts-mode)
   :config
-  (setq python-indent-offset 2)
+  (setq-default indent-tabs-mode t)
+	    (setq-default tab-width 4)
+	    (setq-default py-indent-tabs-mode t)
+  (setq python-indent-offset 4)
   :hook ((python-ts-mode . eglot-ensure)
          (python-ts-mode . pyvenv-mode)
          (python-ts-mode . flycheck-mode))
