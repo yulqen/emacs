@@ -1,8 +1,9 @@
 ;;; -*- lisp-data -*-
-(("/home/lemon/code/python/central_project_register/")
+(("/home/lemon/code/python/coreagenda-django/")
+ ("/home/lemon/code/python/alphabetlearning/")
+ ("/home/lemon/code/python/central_project_register/")
  ("/home/lemon/code/python/coreagenda/")
  ("/home/lemon/code/clojure/proxypox/")
- ("/home/lemon/code/python/alphabetlearning/")
  ("/home/lemon/code/html/yulqen.org/")
  ("/home/lemon/code/clojure/DED/") ("/home/lemon/Documents/denote/")
  ("/home/lemon/Documents/org/") ("/home/lemon/Documents/Notes/")

@@ -297,6 +297,8 @@ https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-o
   "Face used to highlight radcal entries in agenda view.
 https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-org-mode-agenda-depending-on-keyword-tag")
 
+(defface org-agenda-radbox-work-highlight-face `((t :foreground "DarkOrange")) "Colour for work stuff.")
+
 (defun org-agenda-highlight-radcal-entries ()
   "Highlight calendar items in agenda."
   (let ((inhibit-read-only t))
@@ -313,6 +315,8 @@ https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-o
               (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-alt-highlight-face))
             (when (re-search-forward "radcal_coding" line-end t)
               (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-coding-highlight-face))
+            (when (re-search-forward "radbox_work" line-end t)
+              (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radbox-work-highlight-face))
             (when (re-search-forward "radbox_coding" line-end t)
               (font-lock-prepend-text-property line-begin line-end 'face 'org-agenda-radcal-coding-highlight-face))
             (when (re-search-forward "radcal" line-end t)
