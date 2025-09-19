@@ -21,9 +21,10 @@
 
 ;; (ef-themes-select 'ef-deuteranopia-dark)
 
-;; (use-package gruber-darker-theme
-;;  :ensure t)
-;; (use-package borland-blue-theme
+(use-package gruber-darker-theme
+  :ensure t)
+(load-theme 'gruber-darker t)
+;;(use-package borland-blue-theme
 ;;   :ensure t)
 ;; (use-package autumn-light-theme
 ;;   :ensure t)
@@ -36,6 +37,6 @@
   (setq doric-themes-to-toggle '(doric-marble doric-dark))
   (setq doric-themes-to-rotate doric-themes-collection))
 
-(doric-themes-select 'doric-plum)
+;(doric-themes-select 'doric-plum)
 
 (provide 'theme-config)

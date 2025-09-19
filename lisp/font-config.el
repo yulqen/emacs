@@ -1,6 +1,6 @@
-(set-face-attribute 'default nil :family "Aporetic Sans Mono" :height 180)
-(set-face-attribute 'variable-pitch nil :family "Aporetic Sans" :height 1.0)
-(set-face-attribute 'fixed-pitch nil :family "Aporetic Sans Mono" :height 1.0)
+(set-face-attribute 'default nil :family "Iosevka Nerd Font Mono" :height 200)
+(set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font Mono" :height 1.0)
+(set-face-attribute 'fixed-pitch nil :family "Iosevka Nerd Font Mono" :height 1.0)
 
 (setq fontaine-latest-state-file
     (locate-user-emacs-file "fontaine-latest-state.eld"))

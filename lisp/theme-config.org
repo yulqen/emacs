@@ -55,13 +55,12 @@ Comment this out if you don't want a ef-theme to be loaded.
   ;; (ef-themes-select 'ef-deuteranopia-dark)
 #+end_src
 
-
-
 * other themes
 #+begin_src elisp :tangle yes
-  ;; (use-package gruber-darker-theme
-  ;;  :ensure t)
-  ;; (use-package borland-blue-theme
+  (use-package gruber-darker-theme
+    :ensure t)
+  (load-theme 'gruber-darker t)
+  ;;(use-package borland-blue-theme
   ;;   :ensure t)
   ;; (use-package autumn-light-theme
   ;;   :ensure t)
@@ -86,7 +85,7 @@ We set it here first off
 * doric-themes - select theme
 
 #+begin_src elisp :tangle yes
-  (doric-themes-select 'doric-plum)
+  ;(doric-themes-select 'doric-plum)
 #+end_src
 
 * provide
