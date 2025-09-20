@@ -5,6 +5,7 @@
         (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "v0.20.1" "src"))
         (json . ("https://github.com/tree-sitter/tree-sitter-json" "v0.20.2"))
         (markdown . ("https://github.com/ikatyang/tree-sitter-markdown" "v0.7.1"))
+	(clojure . ("https://github.com/sogaiu/tree-sitter-clojure" "v0.0.13"))
         (python . ("https://github.com/tree-sitter/tree-sitter-python" "v0.20.4"))
         (rust . ("https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2"))
         (toml . ("https://github.com/tree-sitter/tree-sitter-toml" "v0.5.1"))
@@ -20,6 +21,7 @@
         '((bash . ("https://github.com/tree-sitter/tree-sitter-bash"))
           (css . ("https://github.com/tree-sitter/tree-sitter-css"))
           (go . ("https://github.com/tree-sitter/tree-sitter-go"))
+	  (clojure . ("https://github.com/sogaiu/tree-sitter-clojure"))  	  
           (html . ("https://github.com/tree-sitter/tree-sitter-html"))
           (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
           (json . ("https://github.com/tree-sitter/tree-sitter-json"))
@@ -31,9 +33,10 @@
           (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"))))
   :hook
   ;; Use the modern *-ts-mode for languages that have it
-  ((js-mode . js-ts-mode)
-   (typescript-mode . typescript-ts-mode)
-   (python-mode . python-ts-mode)))
+ ((js-mode . js-ts-mode)
+  (typescript-mode . typescript-ts-mode)
+  (python-mode . python-ts-mode)
+  (clojure-mode . clojure-ts-mode)))
 
 (use-package simpc-mode
   :ensure nil
@@ -68,8 +71,8 @@
   :mode ("\\.py\\'" . python-ts-mode)
   :config
   (setq-default indent-tabs-mode t)
-	    (setq-default tab-width 4)
-	    (setq-default py-indent-tabs-mode t)
+		    (setq-default tab-width 4)
+		    (setq-default py-indent-tabs-mode t)
   (setq python-indent-offset 4)
   :hook ((python-ts-mode . eglot-ensure)
          (python-ts-mode . pyvenv-mode)

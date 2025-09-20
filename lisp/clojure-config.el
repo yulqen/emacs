@@ -19,7 +19,9 @@
 (use-package clojure-mode
 :ensure t
 :hook ((clojure-mode . eglot-ensure)
-       (clojure-mode . paredit-mode)))
+       (clojure-mode . paredit-mode))
+:config
+(set-face-attribute 'clojure-ts-keyword-face nil :slant 'italic))
 
 (use-package flycheck-clj-kondo
 :ensure t

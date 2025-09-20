@@ -4,7 +4,6 @@
 (set-face-attribute 'italic nil :family "Iosevka Nerd Font Mono" :height 1.0)
 (set-face-attribute 'org-block-begin-line nil :slant 'italic :background "#222222" :foreground "#949494")
 (set-face-attribute 'org-level-1 nil :slant 'italic :underline t :height 1.1)
-(set-face-attribute 'clojure-keyword-face nil :slant 'italic)
 
 (setq fontaine-latest-state-file
     (locate-user-emacs-file "fontaine-latest-state.eld"))

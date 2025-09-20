@@ -24,10 +24,12 @@ This package is the best interactive environment for clojure development in the 
 * clojure-mode settings
 
 #+begin_src elisp :tangle yes
-  (use-package clojure-mode
-  :ensure t
-  :hook ((clojure-mode . eglot-ensure)
-         (clojure-mode . paredit-mode)))
+      (use-package clojure-mode
+      :ensure t
+      :hook ((clojure-mode . eglot-ensure)
+             (clojure-mode . paredit-mode))
+      :config
+      (set-face-attribute 'clojure-ts-keyword-face nil :slant 'italic))
 #+end_src
 
 * flycheck kondo and parseedn
