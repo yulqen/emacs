@@ -43,6 +43,16 @@ Fuck knows why everyone goes on about it likes....
     (python-mode . python-ts-mode)
     (clojure-mode . clojure-ts-mode)))
 #+end_src
+* github copilot
+#+begin_src elisp :tangle yes
+(use-package copilot
+  :vc (:url "https://github.com/copilot-emacs/copilot.el"
+            :rev :newest
+            :branch "main")
+  :hook ((prog-mode . copilot-mode))
+  :bind (:map copilot-completion-map
+			  ("<tab>" . copilot-accept-completion)))
+#+end_src
 * simplec from tsoding
 
 #+begin_src elisp :tangle yes
@@ -162,7 +172,6 @@ Switches on environment variables if you have a .envrc file.
            ("\\.markdown\\'" . markdown-mode))
     :init (setq markdown-command "multimarkdown"))
 #+end_src
-
 * provide
 #+begin_src elisp :tangle yes
   (provide 'programming-generic)

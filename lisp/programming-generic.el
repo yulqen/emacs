@@ -38,6 +38,14 @@
   (python-mode . python-ts-mode)
   (clojure-mode . clojure-ts-mode)))
 
+(use-package copilot
+  :vc (:url "https://github.com/copilot-emacs/copilot.el"
+            :rev :newest
+            :branch "main")
+  :hook ((prog-mode . copilot-mode))
+  :bind (:map copilot-completion-map
+			  ("<tab>" . copilot-accept-completion)))
+
 (use-package simpc-mode
   :ensure nil
   :load-path "lisp/"
