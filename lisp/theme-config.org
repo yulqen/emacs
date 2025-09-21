@@ -52,14 +52,14 @@ Disable all other themes to avoid awkward blending:
 Comment this out if you don't want a ef-theme to be loaded.
 
 #+begin_src elisp :tangle yes
-  ;; (ef-themes-select 'ef-deuteranopia-dark)
+  (ef-themes-select 'ef-duo-dark)
 #+end_src
 
 * other themes
 #+begin_src elisp :tangle yes
-  (use-package gruber-darker-theme
-    :ensure t)
-  (load-theme 'gruber-darker t)
+  ;;(use-package gruber-darker-theme
+  ;;  :ensure t)
+  ;;(load-theme 'gruber-darker t)
   ;;(use-package borland-blue-theme
   ;;   :ensure t)
   ;; (use-package autumn-light-theme

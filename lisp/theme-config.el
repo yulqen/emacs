@@ -19,11 +19,11 @@
 
 (mapc #'disable-theme custom-enabled-themes)
 
-;; (ef-themes-select 'ef-deuteranopia-dark)
+(ef-themes-select 'ef-duo-dark)
 
-(use-package gruber-darker-theme
-  :ensure t)
-(load-theme 'gruber-darker t)
+;;(use-package gruber-darker-theme
+;;  :ensure t)
+;;(load-theme 'gruber-darker t)
 ;;(use-package borland-blue-theme
 ;;   :ensure t)
 ;; (use-package autumn-light-theme
