@@ -15,28 +15,12 @@
 
 (use-package treesit
   :ensure nil
-  :config
-  ;; This is the correct format: (LANG . (URL [REVISION] [SUBDIR]))
-  (setq treesit-language-source-alist
-        '((bash . ("https://github.com/tree-sitter/tree-sitter-bash"))
-          (css . ("https://github.com/tree-sitter/tree-sitter-css"))
-          (go . ("https://github.com/tree-sitter/tree-sitter-go"))
-	  (clojure . ("https://github.com/sogaiu/tree-sitter-clojure"))  	  
-          (html . ("https://github.com/tree-sitter/tree-sitter-html"))
-          (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
-          (json . ("https://github.com/tree-sitter/tree-sitter-json"))
-          (python . ("https://github.com/tree-sitter/tree-sitter-python"))
-          (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
-          (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
-          (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
-          (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
-          (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"))))
   :hook
   ;; Use the modern *-ts-mode for languages that have it
- ((js-mode . js-ts-mode)
-  (typescript-mode . typescript-ts-mode)
-  (python-mode . python-ts-mode)
-  (clojure-mode . clojure-ts-mode)))
+  ((js-mode . js-ts-mode)
+   (typescript-mode . typescript-ts-mode)
+   (python-mode . python-ts-mode)
+   (clojure-mode . clojure-ts-mode)))
 
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el"
@@ -76,7 +60,7 @@
 
 (use-package python
   :ensure nil ;; this is built in but we configure it here
-  :mode ("\\.py\\'" . python-ts-mode)
+  :mode ("\\.py\\'" . python-mode)
   :config
   (setq-default indent-tabs-mode t)
 		    (setq-default tab-width 4)
