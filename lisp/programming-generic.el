@@ -5,7 +5,7 @@
         (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "v0.20.1" "src"))
         (json . ("https://github.com/tree-sitter/tree-sitter-json" "v0.20.2"))
         (markdown . ("https://github.com/ikatyang/tree-sitter-markdown" "v0.7.1"))
-	(clojure . ("https://github.com/sogaiu/tree-sitter-clojure" "v0.0.13"))
+		(clojure . ("https://github.com/sogaiu/tree-sitter-clojure" "v0.0.13"))
         (python . ("https://github.com/tree-sitter/tree-sitter-python" "v0.20.4"))
         (rust . ("https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2"))
         (toml . ("https://github.com/tree-sitter/tree-sitter-toml" "v0.5.1"))
@@ -28,7 +28,10 @@
             :branch "main")
   :hook ((prog-mode . copilot-mode))
   :bind (:map copilot-completion-map
-			  ("<tab>" . copilot-accept-completion)))
+			  ("<tab>" . copilot-accept-completion))
+  :config
+  ;; silence indentation warnings
+  (add-to-list 'warning-suppress-types '(copilot)))
 
 (use-package simpc-mode
   :ensure nil
@@ -60,7 +63,7 @@
 
 (use-package python
   :ensure nil ;; this is built in but we configure it here
-  :mode ("\\.py\\'" . python-mode)
+  :mode ("\\.py\\'" . python-ts-mode)
   :config
   (setq-default indent-tabs-mode t)
 		    (setq-default tab-width 4)

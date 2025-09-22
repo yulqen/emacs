@@ -29,13 +29,16 @@ Fuck knows why everyone goes on about it likes....
 #+end_src
 * github copilot
 #+begin_src elisp :tangle yes
-(use-package copilot
-  :vc (:url "https://github.com/copilot-emacs/copilot.el"
-            :rev :newest
-            :branch "main")
-  :hook ((prog-mode . copilot-mode))
-  :bind (:map copilot-completion-map
-			  ("<tab>" . copilot-accept-completion)))
+  (use-package copilot
+    :vc (:url "https://github.com/copilot-emacs/copilot.el"
+              :rev :newest
+              :branch "main")
+    :hook ((prog-mode . copilot-mode))
+    :bind (:map copilot-completion-map
+  			  ("<tab>" . copilot-accept-completion))
+    :config
+    ;; silence indentation warnings
+    (add-to-list 'warning-suppress-types '(copilot)))
 #+end_src
 * simplec from tsoding
 
