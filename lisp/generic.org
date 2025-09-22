@@ -90,6 +90,17 @@ Lots of odds and ends here. This is where they end up.
 * set PATH
 We need this for doing stuff in compile buffers, etc
 
+Trying with this new config, using a package to sync the PATH:
+
+#+begin_src elisp :tangle yes
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (exec-path-from-shell-initialize))
+#+end_src
+
+This was what I previously had. But not sure it worked with fish and it is much more of a hack, by the looks of it:
+
 #+begin_src elisp :tangle yes
   ;; (defun set-exec-path-from-shell-PATH ()
   ;;   "Set up Emacs' `exec-path' and PATH environment variable to match

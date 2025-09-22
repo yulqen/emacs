@@ -83,6 +83,11 @@
 (setq calendar-longitude -2.01)
 (setq calendar-location-name "Berwick-upon-Tweed")
 
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
+
 ;; (defun set-exec-path-from-shell-PATH ()
 ;;   "Set up Emacs' `exec-path' and PATH environment variable to match
 ;; that used by the user's shell.
