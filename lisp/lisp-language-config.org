@@ -1,22 +1,3 @@
-* clojure-mode settings
-
-#+begin_src elisp :tangle yes
-  (use-package clojure-mode
-  :ensure t
-  :hook ((clojure-mode . eglot-ensure)
-         (clojure-mode . paredit-mode)))
-#+end_src
-
-* flycheck kondo and parseedn
-
-#+begin_src elisp :tangle yes
-  (use-package flycheck-clj-kondo
-  :ensure t
-  :hook (clojure-mode . flycheck-mode))
-
-  (use-package parseedn)
-#+end_src
-
 * paredit
 
 #+begin_src elisp :tangle yes
@@ -77,12 +58,6 @@
   (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
   (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
   )
-#+end_src
-
-* clojure snippets
-
-#+begin_src elisp :tangle yes
-  (use-package clojure-snippets)
 #+end_src
 
 * provide

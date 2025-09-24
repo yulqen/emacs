@@ -16,34 +16,24 @@
 (setq cider-repl-display-help-banner nil)
 )
 
-(use-package clojure-mode
-:ensure t
-:hook ((clojure-mode . eglot-ensure)
-       (clojure-mode . paredit-mode))
-:config
-(set-face-attribute 'clojure-ts-keyword-face nil :slant 'italic))
+(use-package clojure-ts-mode
+  :ensure t
+  ;; These hooks activate for any Clojure file you open
+  :hook ((clojure-ts-mode . eglot-ensure)
+         (clojure-ts-mode . paredit-mode)
+         (clojure-ts-mode . flycheck-mode))
+  :config
+  ;; This ensures .clj files always open in tree-sitter mode
+  (add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode)))
+
+(add-hook 'clojure-ts-mode-hook
+          (lambda ()
+            (set-face-attribute 'clojure-ts-keyword-face nil :slant 'italic)))
 
 (use-package flycheck-clj-kondo
-:ensure t
-:hook (clojure-mode . flycheck-mode))
+:ensure t)
 
-(use-package parseedn)
+(use-package parseedn :ensure t)
+(use-package clojure-snippets :ensure t)
 
-(use-package paredit
-:hook
-(clojure-mode                     . paredit-mode) ; Clojure buffers
-(emacs-lisp-mode                  . paredit-mode) ; Elisp buffers.
-(lisp-mode                        . paredit-mode) ; Common Lisp buffers.
-(lisp-interaction-mode            . paredit-mode) ; Scratch buffers.
-(ielm-mode-hook                   . paredit-mode) ; ELM buffers.
-(eval-expression-minibuffer-setup . paredit-mode) ; Eval minibuffers.
-:bind
-(:map paredit-mode-map
-      ("<return>" . my/paredit-RET))
-:config
-(defun my/paredit-RET ()
-  "Wraps `paredit-RET' to provide a sensible minibuffer experience."
-  (interactive)
-  (if (minibufferp)
-      (read--expression-try-read)
-    (paredit-RET))))
+(provide 'clojure-config)

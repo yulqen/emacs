@@ -30,3 +30,4 @@
 (require 'org-core)
 (require 'email-calendar-rss)
 (require 'reformatting-text)
+(require 'clojure-config)

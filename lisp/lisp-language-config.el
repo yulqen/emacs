@@ -1,14 +1,3 @@
-(use-package clojure-mode
-:ensure t
-:hook ((clojure-mode . eglot-ensure)
-       (clojure-mode . paredit-mode)))
-
-(use-package flycheck-clj-kondo
-:ensure t
-:hook (clojure-mode . flycheck-mode))
-
-(use-package parseedn)
-
 (use-package paredit
 :hook
 (clojure-mode                     . paredit-mode) ; Clojure buffers
@@ -58,7 +47,5 @@
 (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
 )
-
-(use-package clojure-snippets)
 
 (provide 'lisp-language-config)

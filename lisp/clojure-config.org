@@ -21,48 +21,41 @@ This package is the best interactive environment for clojure development in the 
   (setq cider-repl-display-help-banner nil)
   )
 #+end_src
-* clojure-mode settings
+* clojure-ts-mode settings
 
 #+begin_src elisp :tangle yes
-      (use-package clojure-mode
-      :ensure t
-      :hook ((clojure-mode . eglot-ensure)
-             (clojure-mode . paredit-mode))
-      :config
-      (set-face-attribute 'clojure-ts-keyword-face nil :slant 'italic))
+  (use-package clojure-ts-mode
+    :ensure t
+    ;; These hooks activate for any Clojure file you open
+    :hook ((clojure-ts-mode . eglot-ensure)
+           (clojure-ts-mode . paredit-mode)
+           (clojure-ts-mode . flycheck-mode))
+    :config
+    ;; This ensures .clj files always open in tree-sitter mode
+    (add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode)))
 #+end_src
 
-* flycheck kondo and parseedn
+* face customisation
+
+#+begin_src elisp :tangle yes
+  (add-hook 'clojure-ts-mode-hook
+            (lambda ()
+              (set-face-attribute 'clojure-ts-keyword-face nil :slant 'italic)))
+#+end_src
+
+* linting
 
 #+begin_src elisp :tangle yes
   (use-package flycheck-clj-kondo
-  :ensure t
-  :hook (clojure-mode . flycheck-mode))
-
-  (use-package parseedn)
+  :ensure t)
 #+end_src
-
-* paredit - we'll put in there
-
+* utilities
 #+begin_src elisp :tangle yes
-  (use-package paredit
-  :hook
-  (clojure-mode                     . paredit-mode) ; Clojure buffers
-  (emacs-lisp-mode                  . paredit-mode) ; Elisp buffers.
-  (lisp-mode                        . paredit-mode) ; Common Lisp buffers.
-  (lisp-interaction-mode            . paredit-mode) ; Scratch buffers.
-  (ielm-mode-hook                   . paredit-mode) ; ELM buffers.
-  (eval-expression-minibuffer-setup . paredit-mode) ; Eval minibuffers.
-  :bind
-  (:map paredit-mode-map
-        ("<return>" . my/paredit-RET))
-  :config
-  (defun my/paredit-RET ()
-    "Wraps `paredit-RET' to provide a sensible minibuffer experience."
-    (interactive)
-    (if (minibufferp)
-        (read--expression-try-read)
-      (paredit-RET))))
+  (use-package parseedn :ensure t)
+  (use-package clojure-snippets :ensure t)
 #+end_src
-
+* provide
+#+begin_src elisp :tangle yes
+  (provide 'clojure-config)
+#+end_src
 
