@@ -106,6 +106,15 @@ Fuck knows why everyone goes on about it likes....
                 ("C-c t b" . mrl/run-python-tests-in-buffer)
                 ("C-c t f" . mrl/run-python-test-at-point)))
 #+end_src
+
+* italicise strings in python
+#+begin_src elisp :tangle yes
+  (add-hook 'python-ts-mode-hook
+            (lambda ()
+              (set-face-attribute 'font-lock-string-face nil :slant 'italic)))  
+#+end_src
+
+
 * pyvenv
 
 Set up the venv automatically for python projects.

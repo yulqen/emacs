@@ -85,6 +85,10 @@
               ("C-c t b" . mrl/run-python-tests-in-buffer)
               ("C-c t f" . mrl/run-python-test-at-point)))
 
+(add-hook 'python-ts-mode-hook
+          (lambda ()
+            (set-face-attribute 'font-lock-string-face nil :slant 'italic)))
+
 (use-package pyvenv
 :ensure t
 :hook (python-ts-mode . (lambda ()
