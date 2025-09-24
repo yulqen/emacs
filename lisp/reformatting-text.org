@@ -87,6 +87,6 @@ This is from https://sachachua.com/blog/2025/09/emacs-cycle-through-different-pa
 * provide
 
 #+begin_src elisp :tangle yes
-  (provide 'reforatting-text)
+  (provide 'reformatting-text)
 #+end_src
 

@@ -76,4 +76,4 @@ If a region is selected, handle all paragraphs within that region."
 
 (keymap-global-set "M-q" #'my-reformat-paragraph-or-region)
 
-(provide 'reforatting-text)
+(provide 'reformatting-text)
