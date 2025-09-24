@@ -29,3 +29,4 @@
 (require 'programming-generic)
 (require 'org-core)
 (require 'email-calendar-rss)
+(require 'reformatting-text)

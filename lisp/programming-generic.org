@@ -77,6 +77,16 @@ Fuck knows why everyone goes on about it likes....
     :config
     (setq emmet-move-cursor-between-quotes t))
 #+end_src
+* eglot
+#+begin_src elisp :tangle yes
+  (use-package eglot
+    :ensure t
+    :commands eglot-ensure
+    :config
+    (setq eglot-extend-to-xref t)
+    (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :inlayHintProvider)))
+#+end_src
+
 * python
 #+begin_src elisp :tangle yes
   (use-package python

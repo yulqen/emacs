@@ -61,6 +61,13 @@
   :config
   (setq emmet-move-cursor-between-quotes t))
 
+(use-package eglot
+  :ensure t
+  :commands eglot-ensure
+  :config
+  (setq eglot-extend-to-xref t)
+  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :inlayHintProvider)))
+
 (use-package python
   :ensure nil ;; this is built in but we configure it here
   :mode ("\\.py\\'" . python-ts-mode)
