@@ -49,6 +49,7 @@ Subscribe to your feeds here.
     (setq elfeed-feeds
           '(("https://joeyh.name/blog/index.rss" debian linux)
             ("https://lukesmith.xyz/rss.xml" linux)
+  		  ("https://corfield.org/atom.xml" clojure)
             ("https://www.tumfatig.net/index.xml" bsd)
             ("https://discoverbsd.com/feeds/posts/default" bsd)
             ("https://planet.debian.org/rss20.xml" debian)
