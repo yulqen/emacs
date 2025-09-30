@@ -114,7 +114,6 @@ Fuck knows why everyone goes on about it likes....
               (set-face-attribute 'font-lock-string-face nil :slant 'italic)))  
 #+end_src
 
-
 * pyvenv
 
 Set up the venv automatically for python projects.
