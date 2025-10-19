@@ -181,4 +181,22 @@ Switches on environment variables if you have a .envrc file.
 #+begin_src elisp :tangle yes
   (provide 'programming-generic)
 #+end_src
+* shell-maker, acp and  agent-shell
+These support packages are apparently required to enable agent-shell (see https://github.com/xenodium/agent-shell). The ~acp~ package is not yet on MELPA apaprently.
+
+I have this configured for Gemini CLI, as that is what I will probably use most. I am using the default Google account authorisation at this point but I could switch to the API key with a different setting - see https://github.com/xenodium/agent-shell#google-gemini. You get a decent quote of requests with the default set-up however: https://cloud.google.com/gemini/docs/quotas.
+
+#+begin_src elisp :tangle yes
+  (use-package shell-maker
+    :ensure t)
+
+  (use-package acp
+    :vc (:url "https://github.com/xenodium/acp.el"))
+
+  (use-package agent-shell
+    :vc (:url "https://github.com/xenodium/agent-shell"))
+
+  (setq agent-shell-google-authentication
+      (agent-shell-google-make-authentication :login t))
+#+end_src
 
