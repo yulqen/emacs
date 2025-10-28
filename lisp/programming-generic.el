@@ -132,11 +132,17 @@
 (use-package shell-maker
   :ensure t)
 
-(use-package acp
-  :vc (:url "https://github.com/xenodium/acp.el"))
+;; (use-package acp
+;;   :vc (:url "https://github.com/xenodium/acp.el"))
+
+(add-to-list 'load-path "/home/lemon/.emacs.d/lisp/acp.el/")
+(require 'acp)
 
 (use-package agent-shell
   :vc (:url "https://github.com/xenodium/agent-shell"))
 
 (setq agent-shell-google-authentication
-    (agent-shell-google-make-authentication :login t))
+      (agent-shell-google-make-authentication :login t))
+
+(setq agent-shell-openai-authentication
+    (agent-shell-openai-make-authentication :login t))
