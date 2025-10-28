@@ -141,8 +141,18 @@
 (use-package agent-shell
   :vc (:url "https://github.com/xenodium/agent-shell"))
 
+;; (setq agent-shell-google-authentication
+;;       (agent-shell-google-make-authentication :login t))
+
 (setq agent-shell-google-authentication
-      (agent-shell-google-make-authentication :login t))
+      (agent-shell-google-make-authentication
+       :api-key (lambda () (auth-source-pass-get "gemini-key" "google_api_key"))))
+
+;; With function
+(setq agent-shell-anthropic-authentication
+      (agent-shell-anthropic-make-authentication
+       :api-key (lambda () (auth-source-pass-get "api-key" "anthropic_api_key"))))
+
 
 (setq agent-shell-openai-authentication
-    (agent-shell-openai-make-authentication :login t))
+      (agent-shell-openai-make-authentication :login t))
