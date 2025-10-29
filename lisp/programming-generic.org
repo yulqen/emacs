@@ -85,8 +85,18 @@ Fuck knows why everyone goes on about it likes....
     :config
     (setq eglot-extend-to-xref t)
     (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :inlayHintProvider)))
-#+end_src
 
+  ;; according to https://chatgpt.com/c/690268d4-4d1c-832e-9dcf-37950ba372c2  
+  (add-hook 'eglot-managed-mode-hook #'flymake-mode)
+
+  (with-eval-after-load 'eglot
+    ;; Ensure Flycheck is out of the way if it happens to be on
+    (add-hook 'eglot-managed-mode-hook
+              (lambda ()
+                (when (bound-and-true-p flycheck-mode) (flycheck-mode -1))
+                (flymake-mode 1))))
+
+#+end_src
 * python
 #+begin_src elisp :tangle yes
   (use-package python
@@ -226,7 +236,6 @@ Fuck knows why everyone goes on about it likes....
       (define-key go-ts-mode-map (kbd "C-c t f") #'mrl/go-test-func)
       (define-key go-ts-mode-map (kbd "C-c b")   #'mrl/go-build)))
 #+end_src
-
 
 * italicise strings in python
 #+begin_src elisp :tangle yes

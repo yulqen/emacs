@@ -68,6 +68,16 @@
   (setq eglot-extend-to-xref t)
   (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :inlayHintProvider)))
 
+;; according to https://chatgpt.com/c/690268d4-4d1c-832e-9dcf-37950ba372c2  
+(add-hook 'eglot-managed-mode-hook #'flymake-mode)
+
+(with-eval-after-load 'eglot
+  ;; Ensure Flycheck is out of the way if it happens to be on
+  (add-hook 'eglot-managed-mode-hook
+            (lambda ()
+              (when (bound-and-true-p flycheck-mode) (flycheck-mode -1))
+              (flymake-mode 1))))
+
 (use-package python
   :ensure nil ;; this is built in but we configure it here
   :mode ("\\.py\\'" . python-ts-mode)

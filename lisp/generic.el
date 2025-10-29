@@ -108,16 +108,25 @@
 (setq recentf-max-saved-items 25)
 (global-set-key (kbd "C-x C-r") 'recentf-open-files)
 
+;; (use-package flycheck
+;; :ensure t
+;; :hook (prog-mode . flycheck-mode)
+;; :config
+;; (setq flycheck-global-modes '(not org-mode))
+;; (flycheck-add-mode 'javascript-eslint 'web-mode)
+;; (flycheck-add-mode 'javascript-eslint 'js-ts-mode))
+
 (use-package flycheck
-:ensure t
-:hook (prog-mode . flycheck-mode)
-:config
-(setq flycheck-global-modes '(not org-mode))
-(flycheck-add-mode 'javascript-eslint 'web-mode)
-(flycheck-add-mode 'javascript-eslint 'js-ts-mode))
+  :ensure t
+  :disabled t)
 
 (use-package flycheck-clj-kondo
-  :hook (after-init . global-flycheck-mode))
+  :ensure t
+  :disabled t
+
+  ;; (use-package
+  ;; flycheck-clj-kondo
+  ;; :hook (after-init . global-flycheck-mode))
 
 (use-package magit
 :ensure t
@@ -204,30 +213,30 @@
 
 (setq browse-url-browser-function 'eww-browse-url)
 
-(use-package corfu
-:ensure t
-;; Optional customizations
-;; :custom
-;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-;; (corfu-preview-current nil)    ;; Disable current candidate preview
-;; (corfu-preselect 'prompt)      ;; Preselect the prompt
-;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+;; (use-package corfu
+;; :ensure t
+;; ;; Optional customizations
+;; ;; :custom
+;; ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+;; ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+;; ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+;; ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+;; ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+;; ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
 
-;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
-:hook ((prog-mode . corfu-mode)
-       (shell-mode . corfu-mode)
-       (eshell-mode . corfu-mode))
-:init
-;; Recommended: Enable Corfu globally.  Recommended since many modes provide
-;; Capfs and Dabbrev can be used globally (M-/).  See also the customization
-;; variable `global-corfu-modes' to exclude certain modes.
-(global-corfu-mode)
-;; Enable optional extension modes:
-;; (corfu-history-mode)
-;; (corfu-popupinfo-mode)
-)
+;; ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
+;; :hook ((prog-mode . corfu-mode)
+;;        (shell-mode . corfu-mode)
+;;        (eshell-mode . corfu-mode))
+;; :init
+;; ;; Recommended: Enable Corfu globally.  Recommended since many modes provide
+;; ;; Capfs and Dabbrev can be used globally (M-/).  See also the customization
+;; ;; variable `global-corfu-modes' to exclude certain modes.
+;; (global-corfu-mode)
+;; ;; Enable optional extension modes:
+;; ;; (corfu-history-mode)
+;; ;; (corfu-popupinfo-mode)
+;; )
 
 (use-package beacon
 :ensure t
@@ -239,16 +248,15 @@
   (diminish 'which-key-mode)
   (diminish 'beacon-mode))
 
+;; For revision see https://chatgpt.com/c/690268d4-4d1c-832e-9dcf-37950ba372c2
 (use-package company
   :ensure t
   :hook (prog-mode . company-mode)
   :config
+  (setq company-backends '(company-capf))
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 2
         company-show-numbers t
-        company-dabbrev-downcase nil
-        company-dabbrev-ignore-case nil
-        company-dabbrev-code-ignore-case nil
         company-global-modes '(not org-mode)))
 
 (with-eval-after-load 'completion-preview
@@ -268,7 +276,7 @@
   (keymap-set completion-preview-active-mode-map "M-n" #'completion-preview-next-candidate)
   (keymap-set completion-preview-active-mode-map "M-p" #'completion-preview-prev-candidate)
   ;; Convenient alternative to C-i after typing one of the above
-)
+  )
 
 (use-package ibuffer :ensure nil
   :config
