@@ -18,6 +18,13 @@ Fuck knows why everyone goes on about it likes....
           (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "typescript/src"))
           (yaml . ("https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0"))))
 
+  ;; not bothered about these for now - throwing version mismatches
+  ;; (setq treesit-language-source-alist
+  ;;     (append
+  ;;      '((gomod  . ("https://github.com/camdencheek/tree-sitter-go-mod"))
+  ;;        (gowork . ("https://github.com/omertuc/tree-sitter-go-work")))
+  ;;      treesit-language-source-alist))
+
   (use-package treesit
     :ensure nil
     :hook
@@ -27,18 +34,23 @@ Fuck knows why everyone goes on about it likes....
      (python-mode . python-ts-mode)
      (clojure-mode . clojure-ts-mode)))
 #+end_src
-* github copilot
+* copilot
 #+begin_src elisp :tangle yes
   (use-package copilot
-    :vc (:url "https://github.com/copilot-emacs/copilot.el"
-              :rev :newest
-              :branch "main")
-    :hook ((prog-mode . copilot-mode))
+    :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
+    :commands (copilot-mode)
     :bind (:map copilot-completion-map
-  			  ("<tab>" . copilot-accept-completion))
-    :config
-    ;; silence indentation warnings
-    (add-to-list 'warning-suppress-types '(copilot)))
+                ("<tab>" . copilot-accept-completion)))
+  :config
+  (add-hook 'go-mode-hook
+  		  (lambda ()
+              (setq-local indent-tabs-mode t
+                          tab-width 8)))
+  (when (fboundp 'go-ts-mode)
+    (add-hook 'go-ts-mode-hook
+              (lambda ()
+  			  (setq-local indent-tabs-mode t
+  						  tab-width 8))))
 #+end_src
 * simplec from tsoding
 
@@ -119,62 +131,63 @@ Fuck knows why everyone goes on about it likes....
 
 * go config
 #+begin_src elisp :tangle yes
-  ;;;; Go (Tree-sitter + Eglot)
-
-  ;; obtained this config straight from ChatGPT: https://chatgpt.com/c/690268d4-4d1c-832e-9dcf-37950ba372c2
+  ;;;; Go (Tree-sitter + Eglot + Company + Flymake)
 
   ;; Prefer go-ts-mode if your Emacs has it; otherwise use go-mode from MELPA.
-  ;; We declare both so Eglot hooks work either way.
   (with-eval-after-load 'treesit
     (when (fboundp 'go-ts-mode)
       (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))))
 
-  ;; If you need fallback major mode:
+  ;; Fallback major mode (if tree-sitter unavailable)
   (use-package go-mode
     :ensure t
     :defer t)
 
-  ;; Tell Eglot how to start gopls and tune it a bit
+  ;; Eglot ↔ gopls wiring and tuning
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs '((go-mode go-ts-mode) . ("gopls")))
     (setq-default eglot-workspace-configuration
                   '((gopls
                      . ((ui.completion.usePlaceholders . t)
                         (gofumpt . t)               ; use gofumpt style
-                        (staticcheck . t)           ; more diagnostics
+                        (staticcheck . t)           ; extra diagnostics
                         (analyses . ((unusedparams . t)
                                      (unreachable . t)))
                         (directoryFilters . ["-node_modules" "-.git"]))))))
 
   (defun mrl/go--format+imports ()
-    "Format buffer and organize imports with gopls (Eglot)."
-    (when (and (boundp 'eglot-managed-p) eglot-managed-p)
+    "Format buffer and organize imports via gopls (Eglot)."
+    (when (eglot-current-server)
       (eglot-format-buffer)
-      ;; organize imports: run synchronously and silently
-      (eglot-code-actions nil nil "source.organizeImports" t)))
+      ;; Apply organizeImports to whole buffer; ignore if not available.
+      (ignore-errors
+        (eglot-code-actions (point-min) (point-max)
+                            "source.organizeImports" t))))
 
   (defun mrl/go--setup ()
-    ;; Use Eglot
+    "Setup Go buffers: Eglot, Flymake, Company, save-hooks, indentation."
     (eglot-ensure)
-    ;; Avoid Flycheck vs Flymake duplication (Eglot uses Flymake)
-    (when (bound-and-true-p flycheck-mode)
-      (flycheck-mode -1))
-    ;; If you want to avoid duplicate candidates (you currently enable both company & corfu)
-    ;; Pick one. Example: disable company in Go buffers:
-    (when (bound-and-true-p company-mode)
-      (company-mode -1))
-    ;; Save-hooks
-    (add-hook 'before-save-hook #'mrl/go--format+imports nil t)
-    ;; Nice to have: tab settings to match gofmt style
+    ;; Prefer Flymake (Eglot) not Flycheck.
+    (when (bound-and-true-p flycheck-mode) (flycheck-mode -1))
+    (flymake-mode 1)
+    ;; Company as the completion UI (CAPF → Eglot).
+    (setq-local company-backends '(company-capf))
+    (company-mode 1)
+    ;; Go indentation (what gofmt/gofumpt expect).
     (setq-local indent-tabs-mode t
-                tab-width 8))
+                tab-width 8)
+    ;; Format + organize imports on save (buffer-local).
+    (add-hook 'before-save-hook #'mrl/go--format+imports nil t))
 
-  ;; Hooks for both modes
+  ;; Hooks for both go-mode and go-ts-mode
   (add-hook 'go-mode-hook #'mrl/go--setup)
   (when (fboundp 'go-ts-mode)
     (add-hook 'go-ts-mode-hook #'mrl/go--setup))
 
-  ;; Simple compile helpers for Go
+  ;; --------
+  ;; Simple compile/test helpers
+  ;; --------
+
   (defun mrl/go-project-root ()
     (or (when-let ((p (project-current))) (project-root p))
         (locate-dominating-file default-directory "go.mod")
@@ -197,14 +210,13 @@ Fuck knows why everyone goes on about it likes....
   (defun mrl/go-test-pkg ()
     "go test in the current buffer's directory (package)."
     (interactive)
-    (let* ((bufdir (file-name-directory (or (buffer-file-name) default-directory))))
+    (let ((bufdir (file-name-directory (or (buffer-file-name) default-directory))))
       (mrl/go--compile-in bufdir "go test")))
 
   (defun mrl/go-test-func ()
-    "Run go test for the test function at point using -run."
+    "Run go test for the Test* function at point using -run."
     (interactive)
     (let* ((name (or
-                  ;; Prefer Tree-sitter function name if available
                   (when (fboundp 'treesit-node-at)
                     (let* ((node (treesit-node-at (point)))
                            (def (and node (treesit-parent-until
@@ -215,19 +227,18 @@ Fuck knows why everyone goes on about it likes....
                                          (or (treesit-node-child-by-field-name def "name")
                                              def)))))
                       nm))
-                  ;; fallback: symbol-at-point
                   (thing-at-point 'symbol t))))
       (unless (and name (string-match-p "^Test" name))
         (user-error "Point is not inside a Test* function (got: %s)" (or name "nil")))
       (let ((bufdir (file-name-directory (or (buffer-file-name) default-directory))))
         (mrl/go--compile-in bufdir (format "go test -run '^%s$'" name)))))
 
-  ;; Keybindings (mirror your Python test bindings style)
+  ;; Keybindings (same style as your Python helpers)
   (with-eval-after-load 'go-mode
-    (define-key go-mode-map (kbd "C-c t p") #'mrl/go-test-pkg)
-    (define-key go-mode-map (kbd "C-c t a") #'mrl/go-test-all)
-    (define-key go-mode-map (kbd "C-c t f") #'mrl/go-test-func)
-    (define-key go-mode-map (kbd "C-c b")   #'mrl/go-build))
+    (define-key go-mode-map   (kbd "C-c t p") #'mrl/go-test-pkg)
+    (define-key go-mode-map   (kbd "C-c t a") #'mrl/go-test-all)
+    (define-key go-mode-map   (kbd "C-c t f") #'mrl/go-test-func)
+    (define-key go-mode-map   (kbd "C-c b")   #'mrl/go-build))
 
   (when (fboundp 'go-ts-mode)
     (with-eval-after-load 'go-ts-mode

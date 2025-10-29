@@ -259,6 +259,11 @@
         company-show-numbers t
         company-global-modes '(not org-mode)))
 
+(with-eval-after-load 'company
+  (setq company-backends '(company-capf))
+  ;; Optional: TAB triggers completion at point in prog buffers
+  (define-key prog-mode-map (kbd "TAB") #'completion-at-point))
+
 (with-eval-after-load 'completion-preview
   ;; Show the preview already after two symbol characters
   (setq completion-preview-minimum-symbol-length 2)
