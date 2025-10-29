@@ -122,7 +122,7 @@
 
 (use-package flycheck-clj-kondo
   :ensure t
-  :disabled t
+  :disabled t)
 
   ;; (use-package
   ;; flycheck-clj-kondo

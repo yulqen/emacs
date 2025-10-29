@@ -145,7 +145,7 @@ See https://chatgpt.com/c/690268d4-4d1c-832e-9dcf-37950ba372c2 for reasons for t
 
   (use-package flycheck-clj-kondo
     :ensure t
-    :disabled t
+    :disabled t)
 
     ;; (use-package
     ;; flycheck-clj-kondo
