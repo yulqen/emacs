@@ -180,7 +180,7 @@
 
 (use-package ansi-color
   :hook ((compilation-filter . ansi-color-compilation-filter)
-         (shell-mode-hook . ansi-color-for-comint-mode)))
+         (shell-mode . ansi-color-for-comint-mode)))
 (add-hook 'async-shell-command-after-hook 'ansi-color-for-comint-mode)
 
 (use-package undo-tree
