@@ -85,6 +85,123 @@
               ("C-c t b" . mrl/run-python-tests-in-buffer)
               ("C-c t f" . mrl/run-python-test-at-point)))
 
+;;;; Go (Tree-sitter + Eglot)
+
+;; obtained this config straight from ChatGPT: https://chatgpt.com/c/690268d4-4d1c-832e-9dcf-37950ba372c2
+
+;; Prefer go-ts-mode if your Emacs has it; otherwise use go-mode from MELPA.
+;; We declare both so Eglot hooks work either way.
+(with-eval-after-load 'treesit
+  (when (fboundp 'go-ts-mode)
+    (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))))
+
+;; If you need fallback major mode:
+(use-package go-mode
+  :ensure t
+  :defer t)
+
+;; Tell Eglot how to start gopls and tune it a bit
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs '((go-mode go-ts-mode) . ("gopls")))
+  (setq-default eglot-workspace-configuration
+                '((gopls
+                   . ((ui.completion.usePlaceholders . t)
+                      (gofumpt . t)               ; use gofumpt style
+                      (staticcheck . t)           ; more diagnostics
+                      (analyses . ((unusedparams . t)
+                                   (unreachable . t)))
+                      (directoryFilters . ["-node_modules" "-.git"]))))))
+
+(defun mrl/go--format+imports ()
+  "Format buffer and organize imports with gopls (Eglot)."
+  (when (and (boundp 'eglot-managed-p) eglot-managed-p)
+    (eglot-format-buffer)
+    ;; organize imports: run synchronously and silently
+    (eglot-code-actions nil nil "source.organizeImports" t)))
+
+(defun mrl/go--setup ()
+  ;; Use Eglot
+  (eglot-ensure)
+  ;; Avoid Flycheck vs Flymake duplication (Eglot uses Flymake)
+  (when (bound-and-true-p flycheck-mode)
+    (flycheck-mode -1))
+  ;; If you want to avoid duplicate candidates (you currently enable both company & corfu)
+  ;; Pick one. Example: disable company in Go buffers:
+  (when (bound-and-true-p company-mode)
+    (company-mode -1))
+  ;; Save-hooks
+  (add-hook 'before-save-hook #'mrl/go--format+imports nil t)
+  ;; Nice to have: tab settings to match gofmt style
+  (setq-local indent-tabs-mode t
+              tab-width 8))
+
+;; Hooks for both modes
+(add-hook 'go-mode-hook #'mrl/go--setup)
+(when (fboundp 'go-ts-mode)
+  (add-hook 'go-ts-mode-hook #'mrl/go--setup))
+
+;; Simple compile helpers for Go
+(defun mrl/go-project-root ()
+  (or (when-let ((p (project-current))) (project-root p))
+      (locate-dominating-file default-directory "go.mod")
+      default-directory))
+
+(defun mrl/go--compile-in (dir cmd)
+  (let ((default-directory dir))
+    (compile cmd)))
+
+(defun mrl/go-build ()
+  "go build in module root."
+  (interactive)
+  (mrl/go--compile-in (mrl/go-project-root) "go build ./..."))
+
+(defun mrl/go-test-all ()
+  "go test ./... in module root."
+  (interactive)
+  (mrl/go--compile-in (mrl/go-project-root) "go test ./..."))
+
+(defun mrl/go-test-pkg ()
+  "go test in the current buffer's directory (package)."
+  (interactive)
+  (let* ((bufdir (file-name-directory (or (buffer-file-name) default-directory))))
+    (mrl/go--compile-in bufdir "go test")))
+
+(defun mrl/go-test-func ()
+  "Run go test for the test function at point using -run."
+  (interactive)
+  (let* ((name (or
+                ;; Prefer Tree-sitter function name if available
+                (when (fboundp 'treesit-node-at)
+                  (let* ((node (treesit-node-at (point)))
+                         (def (and node (treesit-parent-until
+                                         node (lambda (n)
+                                                (member (treesit-node-type n)
+                                                        '("function_declaration" "method_declaration"))))))
+                         (nm (and def (treesit-node-text
+                                       (or (treesit-node-child-by-field-name def "name")
+                                           def)))))
+                    nm))
+                ;; fallback: symbol-at-point
+                (thing-at-point 'symbol t))))
+    (unless (and name (string-match-p "^Test" name))
+      (user-error "Point is not inside a Test* function (got: %s)" (or name "nil")))
+    (let ((bufdir (file-name-directory (or (buffer-file-name) default-directory))))
+      (mrl/go--compile-in bufdir (format "go test -run '^%s$'" name)))))
+
+;; Keybindings (mirror your Python test bindings style)
+(with-eval-after-load 'go-mode
+  (define-key go-mode-map (kbd "C-c t p") #'mrl/go-test-pkg)
+  (define-key go-mode-map (kbd "C-c t a") #'mrl/go-test-all)
+  (define-key go-mode-map (kbd "C-c t f") #'mrl/go-test-func)
+  (define-key go-mode-map (kbd "C-c b")   #'mrl/go-build))
+
+(when (fboundp 'go-ts-mode)
+  (with-eval-after-load 'go-ts-mode
+    (define-key go-ts-mode-map (kbd "C-c t p") #'mrl/go-test-pkg)
+    (define-key go-ts-mode-map (kbd "C-c t a") #'mrl/go-test-all)
+    (define-key go-ts-mode-map (kbd "C-c t f") #'mrl/go-test-func)
+    (define-key go-ts-mode-map (kbd "C-c b")   #'mrl/go-build)))
+
 (add-hook 'python-ts-mode-hook
           (lambda ()
             (set-face-attribute 'font-lock-string-face nil :slant 'italic)))
