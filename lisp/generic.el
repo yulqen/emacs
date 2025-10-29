@@ -103,6 +103,9 @@
 
 ;; (set-exec-path-from-shell-PATH)
 
+(setq x-stretch-cursor nil)
+(setq-default cursor-type 'bar)
+
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (setq recentf-max-saved-items 25)

@@ -88,6 +88,7 @@ Lots of odds and ends here. This is where they end up.
 #+end_src
 
 * set PATH
+
 We need this for doing stuff in compile buffers, etc
 
 Trying with this new config, using a package to sync the PATH:
@@ -116,6 +117,12 @@ This was what I previously had. But not sure it worked with fish and it is much 
   ;;     (setq exec-path (split-string path-from-shell path-separator))))
 
   ;; (set-exec-path-from-shell-PATH)
+#+end_src
+
+* remove annoying flashing stretched tabs and reset cursor to bar
+#+begin_src elisp :tangle yes
+  (setq x-stretch-cursor nil)
+  (setq-default cursor-type 'bar)
 #+end_src
 * recentf
 
