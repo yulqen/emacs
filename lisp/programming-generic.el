@@ -1,6 +1,7 @@
 (setq treesit-language-source-alist
       '((css . ("https://github.com/tree-sitter/tree-sitter-css" "v0.20.0"))
         (go . ("https://github.com/tree-sitter/tree-sitter-go" "v0.20.0"))
+		(gomod . ("https://github.com/camdencheek/tree-sitter-go-mod" "v1.1.0"))
         (html . ("https://github.com/tree-sitter/tree-sitter-html" "v0.20.1"))
         (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "v0.20.1" "src"))
         (json . ("https://github.com/tree-sitter/tree-sitter-json" "v0.20.2"))
@@ -95,8 +96,8 @@
   :mode ("\\.py\\'" . python-ts-mode)
   :config
   (setq-default indent-tabs-mode t)
-	    (setq-default tab-width 4)
-	    (setq-default py-indent-tabs-mode t)
+		    (setq-default tab-width 4)
+		    (setq-default py-indent-tabs-mode t)
   (setq python-indent-offset 4)
   :hook ((python-ts-mode . eglot-ensure)
          (python-ts-mode . pyvenv-mode)
