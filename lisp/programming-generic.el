@@ -265,8 +265,6 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-(provide 'programming-generic)
-
 (use-package shell-maker
   :ensure t)
 
@@ -294,3 +292,5 @@
 
 (setq agent-shell-openai-authentication
       (agent-shell-openai-make-authentication :login t))
+
+(provide 'programming-generic)

@@ -1,3 +1,4 @@
+
 * treesitter
 
 Fuck knows why everyone goes on about it likes....
@@ -318,10 +319,6 @@ Switches on environment variables if you have a .envrc file.
            ("\\.markdown\\'" . markdown-mode))
     :init (setq markdown-command "multimarkdown"))
 #+end_src
-* provide
-#+begin_src elisp :tangle yes
-  (provide 'programming-generic)
-#+end_src
 * shell-maker, acp and  agent-shell
 These support packages are apparently required to enable agent-shell (see https://github.com/xenodium/agent-shell). The ~acp~ package is not yet on MELPA apaprently.
 
@@ -360,3 +357,7 @@ I have this configured for Gemini CLI, as that is what I will probably use most.
 #+RESULTS:
 : ((:login . t))
 
+* provide
+#+begin_src elisp :tangle yes
+  (provide 'programming-generic)
+#+end_src
