@@ -122,7 +122,7 @@ This was what I previously had. But not sure it worked with fish and it is much 
 * remove annoying flashing stretched tabs and reset cursor to bar
 #+begin_src elisp :tangle yes
   (setq x-stretch-cursor nil)
-  (setq-default cursor-type 'bar)
+  (setq-default cursor-type 'hollow)
 #+end_src
 * recentf
 
