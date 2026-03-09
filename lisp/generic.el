@@ -104,7 +104,7 @@
 ;; (set-exec-path-from-shell-PATH)
 
 (setq x-stretch-cursor nil)
-(setq-default cursor-type 'hollow)
+(setq-default cursor-type 'box)
 
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
