@@ -97,6 +97,7 @@
 ;; strings.
 (setq denote-journal-keyword "journal")
 ;; Read the doc string of `denote-journal-title-format'.
-(setq denote-journal-title-format 'day-date-month-year))
+(setq denote-journal-title-format 'day-date-month-year)
+(setq denote-file-type "text"))
 
 (provide 'denote-stuff)
