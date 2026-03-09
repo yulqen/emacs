@@ -19,7 +19,7 @@
 
 (mapc #'disable-theme custom-enabled-themes)
 
-(ef-themes-select 'ef-duo-dark)
+;;(ef-themes-select 'ef-tritanopia-light)
 
 ;;(use-package gruber-darker-theme
 ;;  :ensure t)

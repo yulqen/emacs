@@ -52,7 +52,7 @@ Disable all other themes to avoid awkward blending:
 Comment this out if you don't want a ef-theme to be loaded.
 
 #+begin_src elisp :tangle yes
-  (ef-themes-select 'ef-duo-dark)
+  ;;(ef-themes-select 'ef-tritanopia-light)
 #+end_src
 
 * other themes
