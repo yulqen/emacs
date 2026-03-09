@@ -54,6 +54,7 @@
                                "~/Documents/org/radcal_coding.org"
                                "~/Documents/org/radbox_work.org"
                                "~/Documents/org/dft.org"
+							   "~/Documents/org/sjp.org"
                                "~/Documents/org/alphabet_learning.org"
                                "~/Documents/org/calendar/cal.org"
                                "~/Documents/org/habits.org")))
@@ -265,16 +266,16 @@
               (sequence "WAITING(w@/!)" "SOMEDAY(s@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
 
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "yellow")
-              ("NEXT" :foreground "dark orange")
-              ("PROJECT" :foreground "blue")
-              ("DOING" :foreground "orchid")
-              ("DONE" :foreground "ForestGreen")
-              ("WAITING" :foreground "black" :background "yellow" :weight bold)
-              ("SOMEDAY" :foreground "dark violet")
-              ("HOLD" :foreground "magenta")
-              ("CANCELLED" :foreground "snow4"))))
+;; (setq org-todo-keyword-faces
+;;       (quote (("TODO" :foreground "yellow")
+;;               ("NEXT" :foreground "dark orange")
+;;               ("PROJECT" :foreground "blue")
+;;               ("DOING" :foreground "orchid")
+;;               ("DONE" :foreground "ForestGreen")
+;;               ("WAITING" :foreground "black" :background "yellow" :weight bold)
+;;               ("SOMEDAY" :foreground "dark violet")
+;;               ("HOLD" :foreground "magenta")
+;;               ("CANCELLED" :foreground "snow4"))))
 
 (setq org-todo-state-tags-triggers
       (quote (("CANCELLED" ("CANCELLED" . t))
