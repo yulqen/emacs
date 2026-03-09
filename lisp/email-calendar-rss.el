@@ -41,6 +41,7 @@
   :config
   (setq elfeed-feeds
         '(("https://joeyh.name/blog/index.rss" debian linux)
+		  ("https://blog.michielborkent.nl/atom.xml" clojure)
           ("https://lukesmith.xyz/rss.xml" linux)
 		  ("https://corfield.org/atom.xml" clojure)
           ("https://www.tumfatig.net/index.xml" bsd)
