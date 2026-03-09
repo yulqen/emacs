@@ -95,18 +95,18 @@ Could break this up at some point.
             )
            ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+Meeting" "+WorkTrip" "+refile"))))
 
-          ("c" "Central Project Register"
+          ("c" "SJP Consulting"
            (
             (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
             (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
                                         (org-agenda-sorting-strategy '(alpha-up))))
-            (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "CPR Waiting/Blocked")
+            (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "SJP Waiting/Blocked")
                                            (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
             (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
-                       ((org-agenda-overriding-header "DfT NEXT UNSCHEDULED")
+                       ((org-agenda-overriding-header "SJP NEXT UNSCHEDULED")
                         (org-agenda-sorting-strategy '(deadline-up priority-down))))
             )
-           ((org-agenda-category-filter-preset '("+CPR-Tasks"))))
+           ((org-agenda-category-filter-preset '("+SJP-Task"))))
           ("h" "Home"
            (
             (agenda)
