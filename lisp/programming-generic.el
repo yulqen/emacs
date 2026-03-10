@@ -51,6 +51,22 @@
          (typescript-ts-mode . tide-hl-identifier-mode)
          (before-save . tide-format-before-save)))
 
+;; we need this for .tsx files.
+;; already downloaded to lisp/ directory - see https://github.com/orzechowskid/tree-sitter-css-in-js
+;; ensure you manually enable tsx-ts-mode in .tsx files
+;; when installing, I don't know the difference between this and the tsx-mode below
+(require 'css-in-js-mode)
+
+;; We have to install tsx-mode manually
+(add-to-list 'load-path "~/.emacs.d/tsx-mode")
+(use-package tsx-mode
+  :load-path "~/.emacs.d/tsx-mode"
+  :mode (("\\.tsx\\'" . tsx-mode))
+  :config
+  (progn
+	  ;; Optional: Customize indentation or other settings here
+	  ))
+
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
   :commands (copilot-mode)

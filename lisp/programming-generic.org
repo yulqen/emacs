@@ -34,7 +34,14 @@ Fuck knows why everyone goes on about it likes....
      (typescript-mode . typescript-ts-mode)
      (python-mode . python-ts-mode)
      (clojure-mode . clojure-ts-mode)))
+
+
+
 #+end_src
+
+#+RESULTS:
+| #<subr F616e6f6e796d6f75732d6c616d626461_anonymous_lambda_92> | clojure--check-wrong-major-mode | eglot-ensure | clojure-ts-mode | paredit-mode |
+
 * typescript
 #+begin_src  elisp :tangle yes
   (use-package tide
@@ -57,6 +64,23 @@ Fuck knows why everyone goes on about it likes....
            (tsx-ts-mode . tide-setup)
            (typescript-ts-mode . tide-hl-identifier-mode)
            (before-save . tide-format-before-save)))
+
+  ;; we need this for .tsx files.
+  ;; already downloaded to lisp/ directory - see https://github.com/orzechowskid/tree-sitter-css-in-js
+  ;; ensure you manually enable tsx-ts-mode in .tsx files
+  ;; when installing, I don't know the difference between this and the tsx-mode below
+  (require 'css-in-js-mode)
+
+  ;; We have to install tsx-mode manually
+  (add-to-list 'load-path "~/.emacs.d/tsx-mode")
+  (use-package tsx-mode
+    :load-path "~/.emacs.d/tsx-mode"
+    :mode (("\\.tsx\\'" . tsx-mode))
+    :config
+    (progn
+  	  ;; Optional: Customize indentation or other settings here
+  	  ))
+
 
 #+end_src
 * copilot
