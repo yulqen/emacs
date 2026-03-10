@@ -45,7 +45,7 @@
   ;; Align annotations to the right
   (setq company-tooltip-align-annotations t)
   ;; Format on save
-  (add-hook 'before-save-hook 'tide-format-before-save))>
+  (add-hook 'before-save-hook 'tide-format-before-save))
   :hook ((typescript-ts-mode . tide-setup)
          (tsx-ts-mode . tide-setup)
          (typescript-ts-mode . tide-hl-identifier-mode)
@@ -66,6 +66,22 @@
   (progn
 	  ;; Optional: Customize indentation or other settings here
 	  ))
+
+(use-package indent-bars
+  :ensure t
+  :custom
+  (indent-bars-no-descend-lists 'skip) ; prevent extra bars in nested lists + skip intermediate bars
+  (indent-bars-treesit-support t)
+  (indent-bars-treesit-ignore-blank-lines-types '("module"))
+  ;; Add other languages as needed; check the wiki
+  (indent-bars-treesit-scope '((python function_definition class_definition for_statement
+	    if_statement with_statement while_statement)))
+  ;; Note: wrap likely not be needed if no-descend-list is enough
+  ;;(indent-bars-treesit-wrap '((python argument_list parameters ; for python, as an example
+  ;;				      list list_comprehension
+  ;;				      dictionary dictionary_comprehension
+  ;;				      parenthesized_expression subscript)))
+  :hook ((python-base-mode yaml-mode) . indent-bars-mode))
 
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
