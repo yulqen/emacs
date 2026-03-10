@@ -43,6 +43,7 @@
         '(("https://joeyh.name/blog/index.rss" debian linux)
 		  ("https://blog.michielborkent.nl/atom.xml" clojure)
           ("https://lukesmith.xyz/rss.xml" linux)
+		  ("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" linux privacy)
 		  ("https://corfield.org/atom.xml" clojure)
           ("https://www.tumfatig.net/index.xml" bsd)
           ("https://discoverbsd.com/feeds/posts/default" bsd)
