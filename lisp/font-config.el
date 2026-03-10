@@ -1,6 +1,6 @@
 (set-face-attribute 'default nil :family "Comic Code" :height 180)
 (set-face-attribute 'variable-pitch nil :family "Comic Code" :height 1.0)
-(set-face-attribute 'fixed-pitch nil :family "Comic Code" :height 1.0)
+(set-face-attribute 'fixed-pitch nil :family "Iosevka Nerd Font Mono" :height 1.1)
 (set-face-attribute 'italic nil :family "Comic Code" :height 1.0)
 (set-face-attribute 'org-block-begin-line nil :slant 'italic :background "#222222" :foreground "#949494")
 (set-face-attribute 'org-level-1 nil :slant 'italic :underline t :height 1.1)
