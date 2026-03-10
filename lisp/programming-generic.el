@@ -30,6 +30,27 @@
    (python-mode . python-ts-mode)
    (clojure-mode . clojure-ts-mode)))
 
+(use-package tide
+  :ensure t
+  :after (typescript-mode flycheck company)
+  :config
+  (defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1)
+  ;; Align annotations to the right
+  (setq company-tooltip-align-annotations t)
+  ;; Format on save
+  (add-hook 'before-save-hook 'tide-format-before-save))>
+  :hook ((typescript-ts-mode . tide-setup)
+         (tsx-ts-mode . tide-setup)
+         (typescript-ts-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
+
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
   :commands (copilot-mode)
