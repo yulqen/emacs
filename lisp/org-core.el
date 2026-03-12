@@ -266,16 +266,16 @@
               (sequence "WAITING(w@/!)" "SOMEDAY(s@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
 
-;; (setq org-todo-keyword-faces
-;;       (quote (("TODO" :foreground "yellow")
-;;               ("NEXT" :foreground "dark orange")
-;;               ("PROJECT" :foreground "blue")
-;;               ("DOING" :foreground "orchid")
-;;               ("DONE" :foreground "ForestGreen")
-;;               ("WAITING" :foreground "black" :background "yellow" :weight bold)
-;;               ("SOMEDAY" :foreground "dark violet")
-;;               ("HOLD" :foreground "magenta")
-;;               ("CANCELLED" :foreground "snow4"))))
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "orange")
+              ("NEXT" :foreground "dark orange")
+              ("PROJECT" :foreground "OrangeRed")
+              ("DOING" :foreground "orchid")
+              ("DONE" :foreground "ForestGreen")
+              ("WAITING" :foreground "black" :background "yellow" :weight bold)
+              ("SOMEDAY" :foreground "dark violet")
+              ("HOLD" :foreground "magenta")
+              ("CANCELLED" :foreground "snow4"))))
 
 (setq org-todo-state-tags-triggers
       (quote (("CANCELLED" ("CANCELLED" . t))
