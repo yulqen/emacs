@@ -76,8 +76,8 @@
           (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
           (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
                                       (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
-          ;; (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
-          ;;                             (org-agenda-sorting-strategy '(alpha-up))))
+          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
+                                      (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "DfT WAITING")
                                          (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
