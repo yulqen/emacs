@@ -45,6 +45,7 @@
           ("https://lukesmith.xyz/rss.xml" linux)
 		  ("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" linux privacy)
 		  ("https://corfield.org/atom.xml" clojure)
+		  ("https://pluralistic.net/feed/" discourse)
           ("https://www.tumfatig.net/index.xml" bsd)
           ("https://discoverbsd.com/feeds/posts/default" bsd)
           ("https://planet.debian.org/rss20.xml" debian)
