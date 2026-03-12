@@ -44,7 +44,7 @@
 (setq denote-save-buffers nil)
 (setq denote-known-keywords '("emacs" "computer" "family" "health"))
 (setq denote-infer-keywords t)
-;;(setq denote-file-type 'text)
+(setq denote-file-type 'text)
 (setq denote-sort-keywords t)
 (setq denote-prompts '(title keywords))
 (setq denote-excluded-directories-regexp nil)
@@ -98,6 +98,6 @@
 (setq denote-journal-keyword "journal")
 ;; Read the doc string of `denote-journal-title-format'.
 (setq denote-journal-title-format 'day-date-month-year)
-(setq denote-file-type "text"))
+(setq denote-file-type "org"))
 
 (provide 'denote-stuff)
