@@ -157,17 +157,14 @@
               ("ht" "Home TODO" entry (file+headline "~/Documents/org/home.org" "Tasks")
                "** TODO %?\nEntered on %U\n"
                :prepend t)
-              ("hn" "Home NEXT" entry (file+headline "~/Documents/org/home.org" "Tasks")
-               "** NEXT %?\nEntered on %U\n"
-               :prepend t)
               ("hS" "Home Someday" entry (file+headline "~/Documents/org/home.org" "Someday")
                "** SOMEDAY %?\nEntered on %U\n")
               ("hi" "Home Idea" entry (file+headline "~/Documents/org/home.org" "Notes")
-               "** %? :idea:\nEntered on %U\n")
+               "** NOTE %? :idea:\nEntered on %U\n")
               ("hn" "Note" entry (file+headline "~/Documents/org/home.org" "Notes")
-               "** %?\nEntered on %U\n")
+               "** NOTE %?\nEntered on %U\n")
               ("hw" "Quick Note (Web link)" entry (file+headline "~/Documents/org/home.org" "Notes")
-               "** %? :quicknote:\nCaptured on: %U\nSource: %x")
+               "** NOTE %? :quicknote:\nCaptured on: %U\nSource: %x")
               ("hj" "Journal" entry (file+olp+datetree "~/Documents/org/home.org" "Journal")
                "* %U: %?\n")
               ("hs" "Home Calendar - Single" entry (file+headline "~/Documents/org/home.org" "Calendar")
@@ -223,6 +220,8 @@
               ("e" "Tech Tip")
               ("et" "Emacs Tip" entry (file+headline "~/Documents/org/tech-tips.org" "Emacs Tips")
                "* %?\n\t%a")
+			  ("eg" "Tech-tip (general)" entry (file+headline "~/Documents/org/tech-tips.org" "Tech-tip (General)")
+			   "* %? :tech-tip:\nCaptured on: %U\nSource: %x")
               ("er" "Emacs Tip from Region" entry (file+headline "~/Documents/org/tech-tips.org" "Emacs Tips")
                "* %?\n\t%i"))))
 
@@ -231,7 +230,7 @@
 ;;                       ("brainstorm" . ?b)
 ;;                       ("idea" . ?d)
 ;;                       ("current" . ?C)
-;;                       ("work" . ?w)
+;;                       ("workx" . ?w)
 ;;                       ("baes" . ?B)
 ;;                       ("rrdl" . ?r)
 ;;                       ("offscreen" . ?O)
@@ -260,7 +259,8 @@
       '("+LEVEL=2/+PROJECT" ("NEXT" "DOING") nil ""))
 
 (setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "|" "DEFERRED(r@/!)")
+      (quote ((sequence "NOTE(N)")
+			(sequence "TODO(t)" "|" "DEFERRED(r@/!)")
               (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
               (sequence "TODO(t)" "NEXT(n)" "DOING(D)" "PROJECT(p)"  "|" "DONE(d!)")
               (sequence "WAITING(w@/!)" "SOMEDAY(s@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
@@ -268,6 +268,7 @@
 
 (setq org-todo-keyword-faces
       (quote (("TODO" :foreground "orange")
+			  ("NOTE" :foreground "DarkOliveGreen")
               ("NEXT" :foreground "dark orange")
               ("PROJECT" :foreground "OrangeRed")
               ("DOING" :foreground "orchid")
