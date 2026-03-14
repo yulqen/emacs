@@ -170,7 +170,7 @@
               ("hw" "Quick Note (Web link)" entry (file+headline "~/Documents/org/home.org" "Notes")
                "** NOTE %? :quicknote:\nCaptured on: %U\nSource: %x")
               ("hj" "Journal" entry (file+olp+datetree "~/Documents/org/home.org" "Journal")
-               "* %U: %?\n")
+               "* %U: %? :journal:\n")
               ("hs" "Home Calendar - Single" entry (file+headline "~/Documents/org/home.org" "Calendar")
                "* %?\n%^T")
               ("hb" "Home Calendar - Block" entry (file+headline "~/Documents/org/home.org" "Calendar")
