@@ -69,76 +69,80 @@
 (setq org-agenda-sort-notime-is-late nil)
 
 (setq org-agenda-custom-commands
-    '(
-      ("w" "Work"
-       (
-        (agenda)
-        (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
-        (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
-                                    (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
-        (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
-                                    (org-agenda-sorting-strategy '(alpha-up))))
-        (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "DfT WAITING")
-                                       (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-        (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
-                   ((org-agenda-overriding-header "DfT NEXT UNSCHEDULED")
-                    (org-agenda-sorting-strategy '(deadline-up priority-down))))
-        (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
-                                       (org-agenda-sorting-strategy '(alpha-up))))
-        )
-       ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+Meeting" "+WorkTrip" "+refile"))))
+      '(
+		("w" "Work"
+		 (
+          (agenda)
+          (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
+          (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
+                                      (org-agenda-sorting-strategy '(alpha-up deadline-up scheduled-down priority-down))))
+          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
+                                      (org-agenda-sorting-strategy '(alpha-up))))
+          (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "DfT WAITING")
+										 (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+          (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
+					 ((org-agenda-overriding-header "DfT NEXT UNSCHEDULED")
+                      (org-agenda-sorting-strategy '(deadline-up priority-down))))
+		  (tags "journal" ((org-agenda-overriding-header "Journal Entries")
+						   (org-agenda-skip-function
+							'(org-agenda-skip-entry-if 'notregexp
+													   (format "\\[%s.*?\\]" (format-time-string "%Y-%m-%d" (current-time)))))))  		  
+          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
+										 (org-agenda-sorting-strategy '(alpha-up))))
+          )
+		 ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+Meeting" "+WorkTrip" "+refile"))))
 
-      ("c" "SJP Consulting"
-       (
-        (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
-        (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
-                                    (org-agenda-sorting-strategy '(alpha-up))))
-        (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "SJP Waiting/Blocked")
-                                       (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-        (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
-                   ((org-agenda-overriding-header "SJP NEXT UNSCHEDULED")
-                    (org-agenda-sorting-strategy '(deadline-up priority-down))))
-        )
-       ((org-agenda-category-filter-preset '("+SJP-Task"))))
-      ("h" "Home"
-       (
-        (agenda)
-        (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")
-                                                                      (org-agenda-sorting-strategy '(priority-down alpha-up))))
-        (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "Home WAITING")
-                                       (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-        (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
-                   ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
-                    (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
-        (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
-                                    (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
-        ;; (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
-        ;;                             (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
-        (tags "idea" ((org-agenda-overriding-header "Ideas")
-                      (org-agenda-sorting-strategy '(alpha-up))))
-	  (tags "journal" ((org-agenda-overriding-header "Journal Entries")
-						 (org-agenda-skip-function
-						  '(org-agenda-skip-entry-if 'notregexp
-						(format "\\[%s.*?\\]" (format-time-string "%Y-%m-%d" (current-time)))))))
-        (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
-                                       (org-agenda-sorting-strategy '(alpha-up)))))
-       ((org-agenda-category-filter-preset '("+home" "+code" "+7Steps" "+Neon" "+habits" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+refile" "+Birthday"))))
-      ("A" "Alphabet Learning Project"
-       (
-        (tags-todo "TODO=\"DOING\"" ((org-agenda-overriding-header "Doing")
-                                     (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-down scheduled-down))))
-        (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "Next")
-                                    (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-done schedule-down))))
-        (tags "bug" ((org-agenda-overriding-header "Bugs")
-                     (org-agenda-sorting-strategy '(priority-down alpha-up))))
-        (tags "ui" ((org-agenda-overriding-header "UI")
-                    (org-agenda-sorting-strategy '(priority-down alpha-up))))
-        (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
-                                    (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-down scheduled-down))))
-        )
-       ((org-agenda-category-filter-preset '("+AL"))))
-      ("i" tags "idea")
-      ("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
+		("c" "SJP Consulting"
+		 (
+          (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
+          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
+                                      (org-agenda-sorting-strategy '(alpha-up))))
+          (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "SJP Waiting/Blocked")
+										 (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+          (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
+					 ((org-agenda-overriding-header "SJP NEXT UNSCHEDULED")
+                      (org-agenda-sorting-strategy '(deadline-up priority-down))))
+          )
+		 ((org-agenda-category-filter-preset '("+SJP-Task"))))
+		("h" "Home"
+		 (
+          (agenda)
+          (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")
+																		(org-agenda-sorting-strategy '(priority-down alpha-up))))
+          (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "Home WAITING")
+										 (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+          (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
+					 ((org-agenda-overriding-header "Home NEXT UNSCHEDULED")
+                      (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
+          (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "All Next Actions")
+                                      (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
+          ;; (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "TODO")
+          ;;                             (org-agenda-sorting-strategy '(alpha-up deadline-down scheduled-down priority-down))))
+          (tags "idea" ((org-agenda-overriding-header "Ideas")
+						(org-agenda-sorting-strategy '(alpha-up))))
+		  (tags "journal" ((org-agenda-overriding-header "Journal Entries")
+						   (org-agenda-skip-function
+							'(org-agenda-skip-entry-if 'notregexp
+													   (format "\\[%s.*?\\]" (format-time-string "%Y-%m-%d" (current-time)))))))
+          (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
+										 (org-agenda-sorting-strategy '(alpha-up)))))
+		 ((org-agenda-category-filter-preset '("+home" "+code" "+7Steps" "+Neon" "+habits" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+refile" "+Birthday"))))
+		("A" "Alphabet Learning Project"
+		 (
+          (tags-todo "TODO=\"DOING\"" ((org-agenda-overriding-header "Doing")
+                                       (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-down scheduled-down))))
+          (tags-todo "TODO=\"NEXT\"" ((org-agenda-overriding-header "Next")
+                                      (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-done schedule-down))))
+          (tags "bug" ((org-agenda-overriding-header "Bugs")
+                       (org-agenda-sorting-strategy '(priority-down alpha-up))))
+          (tags "ui" ((org-agenda-overriding-header "UI")
+                      (org-agenda-sorting-strategy '(priority-down alpha-up))))
+          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
+                                      (org-agenda-sorting-strategy '(priority-down tag-up alpha-up deadline-down scheduled-down))))
+          )
+		 ((org-agenda-category-filter-preset '("+AL"))))
+		("i" tags "idea")
+		("r" tags "LEVEL=2+REFILE" ((org-agenda-overriding-header "Stuff to refile")))))
 
 (setq org-capture-templates
       (quote (("i" "Inbox" entry (file+headline "~/Documents/org/refile.org" "Inbox")
@@ -208,7 +212,7 @@
               ("wr" "Note from Region" entry (file+headline "~/Documents/org/dft.org" "Notes")
                "* %?\n\t\n%i")
               ("wj" "Journal" entry (file+olp+datetree "~/Documents/org/dft.org" "Journal")
-               "* %?\nEntered on %U\n")
+               "* %U: %? :journal:\n")
               ("wd" "Retrospective Tasks" entry (file+headline "~/Documents/org/dft.org" "Tasks")
                "* DONE %?\nCLOSED: %U")
               ("ws" "Work Calendar - Single" entry (file+headline "~/Documents/org/dft.org" "Calendar")
@@ -264,7 +268,7 @@
 
 (setq org-todo-keywords
       (quote ((sequence "NOTE(N)")
-			(sequence "TODO(t)" "|" "DEFERRED(r@/!)")
+			  (sequence "TODO(t)" "|" "DEFERRED(r@/!)")
               (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
               (sequence "TODO(t)" "NEXT(n)" "DOING(D)" "PROJECT(p)"  "|" "DONE(d!)")
               (sequence "WAITING(w@/!)" "SOMEDAY(s@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
@@ -292,11 +296,11 @@
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
 (defface org-agenda-radcal-highlight-face `((t :foreground "SpringGreen3"))
-    "Face used to highlight radcal entries in agenda view.
+  "Face used to highlight radcal entries in agenda view.
 https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-org-mode-agenda-depending-on-keyword-tag")
 
 (defface org-agenda-radcal-coding-highlight-face `((t :foreground "DarkTurquoise"))
-    "Face used to highlight radcal entries in agenda view.
+  "Face used to highlight radcal entries in agenda view.
 https://emacs.stackexchange.com/questions/69564/changing-the-color-of-items-in-org-mode-agenda-depending-on-keyword-tag")
 
 (defface org-agenda-radcal-alt-highlight-face `((t :foreground "dark magenta"))
