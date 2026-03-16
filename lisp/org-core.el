@@ -1,3 +1,32 @@
+(defun mrl/agenda-absolute-day ()
+  "Return the absolute day currently shown by the agenda."
+  (or (let ((agenda-buffer (get-buffer org-agenda-buffer-name)))
+        (when agenda-buffer
+          (with-current-buffer agenda-buffer
+            (and (boundp 'org-starting-day)
+                 (numberp org-starting-day)
+                 org-starting-day))))
+      (org-today)))
+
+(defun mrl/agenda-date-string ()
+  "Return the agenda day as YYYY-MM-DD."
+  (pcase-let ((`(,month ,day ,year)
+               (calendar-gregorian-from-absolute (mrl/agenda-absolute-day))))
+    (format "%04d-%02d-%02d" year month day)))
+
+(defun mrl/journal-heading-date-string ()
+  "Return YYYY-MM-DD from a journal heading, or nil when absent."
+  (let ((heading (org-get-heading t t t t)))
+    (when (and heading
+               (string-match "\\`\\[\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)" heading))
+      (match-string 1 heading))))
+
+(defun mrl/agenda-skip-non-journal-day ()
+  "Skip journal entries that do not belong to the active agenda day."
+  (unless (string= (mrl/journal-heading-date-string)
+                   (mrl/agenda-date-string))
+    (org-entry-end-position)))
+
 (require 'org-crypt)
 (org-crypt-use-before-save-magic)
 (setq org-tags-exclude-from-inheritance '("crypt" "current"))
@@ -84,9 +113,8 @@
 					 ((org-agenda-overriding-header "DfT NEXT UNSCHEDULED")
                       (org-agenda-sorting-strategy '(deadline-up priority-down))))
 		  (tags "journal" ((org-agenda-overriding-header "Journal Entries")
-						   (org-agenda-skip-function
-							'(org-agenda-skip-entry-if 'notregexp
-													   (format "\\[%s.*?\\]" (format-time-string "%Y-%m-%d" (current-time)))))))  		  
+						   (org-use-tag-inheritance nil)
+						   (org-agenda-skip-function #'mrl/agenda-skip-non-journal-day)))
           (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
 										 (org-agenda-sorting-strategy '(alpha-up))))
           )
@@ -98,10 +126,10 @@
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
                                       (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "SJP Waiting/Blocked")
-										 (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))t
+										 (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
 					 ((org-agenda-overriding-header "SJP NEXT UNSCHEDULED")
-                      (org-agenda-sorting-strategy '(deadline-up priority-down))))t
+                      (org-agenda-sorting-strategy '(deadline-up priority-down))))
           )
 		 ((org-agenda-category-filter-preset '("+SJP-Task"))))
 		("h" "Home"
@@ -121,9 +149,8 @@
           (tags "idea" ((org-agenda-overriding-header "Ideas")
 						(org-agenda-sorting-strategy '(alpha-up))))
 		  (tags "journal" ((org-agenda-overriding-header "Journal Entries")
-						   (org-agenda-skip-function
-							'(org-agenda-skip-entry-if 'notregexp
-													   (format "\\[%s.*?\\]" (format-time-string "%Y-%m-%d" (current-time)))))))
+						   (org-use-tag-inheritance nil)
+						   (org-agenda-skip-function #'mrl/agenda-skip-non-journal-day)))
           (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
 										 (org-agenda-sorting-strategy '(alpha-up)))))
 		 ((org-agenda-category-filter-preset '("+home" "+code" "+7Steps" "+Neon" "+habits" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+refile" "+Birthday"))))
