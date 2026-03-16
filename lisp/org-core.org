@@ -2,7 +2,11 @@
 
 * trying to get day journal in agenda view
 
+On [2026-03-16 Mon] I wanted to get a robust ability to see journal entries in the agenda views for work and home. I started using Mistral chat with this but the solution was flaky. When I threw an agent at it, it worked.
+
+** First attempt (using Le Chat from Mistqral)
 Notes from earlier attempts on [2026-03-16 Mon].
+
 
 Replace:
 
@@ -26,6 +30,7 @@ with:
 
 To get it working again with the current journal for each day, which is broken but whatever.
 
+** Actual solution using pi (with 5.3-codex)
 
 Robust solution: derive the agenda day from `org-starting-day` (absolute day number) and filter journals against that date:
 
@@ -59,6 +64,70 @@ Robust solution: derive the agenda day from `org-starting-day` (absolute day num
                      (mrl/agenda-date-string))
       (org-entry-end-position)))
 #+end_src
+
+** Explanation from the model as to what changed to get this working
+
+#+begin_src text :tangle no
+  What I changed to make it robust
+
+### A) Use Org’s internal agenda date, not parsed text
+I added:
+
+- `mrl/agenda-absolute-day`
+- `mrl/agenda-date-string`
+
+These read `org-starting-day` (Org’s internal absolute day for the agenda buffer), then convert to `YYYY-MM-DD`.
+
+So the journal filter now follows the actual agenda day used by Org when you press `f`/`b`.
+
+---
+
+### B) Exact heading-date comparison, not broad regexp scan
+I added:
+
+- `mrl/journal-heading-date-string`
+- updated `mrl/agenda-skip-non-journal-day`
+
+Now it:
+
+1. extracts date from journal heading start (`[YYYY-MM-DD ...]`),
+2. compares it to agenda day string,
+3. skips entry unless exact match.
+
+This avoids accidental matches from subtree/body text.
+
+---
+
+### C) Disable tag inheritance in journal blocks
+In both `w` and `h` journal blocks I added:
+
+- `(org-use-tag-inheritance nil)`
+
+Important because under `* Journals`, many descendants can inherit `:journal:` from parent.  
+Without disabling inheritance there, the journal block may include far too much.
+
+---
+
+### D) Keep literate source clean
+In `org-core.org`, I marked old demo snippets as `:tangle no`, so they don’t re-introduce stale code during tangle.
+
+---
+
+## Net effect
+
+When you hit `f` / `b`:
+
+- Org updates agenda day (`org-starting-day`),
+- agenda rebuild runs,
+- journal block recomputes target day and keeps only journal headings for that day.
+
+So yes — the final behavior comes from replacing:
+- “current clock time” and
+- “post-build mutable global date”
+with
+- “Org’s internal agenda day at build time + exact heading-date filter + no inherited journal tag noise.”
+#+end_src
+
 
 * core org settings
 
