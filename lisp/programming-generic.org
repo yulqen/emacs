@@ -420,7 +420,11 @@ I have this configured for Gemini CLI, as that is what I will probably use most.
 
 #+RESULTS:
 : ((:login . t))
-
+* perldoc
+#+begin_src elisp :tangle yes
+  (use-package perl-doc
+    :ensure t)
+#+end_src
 * provide
 #+begin_src elisp :tangle yes
   (provide 'programming-generic)

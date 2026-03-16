@@ -347,4 +347,7 @@
 (setq agent-shell-openai-authentication
       (agent-shell-openai-make-authentication :login t))
 
+(use-package perl-doc
+  :ensure t)
+
 (provide 'programming-generic)
