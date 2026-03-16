@@ -98,10 +98,10 @@
           (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
                                       (org-agenda-sorting-strategy '(alpha-up))))
           (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "SJP Waiting/Blocked")
-										 (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
+										 (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))t
           (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
 					 ((org-agenda-overriding-header "SJP NEXT UNSCHEDULED")
-                      (org-agenda-sorting-strategy '(deadline-up priority-down))))
+                      (org-agenda-sorting-strategy '(deadline-up priority-down))))t
           )
 		 ((org-agenda-category-filter-preset '("+SJP-Task"))))
 		("h" "Home"
