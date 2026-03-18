@@ -290,8 +290,8 @@
       (org-agenda-redo t)
       (beginning-of-buffer))))
 
-(setq org-stuck-projects
-      '("+LEVEL=2/+PROJECT" ("NEXT" "DOING") nil ""))
+;; (setq org-stuck-projects
+;;       '("+LEVEL=2/+PROJECT" ("NEXT" "DOING") nil ""))
 
 (setq org-todo-keywords
       (quote ((sequence "NOTE(N)")

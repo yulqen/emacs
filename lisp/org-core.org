@@ -128,7 +128,6 @@ with
 - “Org’s internal agenda day at build time + exact heading-date filter + no inherited journal tag noise.”
 #+end_src
 
-
 * core org settings
 
 Could break this up at some point.
@@ -220,8 +219,8 @@ Could break this up at some point.
   					 ((org-agenda-overriding-header "DfT NEXT UNSCHEDULED")
                         (org-agenda-sorting-strategy '(deadline-up priority-down))))
   		  (tags "journal" ((org-agenda-overriding-header "Journal Entries")
-						   (org-use-tag-inheritance nil)
-						   (org-agenda-skip-function #'mrl/agenda-skip-non-journal-day)))
+  						   (org-use-tag-inheritance nil)
+  						   (org-agenda-skip-function #'mrl/agenda-skip-non-journal-day)))
             (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
   										 (org-agenda-sorting-strategy '(alpha-up))))
             )
@@ -256,8 +255,8 @@ Could break this up at some point.
             (tags "idea" ((org-agenda-overriding-header "Ideas")
   						(org-agenda-sorting-strategy '(alpha-up))))
   		  (tags "journal" ((org-agenda-overriding-header "Journal Entries")
-						   (org-use-tag-inheritance nil)
-						   (org-agenda-skip-function #'mrl/agenda-skip-non-journal-day)))
+  						   (org-use-tag-inheritance nil)
+  						   (org-agenda-skip-function #'mrl/agenda-skip-non-journal-day)))
             (tags-todo "TODO=\"PROJECT\"" ((org-agenda-overriding-header "Projects")
   										 (org-agenda-sorting-strategy '(alpha-up)))))
   		 ((org-agenda-category-filter-preset '("+home" "+code" "+7Steps" "+Neon" "+habits" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+refile" "+Birthday"))))
@@ -397,8 +396,8 @@ Could break this up at some point.
         (org-agenda-redo t)
         (beginning-of-buffer))))
 
-  (setq org-stuck-projects
-        '("+LEVEL=2/+PROJECT" ("NEXT" "DOING") nil ""))
+  ;; (setq org-stuck-projects
+  ;;       '("+LEVEL=2/+PROJECT" ("NEXT" "DOING") nil ""))
 
   (setq org-todo-keywords
         (quote ((sequence "NOTE(N)")
