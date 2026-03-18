@@ -1,7 +1,6 @@
-(use-package cider
+(use-pagckage cider
 :ensure t
-:hook ((cider-repl-mode . paredit-mode)
-       (clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
+:hook ((clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
 :config
 
 (setq cider-jack-in-default 'clojure-cli)
