@@ -99,6 +99,10 @@
 			  (setq-local indent-tabs-mode t
 						  tab-width 8))))
 
+(use-package pi-coding-agent
+:ensure t
+:init (defalias 'pi 'pi-coding-agent))
+
 (use-package simpc-mode
   :ensure nil
   :load-path "lisp/"

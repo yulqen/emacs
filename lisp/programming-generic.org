@@ -117,6 +117,12 @@ Fuck knows why everyone goes on about it likes....
   			  (setq-local indent-tabs-mode t
   						  tab-width 8))))
 #+end_src
+* pi-coding-agent
+#+begin_src elisp :tangle yes
+  (use-package pi-coding-agent
+  :ensure t
+  :init (defalias 'pi 'pi-coding-agent))
+#+end_src
 * simplec from tsoding
 
 #+begin_src elisp :tangle yes
