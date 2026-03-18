@@ -349,7 +349,7 @@ Could break this up at some point.
                 ("wd" "Retrospective Tasks" entry (file+headline "~/Documents/org/dft.org" "Tasks")
                  "* DONE %?\nCLOSED: %U")
                 ("ws" "Work Calendar - Single" entry (file+headline "~/Documents/org/dft.org" "Calendar")
-                 "* %?\n%^T")
+                 "* %?\n:PROPERTIES:\n:CATEGORY: Meeting\n:END:\n%^T")
                 ("wb" "Work Calendar - Block" entry (file+headline "~/Documents/org/dft.org" "Calendar")
                  "* %?\n%^t--%^t")
                 ("wp" "Work Calendar - Trip" entry (file+headline "~/Documents/org/dft.org" "Work Trips")
