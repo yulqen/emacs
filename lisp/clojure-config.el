@@ -1,4 +1,4 @@
-(use-pagckage cider
+(use-package cider
 :ensure t
 :hook ((clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
 :config

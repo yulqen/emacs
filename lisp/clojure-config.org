@@ -5,7 +5,7 @@ This package is the best interactive environment for clojure development in the 
 Add back (cider-repl-mode . paredit-mode) if you want paredit in the repl again (in which case you need to deal with Return not working correctly.
 
 #+begin_src elisp :tangle yes
-  (use-pagckage cider
+  (use-package cider
   :ensure t
   :hook ((clojure-mode . eglot-ensure)) ; Added from your clojure-mode hook
   :config
