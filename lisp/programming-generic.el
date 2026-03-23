@@ -1,18 +1,17 @@
-(setq treesit-language-source-alist
-      '((css . ("https://github.com/tree-sitter/tree-sitter-css" "v0.20.0"))
-        (go . ("https://github.com/tree-sitter/tree-sitter-go" "v0.20.0"))
-		(bash . ("https://github.com/tree-sitter/tree-sitter-bash" "v0.25.0"))
-        (html . ("https://github.com/tree-sitter/tree-sitter-html" "v0.20.1"))
-        (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "v0.20.1" "src"))
-        (json . ("https://github.com/tree-sitter/tree-sitter-json" "v0.20.2"))
-        (markdown . ("https://github.com/ikatyang/tree-sitter-markdown" "v0.7.1"))
-		(clojure . ("https://github.com/sogaiu/tree-sitter-clojure" "v0.0.13"))
-        (python . ("https://github.com/tree-sitter/tree-sitter-python" "v0.20.4"))
-        (rust . ("https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2"))
-        (toml . ("https://github.com/tree-sitter/tree-sitter-toml" "v0.5.1"))
-        (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "tsx/src"))
-        (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "typescript/src"))
-        (yaml . ("https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0"))))
+;; (setq treesit-language-source-alist
+;;       '((css . ("https://github.com/tree-sitter/tree-sitter-css" "v0.20.0"))
+;;         (go . ("https://github.com/tree-sitter/tree-sitter-go" "v0.20.0"))
+;; 		(bash . ("https://github.com/tree-sitter/tree-sitter-bash" "v0.23.3"))
+;;         (html . ("https://github.com/tree-sitter/tree-sitter-html" "v0.20.1"))
+;;         (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "v0.20.1" "src"))
+;;         (json . ("https://github.com/tree-sitter/tree-sitter-json" "v0.20.2"))
+;; 		(clojure . ("https://github.com/sogaiu/tree-sitter-clojure" "v0.0.13"))
+;;         (python . ("https://github.com/tree-sitter/tree-sitter-python" "v0.20.4"))
+;;         (rust . ("https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2"))
+;;         (toml . ("https://github.com/tree-sitter/tree-sitter-toml" "v0.5.1"))
+;;         (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "tsx/src"))
+;;         (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "typescript/src"))
+;;         (yaml . ("https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0"))))
 
 ;; not bothered about these for now - throwing version mismatches
 ;; (setq treesit-language-source-alist
@@ -153,8 +152,8 @@
   :mode ("\\.py\\'" . python-ts-mode)
   :config
   (setq-default indent-tabs-mode t)
-		    (setq-default tab-width 4)
-		    (setq-default py-indent-tabs-mode t)
+	    (setq-default tab-width 4)
+	    (setq-default py-indent-tabs-mode t)
   (setq python-indent-offset 4)
   :hook ((python-ts-mode . eglot-ensure)
          (python-ts-mode . pyvenv-mode)
