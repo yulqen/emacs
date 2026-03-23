@@ -46,6 +46,7 @@
 		  ("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" linux privacy)
 		  ("https://corfield.org/atom.xml" clojure)
 		  ("https://pluralistic.net/feed/" discourse)
+		  ("https://jl.ly/index.rss" internet)
 		  ("https://nolanlawson.com/feed/" discourse)
 		  ("https://www.eff.org/rss/updates.xml" privacy)
           ("https://www.tumfatig.net/index.xml" bsd)
