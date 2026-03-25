@@ -124,7 +124,26 @@ Fuck knows why everyone goes on about it likes....
     (add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
     (add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
     (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode)))
+
+  (setq-default eglot-workspace-configuration
+                '((:perlnavigator . (:perlPath
+  								   "/usr/bin/perl"
+  								   :enableWarnings t))))
+
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 `((cperl-mode perl-mode) . ("/usr/bin/perlnavigator", "--stdio"))))
+
+  (global-company-mode)
+
+  (add-hook 'cperl-mode-hook 'eglot-ensure)
+  (add-hook 'perl-mode-hook 'eglot-ensure)
+
 #+end_src
+
+#+RESULTS:
+| eglot-ensure |
+
 * pi-coding-agent
 #+begin_src elisp :tangle yes
   (use-package pi-coding-agent

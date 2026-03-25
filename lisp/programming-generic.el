@@ -105,6 +105,20 @@
   (add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
   (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode)))
 
+(setq-default eglot-workspace-configuration
+              '((:perlnavigator . (:perlPath
+								   "/usr/bin/perl"
+								   :enableWarnings t))))
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               `((cperl-mode perl-mode) . ("/usr/bin/perlnavigator", "--stdio"))))
+
+(global-company-mode)
+
+(add-hook 'cperl-mode-hook 'eglot-ensure)
+(add-hook 'perl-mode-hook 'eglot-ensure)
+
 (use-package pi-coding-agent
 :ensure t
 :init (defalias 'pi 'pi-coding-agent))
