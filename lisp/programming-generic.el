@@ -98,6 +98,13 @@
 			  (setq-local indent-tabs-mode t
 						  tab-width 8))))
 
+(use-package cperl-mode
+  :mode (("\\.\\([pP][Llm]\\|al\\|tt\\|tt2\\)\\'" . cperl-mode))
+  :init
+  (add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
+  (add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
+  (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode)))
+
 (use-package pi-coding-agent
 :ensure t
 :init (defalias 'pi 'pi-coding-agent))
@@ -152,8 +159,8 @@
   :mode ("\\.py\\'" . python-ts-mode)
   :config
   (setq-default indent-tabs-mode t)
-	    (setq-default tab-width 4)
-	    (setq-default py-indent-tabs-mode t)
+		    (setq-default tab-width 4)
+		    (setq-default py-indent-tabs-mode t)
   (setq python-indent-offset 4)
   :hook ((python-ts-mode . eglot-ensure)
          (python-ts-mode . pyvenv-mode)

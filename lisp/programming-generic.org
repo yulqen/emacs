@@ -116,6 +116,15 @@ Fuck knows why everyone goes on about it likes....
   			  (setq-local indent-tabs-mode t
   						  tab-width 8))))
 #+end_src
+* perl
+#+begin_src elisp :tangle yes
+  (use-package cperl-mode
+    :mode (("\\.\\([pP][Llm]\\|al\\|tt\\|tt2\\)\\'" . cperl-mode))
+    :init
+    (add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
+    (add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
+    (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode)))
+#+end_src
 * pi-coding-agent
 #+begin_src elisp :tangle yes
   (use-package pi-coding-agent
