@@ -25,7 +25,7 @@
   ;; Finally, load your theme of choice (or a random one with
   ;; `modus-themes-load-random', `modus-themes-load-random-dark',
   ;; `modus-themes-load-random-light').
-  (modus-themes-load-theme 'ef-summer))
+  (modus-themes-load-theme 'ef-frost))
 
 ;; (setq ef-themes-headings ; read the manual's entry or the doc string
 ;;     '((0 variable-pitch light 1.9)
