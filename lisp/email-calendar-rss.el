@@ -43,6 +43,7 @@
         '(("https://joeyh.name/blog/index.rss" debian linux)
 		  ("https://blog.michielborkent.nl/atom.xml" clojure)
           ("https://lukesmith.xyz/rss.xml" linux)
+		  ("https://www.theregister.com/headlines.atom" news)
 		  ("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" linux privacy)
 		  ("https://corfield.org/atom.xml" clojure)
 		  ("https://pluralistic.net/feed/" discourse)
