@@ -56,6 +56,7 @@
           ("https://blog.cleancoder.com/atom.xml" programming)
           ("https://clojure.org/feed.xml" programming clojure)
           ("https://thelibre.news/latest/rss" freesoftware)
+		  ("https://joeyh.name/blog/index.rss" freesoftware)t
           ("https://drewdevault.com/blog/index.xml" freesoftware linux)
           ("https://landchad.net/rss.xml" linux)
           ("https://lobste.rs/rss" firehose)
