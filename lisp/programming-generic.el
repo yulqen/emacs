@@ -63,8 +63,8 @@
   :mode (("\\.tsx\\'" . tsx-mode))
   :config
   (progn
-	  ;; Optional: Customize indentation or other settings here
-	  ))
+	;; Optional: Customize indentation or other settings here
+	))
 
 (use-package indent-bars
   :ensure t
@@ -74,7 +74,7 @@
   (indent-bars-treesit-ignore-blank-lines-types '("module"))
   ;; Add other languages as needed; check the wiki
   (indent-bars-treesit-scope '((python function_definition class_definition for_statement
-	    if_statement with_statement while_statement)))
+									   if_statement with_statement while_statement)))
   ;; Note: wrap likely not be needed if no-descend-list is enough
   ;;(indent-bars-treesit-wrap '((python argument_list parameters ; for python, as an example
   ;;				      list list_comprehension
@@ -120,8 +120,8 @@
 (add-hook 'perl-mode-hook 'eglot-ensure)
 
 (use-package pi-coding-agent
-:ensure t
-:init (defalias 'pi 'pi-coding-agent))
+  :ensure t
+  :init (defalias 'pi 'pi-coding-agent))
 
 (use-package simpc-mode
   :ensure nil
@@ -160,6 +160,10 @@
 
 ;; according to https://chatgpt.com/c/690268d4-4d1c-832e-9dcf-37950ba372c2  
 (add-hook 'eglot-managed-mode-hook #'flymake-mode)
+
+(add-to-list 'eglot-server-programs
+          '((python-mode python-ts-mode)
+          "basedpyright-langserver" "--stdio"))
 
 (with-eval-after-load 'eglot
   ;; Ensure Flycheck is out of the way if it happens to be on
