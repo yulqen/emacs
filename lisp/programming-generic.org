@@ -199,10 +199,6 @@ Fuck knows why everyone goes on about it likes....
   ;; according to https://chatgpt.com/c/690268d4-4d1c-832e-9dcf-37950ba372c2  
   (add-hook 'eglot-managed-mode-hook #'flymake-mode)
 
-  (add-to-list 'eglot-server-programs
-            '((python-mode python-ts-mode)
-            "basedpyright-langserver" "--stdio"))
-
   (with-eval-after-load 'eglot
     ;; Ensure Flycheck is out of the way if it happens to be on
     (add-hook 'eglot-managed-mode-hook
@@ -218,8 +214,8 @@ Fuck knows why everyone goes on about it likes....
     :mode ("\\.py\\'" . python-ts-mode)
     :config
     (setq-default indent-tabs-mode t)
-		    (setq-default tab-width 4)
-		    (setq-default py-indent-tabs-mode t)
+  		    (setq-default tab-width 4)
+  		    (setq-default py-indent-tabs-mode t)
     (setq python-indent-offset 4)
     :hook ((python-ts-mode . eglot-ensure)
            (python-ts-mode . pyvenv-mode)
@@ -229,6 +225,11 @@ Fuck knows why everyone goes on about it likes....
                 ("C-c t a" . mrl/run-python-tests-for-app)
                 ("C-c t b" . mrl/run-python-tests-in-buffer)
                 ("C-c t f" . mrl/run-python-test-at-point)))
+
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("pyright"))))
+
+
 #+end_src
 
 * go config
