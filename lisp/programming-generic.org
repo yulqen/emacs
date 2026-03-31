@@ -370,6 +370,11 @@ Set up the venv automatically for python projects.
                               (when (file-directory-p venv-dir)
                                 (pyvenv-activate venv-dir))))))
 #+end_src
+* line numbering in prog-mode
+#+begin_src  elisp :tangle yes
+  (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+#+end_src
+
 * yasnippet
 #+begin_src elisp :tangle yes
   (use-package yasnippet

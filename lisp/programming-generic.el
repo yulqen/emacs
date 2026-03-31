@@ -315,6 +315,8 @@
                             (when (file-directory-p venv-dir)
                               (pyvenv-activate venv-dir))))))
 
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+
 (use-package yasnippet
   :ensure t
   :hook (prog-mode . yas-minor-mode)
