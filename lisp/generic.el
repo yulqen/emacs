@@ -392,4 +392,7 @@
 		 ("M-g f" . avy-goto-line)
 		 ("M-g e" . avy-goto-word-0)))
 
+(use-package ace-window
+  :bind (("M-o" . ace-window)))
+
 (provide 'generic)

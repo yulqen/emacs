@@ -482,6 +482,11 @@ This is not essential.
   		 ("M-g f" . avy-goto-line)
   		 ("M-g e" . avy-goto-word-0)))
  #+end_src
+* ace-window
+#+begin_src elisp :tangle yes
+  (use-package ace-window
+    :bind (("M-o" . ace-window)))
+#+end_src
 * provide
 
 #+begin_src elisp :tangle yes
