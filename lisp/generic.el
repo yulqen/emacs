@@ -385,4 +385,11 @@
 )
 (global-set-key [(f5)]  #'ibuffer)
 
+(use-package avy
+  :ensure t
+  :bind (("C-'" . avy-goto-char-timer)
+		 ("C-:" . avy-goto-char)
+		 ("M-g f" . avy-goto-line)
+		 ("M-g e" . avy-goto-word-0)))
+
 (provide 'generic)

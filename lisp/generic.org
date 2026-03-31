@@ -473,6 +473,15 @@ This is not essential.
   )
   (global-set-key [(f5)]  #'ibuffer)
 #+end_src
+* avy (replacement for ace-jump)
+#+begin_src elisp :tangle yes
+  (use-package avy
+    :ensure t
+    :bind (("C-'" . avy-goto-char-timer)
+  		 ("C-:" . avy-goto-char)
+  		 ("M-g f" . avy-goto-line)
+  		 ("M-g e" . avy-goto-word-0)))
+ #+end_src
 * provide
 
 #+begin_src elisp :tangle yes
