@@ -317,6 +317,8 @@
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
+(add-to-list 'auto-mode-alist '(\"\\\\.*rc$\" . conf-unix-mode))
+
 (use-package yasnippet
   :ensure t
   :hook (prog-mode . yas-minor-mode)

@@ -374,7 +374,10 @@ Set up the venv automatically for python projects.
 #+begin_src  elisp :tangle yes
   (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 #+end_src
-
+* rc file formatting
+#+begin_src elisp :tangle yes
+  (add-to-list 'auto-mode-alist '(\"\\\\.*rc$\" . conf-unix-mode))
+#+end_src
 * yasnippet
 #+begin_src elisp :tangle yes
   (use-package yasnippet
