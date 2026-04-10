@@ -173,8 +173,8 @@
   :mode ("\\.py\\'" . python-ts-mode)
   :config
   (setq-default indent-tabs-mode t)
-		    (setq-default tab-width 4)
-		    (setq-default py-indent-tabs-mode t)
+  (setq-default tab-width 4)
+  (setq-default py-indent-tabs-mode t)
   (setq python-indent-offset 4)
   :hook ((python-ts-mode . eglot-ensure)
          (python-ts-mode . pyvenv-mode)
@@ -186,7 +186,16 @@
               ("C-c t f" . mrl/run-python-test-at-point)))
 
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("pyright"))))
+  (add-to-list 'eglot-server-programs
+               '(python-base-mode . ("ruff" "server"))))
+(add-hook 'python-base-mode-hook
+          (lambda ()
+            (eglot-ensure)
+            (add-hook 'after-save-hook 'eglot-format nil t)))
+
+
+;; (with-eval-after-load 'eglot
+;;   (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("pyright"))))
 
 ;;;; Go (Tree-sitter + Eglot + Company + Flymake)
 
@@ -317,7 +326,7 @@
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
-(add-to-list 'auto-mode-alist '(\"\\\\.*rc$\" . conf-unix-mode))
+;; (add-to-list 'auto-mode-alist '(\"\\\\.*rc$\" . conf-unix-mode))
 
 (use-package yasnippet
   :ensure t
