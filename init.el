@@ -31,3 +31,4 @@
 (require 'email-calendar-rss)
 (require 'reformatting-text)
 (require 'clojure-config)
+(require 'org-crypt-config)
