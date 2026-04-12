@@ -1,4 +1,4 @@
-(set-face-attribute 'default nil :family "Comic Code" :height 180)
+(set-face-attribute 'default nil :family "Comic Code" :height 140)
 (set-face-attribute 'variable-pitch nil :family "Comic Code" :height 1.0)
 (set-face-attribute 'fixed-pitch nil :family "monospace" :height 1.0)
 (set-face-attribute 'italic nil :family "Comic Code" :height 1.0)
