@@ -20,6 +20,7 @@
   (add-to-list 'mu4e-bookmarks
                '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
   (setq mu4e-get-mail-command "mbsync fastmailchannel")
+  (setq mu4e-change-filenames-when-moving t)
   (setq mu4e-compose-reply-to-address "matt@matthewlemon.com"
         user-mail-address "matt@matthewlemon.com"
         user-full-name  "Matthew Lemon")
