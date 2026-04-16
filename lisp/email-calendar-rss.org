@@ -78,7 +78,7 @@ Subscribe to your feeds here.
             ("https://www.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/dg" weather)
             ("https://baty.net/index.xml" personal productivity emacs)
             ("https://dataswamp.org/~solene/rss.xml" bsd)
-            ("https://rubenerd.com/feed/" personal)
+  		  ("https://protesilaos.com/master.xml" personal emacs discourse)
   		  ("https://www.c0ffee.net/rss" bsd)
             ("https://simonwillison.net/atom/everything/" python AI programming)
             ("https://www.youtube.com/feeds/videos.xml?channel_id=UCajqxDsE7PBMI_IkgMkQ39w" family)
