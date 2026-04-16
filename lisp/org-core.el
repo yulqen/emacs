@@ -83,7 +83,6 @@
                                "~/Documents/org/radcal_coding.org"
                                "~/Documents/org/radbox_work.org"
                                "~/Documents/org/dft.org"
-							   "~/Documents/org/sjp.org"
                                "~/Documents/org/alphabet_learning.org"
                                "~/Documents/org/calendar/cal.org"
                                "~/Documents/org/habits.org")))
@@ -119,19 +118,6 @@
 										 (org-agenda-sorting-strategy '(alpha-up))))
           )
 		 ((org-agenda-category-filter-preset '("+DfT" "+Proj/Task" "+radbox" "+radbox_alt" "+radbox_work" "+radbox_coding" "+Meeting" "+WorkTrip" "+refile"))))
-
-		("c" "SJP Consulting"
-		 (
-          (tags "TODO=\"DOING\"|REFILE+LEVEL=2|current|PRIORITY=\"A\"" ((org-agenda-overriding-header "DEAL")))
-          (tags-todo "TODO=\"TODO\"" ((org-agenda-overriding-header "Tasks")
-                                      (org-agenda-sorting-strategy '(alpha-up))))
-          (tags-todo "TODO=\"WAITING\"" ((org-agenda-overriding-header "SJP Waiting/Blocked")
-										 (org-agenda-sorting-strategy '(deadline-down scheduled-down priority-down))))
-          (tags-todo "-SCHEDULED>=\"<today>\"&TODO=\"NEXT\""
-					 ((org-agenda-overriding-header "SJP NEXT UNSCHEDULED")
-                      (org-agenda-sorting-strategy '(deadline-up priority-down))))
-          )
-		 ((org-agenda-category-filter-preset '("+SJP-Task"))))
 		("h" "Home"
 		 (
           (agenda)
