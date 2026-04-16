@@ -87,6 +87,138 @@ Lots of odds and ends here. This is where they end up.
   (setq calendar-location-name "Berwick-upon-Tweed")
 #+end_src
 
+** Some more generic stuff I got from this web site: https://emacsredux.com/blog/2026/04/07/stealing-from-the-best-emacs-configs/
+
+*** Disable Bidirectional Text Scanning
+
+If you don’t edit right-to-left languages (Arabic, Hebrew, etc.), Emacs is doing a bunch of work on every redisplay cycle for nothing. These settings tell Emacs to assume left-to-right text everywhere and skip the bidirectional parenthesis algorithm:
+
+#+begin_src elisp :tangle yes
+  (setq-default bidi-display-reordering 'left-to-right
+                bidi-paragraph-direction 'left-to-right)
+  (setq bidi-inhibit-bpa t)
+#+end_src
+
+*** Increase Process Output Buffer for LSP
+
+The default read-process-output-max is 64KB, which is still quite conservative. Modern LSP servers like rust-analyzer or clangd routinely send multi-megabyte responses. Bumping this reduces the number of read calls Emacs has to make:
+
+#+begin_src elisp :tangle yes
+  (setq read-process-output-max (* 4 1024 1024)) ; 4MB
+#+end_src
+
+*** Redisplay fontification on input
+
+Emacs normally fontifies (syntax-highlights) text even while you’re actively typing. This can cause micro-stutters, especially in tree-sitter modes or large buffers. One setting fixes it:
+
+#+begin_src elisp :tangle yes
+  (setq redisplay-skip-fontification-on-input t)
+#+end_src
+
+*** Don’t Render Cursors in Non-Focused Window
+
+If you have several windows visible, Emacs draws a cursor in each of them – even the ones you’re not working in. It also highlights selections in non-focused windows. Two settings to stop that:
+
+#+begin_src elisp :tangle yes
+  (setq-default cursor-in-non-selected-windows nil)
+  (setq highlight-nonselected-windows nil)
+#+end_src
+
+*** Save the Clipboard Before Killing and No Duplicates in Kill Ring and other kill ring stuff
+
+Allows you to copy from a web site, go back to emacs and kill a line, then you can yank from the kill ring without the thing you copied disappearing:
+
+#+begin_src elisp :tangle yes
+  (setq save-interprogram-paste-before-kill t)
+  (setq kill-do-not-save-duplicates t)
+#+end_src
+
+
+Most configs that use savehist-mode only persist search rings. But savehist can save any variable – including the kill ring. Add it and you get clipboard history that survives restarts:
+
+#+begin_src elisp :tangle yes
+  (setq savehist-additional-variables
+      '(search-ring regexp-search-ring kill-ring))
+#+end_src
+
+One thing to watch out for: the kill ring can accumulate text properties (fonts, overlays, etc.) that bloat the savehist file. Doom strips them before saving:
+
+#+begin_src elisp :tangle yes
+  (add-hook 'savehist-save-hook
+            (lambda ()
+  			(setq kill-ring
+                    (mapcar #'substring-no-properties
+                            (cl-remove-if-not #'stringp kill-ring)))))
+#+end_src
+
+*** auto-chmod scripts on save
+
+#+begin_src elisp :tangle yes
+  (add-hook 'after-save-hook
+          #'executable-make-buffer-file-executable-if-script-p)
+#+end_src
+
+*** Proportional Window Resizing (Prot)
+
+When you split a window with C-x 2 or C-x 3, Emacs halves the current window. If you already have a multi-window layout, this can produce one awkwardly tiny window while others stay large. With this setting, all windows in the frame resize proportionally:
+#+begin_src elisp :tangle yes
+  (setq window-combination-resize t)
+#+end_src
+
+*** Reversible C-x 1 (Purcell)
+
+C-x 1 (delete-other-windows) is the nuclear option – it nukes your entire window layout to focus on one buffer. Then you spend the next minute recreating the layout you just destroyed.
+
+With winner-mode and a small wrapper, you can make C-x 1 toggle: press it once to go single-window, press it again to restore the previous layout:
+
+#+begin_src elisp :tangle yes
+  (winner-mode +1)
+
+  (defun toggle-delete-other-windows ()
+    "Delete other windows in frame if any, or restore previous window config."
+    (interactive)
+    (if (and winner-mode
+             (equal (selected-window) (next-window)))
+        (winner-undo)
+      (delete-other-windows)))
+
+  (global-set-key (kbd "C-x 1") #'toggle-delete-other-windows)  
+#+end_src
+
+Just drop this into your config as-is – it’s self-contained. This is one of those tricks where once you have it, you can’t imagine going back.
+
+*** Faster Mark Popping (Purcell, Centaur, Prot)
+
+The mark ring is one of Emacs’s most underused navigation features. Every time you jump somewhere – isearch, M-<, M->, goto-line, imenu, and many more – Emacs pushes your old position onto the mark ring. C-u C-SPC pops it, jumping you back.
+
+The annoyance: you need C-u C-SPC every single time. With this setting, after the first C-u C-SPC you can keep pressing just C-SPC to continue popping:
+#+begin_src elisp :tangle yes
+  (setq set-mark-command-repeat-pop t)  
+#+end_src
+
+This pairs beautifully with repeat-mode if you have it enabled (and you should – see my earlier post on repeat-mode).
+
+*** Recenter After save-place Restores Position (Doom Emacs)
+
+save-place-mode is great – it remembers where you were in each file and jumps back there when you reopen it. The problem is that it can leave your cursor on the last visible line of the window, which is disorienting. This advice recenters the view after the jump:
+
+#+begin_src elisp :tangle yes
+  (advice-add 'save-place-find-file-hook :after
+              (lambda (&rest _)
+                (when buffer-file-name (ignore-errors (recenter)))))
+#+end_src
+
+Small thing, but it makes reopening files feel much more natural.
+
+*** Auto-Select Help Windows (Prot)
+
+When you press C-h f or C-h v, Emacs opens the help buffer but leaves your cursor in the original window. You almost always want to read the help right away, so you end up pressing C-x o every single time. This fixes it:
+
+#+begin_src elisp :tangle yes
+  (setq help-window-select t)  
+#+end_src
+
+
 * set PATH
 
 We need this for doing stuff in compile buffers, etc
