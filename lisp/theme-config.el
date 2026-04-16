@@ -63,4 +63,12 @@
 
 ;(doric-themes-select 'doric-plum)
 
+(use-package modus-themes-exporter
+  :ensure nil ; do not try to install because we get it from source in the `:init'
+  :commands (modus-themes-exporter-export)
+  :init
+  ;; Then upgrade it with the command `package-vc-upgrade' or `package-vc-upgrade-all'.
+  (unless (package-installed-p 'modus-themes-exporter)
+	(package-vc-install "https://github.com/protesilaos/modus-themes-exporter.git")))
+
 (provide 'theme-config)
