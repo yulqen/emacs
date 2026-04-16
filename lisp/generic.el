@@ -131,7 +131,7 @@
 
 (setq help-window-select t)
 
-(use-package exec-path-fromshell
+(use-package exec-path-from-shell
   :ensure t
   :config
   (exec-path-from-shell-initialize))

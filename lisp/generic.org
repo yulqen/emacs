@@ -218,7 +218,6 @@ When you press C-h f or C-h v, Emacs opens the help buffer but leaves your curso
   (setq help-window-select t)  
 #+end_src
 
-
 * set PATH
 
 We need this for doing stuff in compile buffers, etc
