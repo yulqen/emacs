@@ -1,5 +1,5 @@
 (set-face-attribute 'default nil :family "Comic Code" :height 150)
-(set-face-attribute 'variable-pitch nil :family "Aporetic Sans" :height 1.0)
+(set-face-attribute 'variable-pitch nil :family "Comic Code" :height 1.0)
 (set-face-attribute 'fixed-pitch nil :family "Comic Code" :height 1.0)
 (set-face-attribute 'italic nil :family "Comic Code" :height 1.0)
 (set-face-attribute 'org-block-begin-line nil :slant 'italic :background "#222222" :foreground "#949494")
