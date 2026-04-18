@@ -83,17 +83,17 @@
        :line-spacing nil)))
 
 ;; Set the last preset or fall back to desired style from `fontaine-presets'
-;; (the `regular' in this case).
-;(fontaine-set-preset (or (fontaine-restore-latest-preset) 'medium))
+ ;; (the `regular' in this case).
+ ;(fontaine-set-preset (or (fontaine-restore-latest-preset) 'medium))
 
-;; Persist the latest font preset when closing/starting Emacs and
-;; while switching between themes.
-;(fontaine-mode 1)
+ ;; Persist the latest font preset when closing/starting Emacs and
+ ;; while switching between themes.
+ ;(fontaine-mode 1)
 
-;; fontaine does not define any key bindings.  This is just a sample that
-;; respects the key binding conventions.  Evaluate:
-;;
-;;     (info "(elisp) Key Binding Conventions")
-;(define-key global-map (kbd "C-c f") #'fontaine-set-preset)
+ ;; fontaine does not define any key bindings.  This is just a sample that
+ ;; respects the key binding conventions.  Evaluate:
+ ;;
+ ;;     (info "(elisp) Key Binding Conventions")
+(define-key global-map (kbd "C-c f") #'fontaine-set-preset)
 
 (provide 'font-config)
