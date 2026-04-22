@@ -119,9 +119,9 @@
 (add-hook 'cperl-mode-hook 'eglot-ensure)
 (add-hook 'perl-mode-hook 'eglot-ensure)
 
-(use-package pi-coding-agent
-:ensure t
-:init (defalias 'pi 'pi-coding-agent))
+;; (use-package pi-coding-agent
+;; :ensure t
+;; :init (defalias 'pi 'pi-coding-agent))
 
 (use-package simpc-mode
   :ensure nil

@@ -145,10 +145,11 @@ Fuck knows why everyone goes on about it likes....
 | eglot-ensure |
 
 * pi-coding-agent
+This doesn't work so out you go.
 #+begin_src elisp :tangle yes
-  (use-package pi-coding-agent
-  :ensure t
-  :init (defalias 'pi 'pi-coding-agent))
+  ;; (use-package pi-coding-agent
+  ;; :ensure t
+  ;; :init (defalias 'pi 'pi-coding-agent))
 #+end_src
 * simplec from tsoding
 
