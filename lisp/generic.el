@@ -253,6 +253,17 @@
        ("C-\"" . mc/skip-to-next-like-this)
        ("C-:" . mc/skip-to-previous-like-this)))
 
+(use-package buffer-to-pdf
+  :ensure nil
+  :init
+  ;; Then upgrade it with the command `package-vc-upgrade' or `package-vc-upgrade-all'.
+  (unless (package-installed-p 'buffer-to-pdf)
+    (package-vc-install "https://github.com/protesilaos/buffer-to-pdf.git"))
+  :config
+  ;; Configure `buffer-to-pdf-directory' to specify where PDF files are stored.
+  ;; This is the default value:
+  (setq buffer-to-pdf-directory (expand-file-name "~/Downloads/")))
+
 (use-package dired-x
 :ensure nil
 :config
